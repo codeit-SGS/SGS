@@ -37,7 +37,7 @@ const ScentSelector = () => {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-10">
       {SCENTS.map((scent) => {
         const isSelected = selectedScents.includes(scent);
         return (
