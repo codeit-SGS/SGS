@@ -1,7 +1,6 @@
-import type { Config } from 'tailwindcss'
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+
+
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -35,15 +34,15 @@ const config: Config = {
         'gray-300': '#CFDBEA',
         'gray-500': '#9FACBD',
         'gray-800': '#2D3034',
-        'main': '#6A42DB',
+        main: '#6A42DB',
         'main-10': '#F1EDFC',
       },
       spacing: {
-        spacing: '0.0625rem', // 즉 1px
+        spacing: '0.0625rem', // 1px
       },
     },
   },
   plugins: [],
-}
-export default config
+};
 
+export default config;

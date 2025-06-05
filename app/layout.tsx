@@ -1,19 +1,15 @@
-import type { Metadata } from 'next';
-import '@/src/stlye/globals.css';
+// src/app/layout.tsx
+import '@/stlyes/globals.css';
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'My App',
-  description: 'A Next.js app with Tailwind CSS',
+  description: 'Next.js + Tailwind',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="min-h-screen bg-gray-100">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
