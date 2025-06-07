@@ -1,6 +1,6 @@
 import { CommonButton, ButtonVariant } from '@/components/button';
-import GoogleIcon from "@/icon/google.svg";
-import KakaoIcon from "@/icon/kakao.svg";
+import GoogleIcon from "/icon/google.svg";
+import KakaoIcon from "/icon/kakao.svg";
 
 export default function MyComponent() {
   return (

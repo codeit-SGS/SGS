@@ -1,23 +1,23 @@
 
 import {CommonButton} from '@/components/button';
-import GoogleIcon from "/icon/google.svg";
-import KakaoIcon from "/icon/kakao.svg";
+
 
 export default function MyProfile() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center text-gray-800">내 프로필</h1>
-      <p className="text-center text-gray-600 mt-4">여기는 내 프로필 페이지입니다.</p>
-       <CommonButton variant="social-google" icon={<GoogleIcon />}>
-        Google로 시작하기
-      </CommonButton>
-      <CommonButton variant="social-kakao" icon={<KakaoIcon />}>
-        Kakao로 시작하기
-      </CommonButton>
-      <CommonButton variant="modal-cancel">취소</CommonButton>
-      <CommonButton variant="modal-submit">링크 보내기</CommonButton>
-      <CommonButton variant="signup">가입하기</CommonButton>
-      <CommonButton variant="review">리뷰 남기기</CommonButton>
+    <div >
+      {/* <Gnb /> */}
+      <div className="flex flex-coly items-center justify-center rounded-[16px] border border-gray-300 shadow-sm ">
+<div>
+        <h1 className="text-2xl font-bold text-primary-purple">내 프로필</h1>
+        <p className="text-gray-600 mt-2">여기에 프로필 정보를 입력하세요.</p>
+      </div>
+      <div className="mt-4">
+        <CommonButton label="프로필 수정" onClick={() => alert('프로필 수정 클릭!')} />
+      </div>
+      <div className="mt-4">
+        <CommonButton label="로그아웃" onClick={() => alert('로그아웃 클릭!')} />
+</div>
+      </div>
     </div>
   );
 }
