@@ -46,7 +46,7 @@ const WineCard = () => {
             {/* right 아이콘 */}
             <div className="absolute bottom-23.5 right-0">
               <img
-                src="/img/icon/right.svg"
+                src="/icon/right.svg"
                 alt="오른쪽 화살표 아이콘"
                 className="w-36 h-36"
               />
