@@ -3,13 +3,13 @@
 const MylistCard = () => {
   return (
     <div className="flex flex-col w-full max-w-800 pt-42">
-      <div className="flex pt-30 pr-63  max-h-228 rounded-[16px] bg-white cursor-pointer border border-gray-300">
+      <div className="relative flex pt-30 pr-40 max-h-228 rounded-[16px] bg-white border border-gray-300">
         <div className="relative w-full px-70 max-w-180">
           {/* 와인 이미지 */}
           <img
             src="/wine/wine-type2.svg"
             alt="와인 이미지"
-            className="absolute bottom-0 w-full h-5/3 max-w-180 left-1/2 -translate-x-1/2 object-contain"
+            className="absolute bottom-0 w-full h-4/3 max-w-180 left-1/2 -translate-x-1/2 object-contain"
           />
         </div>
         {/* 텍스트 영역 */}
@@ -25,6 +25,15 @@ const MylistCard = () => {
               ₩ 64,990
             </div>
           </div>
+        </div>
+        {/* 드롭다운 버튼 */}
+        <div className="absolute top-30 right-40 cursor-pointer">
+          <img
+            src="/icon/menu.svg"
+            alt="드롭다운 버튼"
+            width={26}
+            height={26}
+          />
         </div>
       </div>
     </div>
