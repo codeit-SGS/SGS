@@ -7,6 +7,21 @@
   }
 }
 
+@layer utilities {
+  .shadow-subtle {
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  .text-overflow-line3 {
+    @apply overflow-hidden;
+    @apply break-words;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+  }
+}
+
 @theme {
   --color-black: #101318;
   --color-white: #ffffff;
