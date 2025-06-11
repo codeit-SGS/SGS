@@ -13,8 +13,8 @@ export type ButtonVariant =
   | "list-page-modal-cancel"
   | "product-page-add-review"
   | "product-page-modal-add-review2"
-  | "modal-add-wine"
-  | "modal-add-review"
+  | "list-page-modal-add-wine"
+  | "product-page-modal-add-review"
   | "profile-page-modal-update"
   | "profile-page-modal-cancel2"
   | "profile-page-change"
@@ -61,9 +61,9 @@ const CommonButton = ({
       "bg-main-10 text-main border-none font-bold leading-16  text-lg rounded-[12px]",
     "product-page-modal-add-review2":
       "bg-main text-white font-semibold text-lg rounded-[12px] border-none",
-    "modal-add-wine":
+    "list-page-modal-add-wine":
       "bg-main text-white font-bold text-lg rounded-[12px] border-none leading-16 mobile:leading-14",
-    "modal-add-review":
+    "product-page-modal-add-review":
       "bg-main text-white font-bold text-lg rounded-[12px] border-none leading-16",
     "profile-page-modal-update":
       "bg-main text-white font-bold text-lg rounded-[12px] border-none leading-16",
