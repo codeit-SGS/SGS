@@ -83,13 +83,23 @@ export default function LoginPage() {
         </button>
 
         {/* 소셜 로그인 */}
-        <button className="w-full h-[48px] mb-3">
+        <button
+          className="w-full h-[48px] mb-3"
+          onClick={() =>
+            (window.location.href = 'https://myaccount.google.com/')
+          }
+        >
           <img src="/img/social-login-google.png" alt="Google로 시작하기" />
         </button>
 
-        <button className="w-full h-[48px] mb-6">
+        <button
+          className="w-full h-[48px] mb-6"
+          onClick={() =>
+            (window.location.href = 'https://accounts.kakao.com/')
+          }
+        >
           <img src="/img/social-login-kakao.png" alt="Kakao로 시작하기" />
-        </button>
+        </button> 
 
         {/* 회원가입 링크 */}
         <div className="text-center text-sm text-gray-500">

@@ -13,42 +13,53 @@ export default function SigninPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignup = async () => {
-    if (password !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
+const handleSignup = async () => {
+  if (password !== confirmPassword) {
+    alert('비밀번호가 일치하지 않습니다.');
+    return;
+  }
 
-    try {
-      // Step 1 → Sign Up
-      const signupRes = await signup(email, password);
+  try {
+    // Step 1 Sign Up
+    const signupRes = await signup(email, password, confirmPassword, nickname);
 
-      if (signupRes.status === 201 || signupRes.status === 200) {
-        // Step 2 → Login to get token
-        const loginRes = await login(email, password);
+    if (signupRes.status === 201 || signupRes.status === 200) {
+      // Step 2 Login to get token
+      const loginRes = await login(email, password);
 
-        if (loginRes.status === 200) {
-          // Step 3 → PATCH nickname
+      if (loginRes.status === 200) {
+        // Save token to localStorage
+        const token = loginRes.data?.accessToken;
+        if (token) {
+          localStorage.setItem('token', token);
+          console.log('Saved token:', token);
+
+          // Step 3 PATCH nickname (now token will be valid)
           await updateUserProfile(nickname);
 
           alert('회원가입 성공! 로그인 해주세요.');
           router.push('/login');
         } else {
-          alert('로그인 실패했습니다.');
+          throw new Error('No token received from login.');
         }
       } else {
-        alert('회원가입에 실패했습니다.');
+        alert('로그인 실패했습니다.');
       }
-    } catch (error) {
-      console.error(error);
-      if (error.response) {
-        console.log('Error response:', error.response);
-        alert(`오류 발생: ${error.response.status}`);
-      } else {
-        alert('네트워크 오류 또는 서버 연결 실패');
-      }
+    } else {
+      alert('회원가입에 실패했습니다.');
     }
-  };
+  } catch (error: any) {
+    console.error(error);
+    if (error.response) {
+      console.log('Error response:', error.response.data);
+      alert(`오류 발생: ${error.response.status}\n${error.response.data.message}`);
+    } else {
+      alert('네트워크 오류 또는 서버 연결 실패');
+    }
+  }
+};
+
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
