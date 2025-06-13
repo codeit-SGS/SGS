@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api/axios'; 
+import { login } from '@/lib/api/auth';
 
-export default function Page() {
+
+export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -12,50 +15,34 @@ export default function Page() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('https://your.api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+        const res = await login(email, password);
 
-      if (res.ok) {
+        if (res.status === 200) {
         router.push('/');
-      } else {
+        } else {
         alert('이메일 혹은 비밀번호를 확인해주세요.');
-      }
+        }
     } catch (error) {
-      alert('오류가 발생했습니다.');
+        console.error(error);
+
+        if (error.response && error.response.status === 401) {
+        alert('이메일 혹은 비밀번호를 확인해주세요.');
+        } else {
+        alert('오류가 발생했습니다.');
+        }
     }
-  };
+ };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div
-        className="bg-white rounded-[16px] shadow-md w-[400px] border border-[#CFDBEA]"
-        style={{
-          padding: '80px 48px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
+      <div className="bg-white rounded-[16px] shadow-md w-[400px] border border-[#CFDBEA] px-[48px] py-[80px] flex flex-col items-center gap-[10px]">
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <img src="/logo/logo-bk.svg" alt="Logo" className="h-16" />
         </div>
 
         {/* 이메일 */}
-        <div
-          style={{
-            display: 'flex',
-            height: '84px',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '10px',
-            alignSelf: 'stretch',
-          }}
-        >
+        <div className="flex flex-col items-start gap-[10px] h-[84px] w-full">
           <label className="text-sm font-medium text-gray-700">이메일</label>
           <input
             type="email"
@@ -67,16 +54,7 @@ export default function Page() {
         </div>
 
         {/* 비밀번호 */}
-        <div
-          style={{
-            display: 'flex',
-            height: '84px',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '10px',
-            alignSelf: 'stretch',
-          }}
-        >
+        <div className="flex flex-col items-start gap-[10px] h-[84px] w-full">
           <label className="text-sm font-medium text-gray-700">비밀번호</label>
           <input
             type="password"
@@ -95,15 +73,10 @@ export default function Page() {
         {/* 로그인 버튼 */}
         <button
           onClick={handleLogin}
-          className="w-full text-white font-semibold transition hover:brightness-110 mb-4"
+          className="w-full text-white font-semibold transition hover:brightness-110 mb-4 flex justify-center items-center rounded-[16px]"
           style={{
             height: '50px',
-            padding: '16px 0',
-            borderRadius: '16px',
             backgroundColor: '#6A42DB',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
           }}
         >
           로그인
