@@ -54,8 +54,8 @@
   --text-2xs: 0.75rem; /* 12px */
   --text-2xs--line-height: 1.125rem; /* 18px */
 
-  --breakpoint-mobile: 46.4375rem; /* 743px */
-  --breakpoint-tablet: 64.25rem; /* 1028px */
+  --breakpoint-tablet: 744px;
+  --breakpoint-pc: 1028px;
 
   --spacing: 0.0625rem;
 }
