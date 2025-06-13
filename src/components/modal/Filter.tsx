@@ -78,7 +78,7 @@ export default function Filter() {
         <p className="text-lg font-semibold mb-2 text-[#2D3034] pt-16 pb-12">RATING</p>
         <div className="space-y-10 text-sm">
           {ratingOptions.map((option) => (
-            <label className="flex items-center cursor-pointer">
+            <label key={option} className="flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={selectedRating === option}
