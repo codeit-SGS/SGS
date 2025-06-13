@@ -1,23 +1,31 @@
-import CommonInput from './CommonInput';
+// src/components/input/EmailInput.tsx
 
-export default function EmailInput() {
-  return (
-    <>
-      <div>
-        <CommonInput
-          label="이메일"
-          type="email"
-          placeholder="example@gmail.com"
-        />
-      </div>
-      <div>
-        <CommonInput
-          label="이메일"
-          type="email"
-          placeholder="example@gmail.com"
-          rightIconSrc="/img/icon/dropdown.svg"
-        />
-      </div>
-    </>
-  );
+import CommonInput from './CommonInput';
+import { InputHTMLAttributes, forwardRef } from 'react';
+
+interface EmailInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  rightIconSrc?: string;
+  rightIconAlt?: string;
 }
+
+const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(
+  ({ label = '이메일', error, rightIconSrc, rightIconAlt, ...props }, ref) => {
+    return (
+      <CommonInput
+        ref={ref}
+        label={label}
+        type="email"
+        error={error}
+        rightIconSrc={rightIconSrc}
+        rightIconAlt={rightIconAlt}
+        placeholder="example@gmail.com"
+        {...props}
+      />
+    );
+  }
+);
+
+EmailInput.displayName = 'EmailInput';
+export default EmailInput;
