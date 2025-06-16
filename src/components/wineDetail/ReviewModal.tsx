@@ -6,6 +6,7 @@ import SliderInput from './SliderInput'; // 바디/타닌/당도/산미 슬라�
 import FlavorTagSelector from './FlavorTagSelector'; // 향 선택 태그 버튼
 import { useState } from 'react';
 import Image from 'next/image';
+import { postReview } from '@/lib/api/review';
 
 export default function ReviewModal({
   onClose,
@@ -38,18 +39,37 @@ export default function ReviewModal({
     setSliderValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = () => {
-    const reviewData = {
-      wineId,
+  const handleSubmit = async () => {
+    const payload = {
       rating,
-      text: reviewText,
-      sliders: sliderValues,
-      flavors: selectedFlavors,
+      lightBold: sliderValues.body,
+      smoothTannic: sliderValues.tannin,
+      drySweet: sliderValues.sweetness,
+      softAcidic: sliderValues.acidity,
+      aroma: selectedFlavors,
+      content: reviewText,
+      wineId,
     };
 
-    console.log('리뷰 전송 데이터:', reviewData);
-    onClose();
+    try {
+      const res = await postReview(payload);
+      console.log('리뷰 등록 성공:', res);
+      onClose(); // 성공하면 모달 닫기
+    } catch (err) {
+      console.error('리뷰 등록 실패:', err);
+    }
   };
+
+  // const reviewData = {
+  //   wineId,
+  //   rating,
+  //   text: reviewText,
+  //   sliders: sliderValues,
+  //   flavors: selectedFlavors,
+  // };
+
+  // console.log('리뷰 전송 데이터:', reviewData);
+  // onClose();
 
   return (
     <div className="p-6 fixed inset-0 z-50 bg-black/40 flex items-center justify-center">

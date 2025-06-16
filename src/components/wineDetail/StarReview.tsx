@@ -9,10 +9,12 @@ export default function StarRatingSummary({
   average,
   count,
   ratings,
+  wineId,
 }: {
   average: number;
   count: number;
   ratings: Record<number, number>;
+  wineId: number;
 }) {
   const total = Object.values(ratings).reduce((a, b) => a + b, 0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,7 +100,9 @@ export default function StarRatingSummary({
       </div>
 
       {/* 리뷰 작성 모달 */}
-      {isModalOpen && <ReviewModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <ReviewModal onClose={() => setIsModalOpen(false)} wineId={wineId} />
+      )}
     </>
   );
 }

@@ -4,7 +4,9 @@ import DetailCard from '@/components/card/detailCard';
 import Image from 'next/image';
 import StarReview from '@/components/wineDetail/StarReview';
 
-export default function WinePage() {
+export default function WinePage({ params }: { params: { wineId: string } }) {
+  const wineId = Number(params.wineId);
+
   const ratingData = {
     average: 4.8,
     count: 5446,
@@ -42,14 +44,24 @@ export default function WinePage() {
 
         {/* 별점 요약 */}
         <div className="sticky top-[130px] w-[280px] h-[311px]">
-          <StarReview {...ratingData} />
+          <StarReview
+            average={ratingData.average}
+            count={ratingData.count}
+            ratings={ratingData.ratings}
+            wineId={Number(params.wineId)} // ✅ string → number 변환
+          />
         </div>
       </div>
 
       {/* 📱📱 모바일/태블릿 전용: 별점 먼저 → 리뷰 카드들 */}
       <div className="flex flex-col gap-10 w-full max-w-[1140px] lg:hidden">
         {/* 별점 요약 */}
-        <StarReview {...ratingData} />
+        <StarReview
+          average={ratingData.average}
+          count={ratingData.count}
+          ratings={ratingData.ratings}
+          wineId={wineId} // ✅ string → number 변환
+        />
 
         {/* 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-6 md:space-y-8">
