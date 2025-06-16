@@ -46,7 +46,7 @@ export default function FlavorTagSelector({
 
   return (
     <div className="space-y-2 pt-40">
-      <p className="py-[10] font-pretendard font-bold text-xl leading-8 tracking-normal">
+      <p className="py-10 font-pretendard font-bold text-xl leading-8 tracking-normal">
         기억에 남는 향이 있나요?
       </p>
 

@@ -44,7 +44,7 @@ export default function StarRatingSummary({
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-[113px] h-[42px] px-5 py-2 rounded-[12px] bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
+          className="w-113 h-42 px-5 py-2 rounded-12 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
         >
           리뷰 남기기
         </button>
@@ -66,7 +66,7 @@ export default function StarRatingSummary({
               {/* ✅ 모바일: 평균 옆 / ✅ 태블릿: 후기 수 아래 */}
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="md:hidden w-[113px] h-[42px] px-5 py-2 rounded-[12px] bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
+                className="md:hidden w-113 h-42 px-5 py-2 rounded-12 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
               >
                 리뷰 남기기
               </button>
@@ -79,7 +79,7 @@ export default function StarRatingSummary({
             {/* ✅ 태블릿: 버튼은 후기 수 아래 */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="hidden md:block mt-2 w-[113px] h-[42px] px-5 py-2 rounded-[12px] bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
+              className="hidden md:block mt-2 w-113 h-42 px-5 py-2 rounded-12 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
             >
               리뷰 남기기
             </button>

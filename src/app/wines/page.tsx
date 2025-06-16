@@ -22,16 +22,16 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
   return (
     <main className="min-h-screen px-4 py-10 flex flex-col items-center bg-gray-50">
       {/* ⭐ 와인 카드 */}
-      <div className="relative w-full max-w-[1140px] h-[200px] md:h-[260px] lg:h-[302px] mb-10 lg:mb-16">
+      <div className="relative w-full max-w-1140 h-200 md:h-260 lg:h-302 mb-10 lg:mb-16">
         <DetailCard />
       </div>
 
       {/* 💻 PC: 리뷰 카드 + 별점 요약 나란히 */}
-      <div className="hidden lg:flex justify-between gap-[30px] w-full max-w-[1140px]">
+      <div className="hidden lg:flex justify-between gap-30 w-full max-w-1140">
         {/* 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-10 w-[800px]">
           {[...Array(3)].map((_, idx) => (
-            <div key={idx} className="relative w-full h-[260px] xl:h-[481px]">
+            <div key={idx} className="relative w-full h-260 xl:h-481">
               <Image
                 src="/page/review.png"
                 alt={`Review ${idx + 1}`}
@@ -43,7 +43,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
         </div>
 
         {/* 별점 요약 */}
-        <div className="sticky top-[130px] w-[280px] h-[311px]">
+        <div className="sticky top-130 w-280 h-311">
           <StarReview
             average={ratingData.average}
             count={ratingData.count}
@@ -54,7 +54,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
       </div>
 
       {/* 📱📱 모바일/태블릿 전용: 별점 먼저 → 리뷰 카드들 */}
-      <div className="flex flex-col gap-10 w-full max-w-[1140px] lg:hidden">
+      <div className="flex flex-col gap-10 w-full max-w-1140 lg:hidden">
         {/* 별점 요약 */}
         <StarReview
           average={ratingData.average}
@@ -66,7 +66,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
         {/* 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-6 md:space-y-8">
           {[...Array(3)].map((_, idx) => (
-            <div key={idx} className="relative w-full h-[200px] md:h-[260px]">
+            <div key={idx} className="relative w-full h-200 md:h-260">
               <Image
                 src="/page/review.png"
                 alt={`Review ${idx + 1}`}
