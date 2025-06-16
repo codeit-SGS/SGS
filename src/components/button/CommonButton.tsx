@@ -58,15 +58,15 @@ const CommonButton = ({
 
     // 인증
     "auth-submit":
-      "bg-main text-white font-bold text-lg leading-16 mobile:text-md mobile:leading-14 rounded-[16px] mobile:rounded-[12px] border-none",
+      "bg-main text-white font-bold tablet:text-lg tablet:leading-16 text-md leading-14 tablet:rounded-[16px] rounded-[12px] border-none",
     "auth-social-google":
-      "bg-white border border-gray-300 text-gray-800 font-medium text-lg leading-16 mobile:text-md rounded-[16px] mobile:rounded-[12px]",
+      "bg-white border border-gray-300 text-gray-800 font-medium tablet:text-lg leading-16 text-md tablet:rounded-[16px] rounded-[12px]",
     "auth-social-kakao":
-      "bg-white border border-gray-300 text-gray-800 font-medium text-lg leading-16 mobile:text-md rounded-[16px] mobile:rounded-[12px]",
+      "bg-white border border-gray-300 text-gray-800 font-medium tablet:text-lg leading-16 :text-md tablet:rounded-[16px] rounded-[12px]",
 
     // 리스트 페이지
     "list-add-wine":
-      "bg-main text-white font-bold text-lg leading-16 mobile:text-md mobile:leading-14 rounded-[16px] mobile:rounded-[12px] border-none",
+      "bg-main text-white font-bold tablet:text-lg tablet:leading-16 text-md leading-14 tablet:rounded-[16px] rounded-[12px] border-none",
     "list-modal-reset":
       "bg-main-10 text-main font-bold text-lg leading-16 rounded-[12px] border-none",
     "list-modal-filter":
@@ -74,11 +74,11 @@ const CommonButton = ({
     "list-modal-cancel":
       "bg-main-10 text-main font-bold text-lg leading-16 rounded-[12px] border-none",
     "list-modal-add-wine":
-      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+      "bg-main text-white font-bold text-lg tablet:leading-16 leading-14 rounded-[12px] border-none",
 
     // 상품 페이지
     "product-add-review":
-      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+      "bg-main text-white font-bold text-lg tablet:leading-16 leading-14 rounded-[12px] border-none",
     "product-modal-add-review":
       "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
     "product-modal-add-review2":
@@ -88,7 +88,7 @@ const CommonButton = ({
 
     // 프로필 페이지
     "profile-change":
-      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+      "bg-main text-white font-bold text-lg tablet:leading-16 leading-14 rounded-[12px] border-none",
     "profile-modal-update":
       "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
     "profile-modal-cancel":
@@ -96,7 +96,7 @@ const CommonButton = ({
 
     // 공통 모달
     "modal-add-wine":
-      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+      "bg-main text-white font-bold text-lg tablet:leading-16 leading-14 rounded-[12px] border-none",
     "modal-add-review":
       "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
   };
@@ -106,7 +106,7 @@ const CommonButton = ({
       className={`${baseStyle} ${variantStyles[variant]} ${className}`}
       {...props}
     >
-      {hasIcon && <span className="mr-12 size-24 mobile:size-20">{icon}</span>}
+      {hasIcon && <span className="mr-12 tablet:size-24 size-20">{icon}</span>}
       <span>{children}</span>
     </button>
   );

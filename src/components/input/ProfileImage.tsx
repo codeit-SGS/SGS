@@ -26,3 +26,4 @@ export default function ProfileIcon({ className = "w-[45px] h-[45px]" }: Profile
     </div>
   );
 }
+  
