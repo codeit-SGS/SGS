@@ -19,7 +19,7 @@ export default function Filter() {
     <div className="bg-none text-white p-4 rounded-xl space-y-6 w-284 h-628">
 
       {/* WINE TYPES */}
-      <div className="pb-6 border-b border-[#F2F4F8]">
+      <div className="pb-6 border-b border-gray-100">
         <p className="text-lg font-semibold mb-2 text-gray-800">WINE TYPES</p>
         <div className="flex gap-6 pt-12 pb-16">
           {wineTypes.map((type) => (
@@ -38,9 +38,9 @@ export default function Filter() {
       </div>
 
       {/* PRICE */}
-      <div className="pb-6 border-b border-[#F2F4F8]">
-        <p className="text-lg font-semibold mb-2 text-[#2D3034] pt-16 pb-12">PRICE</p>
-        <div className="flex justify-between text-[#6A42DB] text-sm mb-1">
+      <div className="pb-6 border-b border-gray-100">
+        <p className="text-lg font-semibold mb-2 text-gray-800 pt-16 pb-12">PRICE</p>
+        <div className="flex justify-between text-main text-sm mb-1">
           <span>₩{priceRange[0].toLocaleString()}</span>
           <span>₩{priceRange[1].toLocaleString()}</span>
         </div>
@@ -75,7 +75,7 @@ export default function Filter() {
 
       {/* RATING */}
       <div>
-        <p className="text-lg font-semibold mb-2 text-[#2D3034] pt-16 pb-12">RATING</p>
+        <p className="text-lg font-semibold mb-2 text-gray-800 pt-16 pb-12">RATING</p>
         <div className="space-y-10 text-sm">
           {ratingOptions.map((option) => (
             <label key={option} className="flex items-center cursor-pointer">
@@ -85,10 +85,10 @@ export default function Filter() {
                 onChange={() => setSelectedRating(option)}
                 className="sr-only peer"
               />
-              <div className="w-20 h-20 rounded-sm border-2 bg-[#F2F4F8] border-[#CFDBEA] flex items-center justify-center peer-checked:bg-[#E5DFFB] transition-colors">
-                <div className={`w-10 h-10 rounded-sm transition-colors ${selectedRating === option ? 'bg-[#6A42DB]' : 'bg-transparent'}`} />
+              <div className="w-20 h-20 rounded-sm border-2 bg-gray-100 border-gray-300 flex items-center justify-center peer-checked:bg-[#E5DFFB] transition-colors">
+                <div className={`w-10 h-10 rounded-sm transition-colors ${selectedRating === option ? 'bg-main' : 'bg-transparent'}`} />
               </div>
-              <span className="ml-4 text-sm text-black peer-checked:text-[#6A42DB]">{option}</span>
+              <span className="ml-4 text-sm text-black peer-checked:text-main">{option}</span>
             </label>
           ))}
         </div>
@@ -102,7 +102,7 @@ export default function Filter() {
             setPriceRange([0, 74000]);
             setSelectedRating("4.5 - 5.0");
           }}
-          className="text-md w-1/4 py-7 font-semibold border border-[#F1EDFC] text-[#6A42DB] rounded-lg hover:bg-[#F1EDFC]">
+          className="text-md w-1/4 py-7 font-semibold border border-main-10 text-main rounded-lg hover:bg-main-10">
           초기화
         </button>
 
@@ -114,7 +114,7 @@ export default function Filter() {
               rating: selectedRating,
             });
           }}
-          className="text-md w-3/4 py-7 font-semibold bg-[#6A42DB] text-white rounded-lg hover:bg-[#5a35c6] transition-colors">
+          className="text-md w-3/4 py-7 font-semibold bg-main text-white rounded-lg hover:bg-[#5a35c6] transition-colors">
           필터 적용하기
         </button>
       </div>
