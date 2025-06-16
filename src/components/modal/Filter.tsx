@@ -20,14 +20,14 @@ export default function Filter() {
 
       {/* WINE TYPES */}
       <div className="pb-6 border-b border-[#F2F4F8]">
-        <p className="text-lg font-semibold mb-2 text-[#2D3034]">WINE TYPES</p>
+        <p className="text-lg font-semibold mb-2 text-gray-800">WINE TYPES</p>
         <div className="flex gap-6 pt-12 pb-16">
           {wineTypes.map((type) => (
             <button
               key={type}
               className={`px-10 py-5 rounded-full border ${selectedWine === type
-                ? "bg-[#6A42DB] border-[#6A42DB] text-white"
-                : "bg-white text-[#2D3034] border-[#CFDBEA]"
+                ? "bg-main border-main text-white"
+                : "bg-white text-gray-800 border-gray-300"
                 }`}
               onClick={() => setSelectedWine(type)}
             >
