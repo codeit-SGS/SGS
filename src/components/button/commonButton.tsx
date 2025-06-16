@@ -3,52 +3,111 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 export type ButtonVariant =
-  | "social-google"
-  | "social-kakao"
-  | "modal-cancel"
-  | "modal-submit"
-  | "signup"
-  | "review";
+  // 랜딩
+  | "landing-go-to-wine"
+
+  // 인증
+  | "auth-submit"
+  | "auth-social-google"
+  | "auth-social-kakao"
+
+  // 리스트
+  | "list-add-wine"
+  | "list-modal-reset"
+  | "list-modal-filter"
+  | "list-modal-cancel"
+  | "list-modal-add-wine"
+
+  // 상품
+  | "product-add-review"
+  | "product-modal-add-review"
+  | "product-modal-add-review2"
+  | "product-modal-delete"
+
+  // 프로필
+  | "profile-change"
+  | "profile-modal-update"
+  | "profile-modal-cancel"
+
+  // 공통 모달
+  | "modal-add-wine"
+  | "modal-add-review";
 
 interface CommonButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: ButtonVariant;
+  icon?: ReactNode; // 왼쪽 아이콘
   className?: string;
-  icon?: ReactNode;
 }
 
 const CommonButton = ({
   children,
   variant,
-  className = "",
   icon,
+  className = "",
   ...props
 }: CommonButtonProps) => {
-  const hasIcon = variant === "social-google" || variant === "social-kakao";
+  const hasIcon = !!icon;
+
   const baseStyle =
-    "flex items-center justify-center text-center cursor-pointer whitespace-nowrap tablet:whitespace-nowrap";
+    "flex items-center justify-center text-center whitespace-nowrap cursor-pointer";
 
   const variantStyles: Record<ButtonVariant, string> = {
-    "social-google":
-      "w-303 h-48 gap-10 px-81.5 py-14 rounded-[12px] text-md text-gray-800 border border-gray-300 bg-white font-medium tablet:w-400 tablet:h-52 tablet:gap-12 tablet:text-lg",
-    "social-kakao":
-      "w-303 h-48 gap-10 py-14 px-81.5 rounded-[12px] text-md text-gray-800 border border-gray-300 bg-white font-medium tablet:w-400 tablet:h-52 tablet:gap-12 tablet:text-lg",
-    "modal-cancel":
-      "w-61 h-40 px-18 py-16 rounded-[12px] text-md text-gray-500 border border-gray-300 bg-white font-medium tablet:w-68 tablet:h-42 tablet:px-20 tablet:text-lg",
-    "modal-submit":
-      "w-100 h-40 px-18 py-16 rounded-[12px] text-md text-white bg-main font-bold border-none tablet:w-113 tablet:h-42 tablet:px-20 tablet:text-lg ",
-    signup:
-      "w-343 h-48 px-172 py-16 rounded-[12px] text-md text-white bg-main font-bold tablet:w-400 tablet:h-50 tablet:rounded-[16px] tablet:text-lg",
-    review:
-      "w-169 h-48 px-48 py-16 rounded-[12px] text-white bg-main font-semibold text-lg",
+    // 랜딩
+    "landing-go-to-wine":
+      "bg-main text-white font-bold text-lg leading-16 rounded-full border-none",
+
+    // 인증
+    "auth-submit":
+      "bg-main text-white font-bold text-lg leading-16 mobile:text-md mobile:leading-14 rounded-[16px] mobile:rounded-[12px] border-none",
+    "auth-social-google":
+      "bg-white border border-gray-300 text-gray-800 font-medium text-lg leading-16 mobile:text-md rounded-[16px] mobile:rounded-[12px]",
+    "auth-social-kakao":
+      "bg-white border border-gray-300 text-gray-800 font-medium text-lg leading-16 mobile:text-md rounded-[16px] mobile:rounded-[12px]",
+
+    // 리스트 페이지
+    "list-add-wine":
+      "bg-main text-white font-bold text-lg leading-16 mobile:text-md mobile:leading-14 rounded-[16px] mobile:rounded-[12px] border-none",
+    "list-modal-reset":
+      "bg-main-10 text-main font-bold text-lg leading-16 rounded-[12px] border-none",
+    "list-modal-filter":
+      "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
+    "list-modal-cancel":
+      "bg-main-10 text-main font-bold text-lg leading-16 rounded-[12px] border-none",
+    "list-modal-add-wine":
+      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+
+    // 상품 페이지
+    "product-add-review":
+      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+    "product-modal-add-review":
+      "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
+    "product-modal-add-review2":
+      "bg-main text-white font-semibold text-lg rounded-[12px] border-none",
+    "product-modal-delete":
+      "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
+
+    // 프로필 페이지
+    "profile-change":
+      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+    "profile-modal-update":
+      "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
+    "profile-modal-cancel":
+      "bg-white text-gray-500 font-bold text-lg leading-16 border border-gray-300 rounded-[12px]",
+
+    // 공통 모달
+    "modal-add-wine":
+      "bg-main text-white font-bold text-lg leading-16 mobile:leading-14 rounded-[12px] border-none",
+    "modal-add-review":
+      "bg-main text-white font-bold text-lg leading-16 rounded-[12px] border-none",
   };
 
   return (
     <button
-      className={`${baseStyle}${variantStyles[variant]} ${className}`}
+      className={`${baseStyle} ${variantStyles[variant]} ${className}`}
       {...props}
     >
-      {hasIcon && <span className="size-20 tablet:size-24">{icon}</span>}
-      {children}
+      {hasIcon && <span className="mr-12 size-24 mobile:size-20">{icon}</span>}
+      <span>{children}</span>
     </button>
   );
 };
