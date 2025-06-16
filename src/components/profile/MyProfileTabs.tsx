@@ -13,7 +13,7 @@ export default function MyProfileTabs({
     <div className="flex items-center justify-between w-full mb-4">
       <div className="flex gap-16 tablet:gap-32">
         <button
-          className={`text-2lg tablet:text-xl leading-18 tablet:leaidng-20 font-bold cursor-pointer ${
+          className={`text-2lg tablet:text-xl leading-18 tablet:leading-20 font-bold cursor-pointer ${
             activeTab === "review" ? "text-gray-800" : "text-gray-500"
           }`}
           onClick={() => onTabChange("review")}
@@ -21,7 +21,7 @@ export default function MyProfileTabs({
           내가 쓴 후기
         </button>
         <button
-          className={`text-2lg tablet:text-xl leading-18 tablet:leaidng-20 font-bold cursor-pointer ${
+          className={`text-2lg tablet:text-xl leading-18 tablet:leading-20 font-bold cursor-pointer ${
             activeTab === "wine" ? "text-gray-800" : "text-gray-500"
           }`}
           onClick={() => onTabChange("wine")}
