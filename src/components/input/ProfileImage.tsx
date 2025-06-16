@@ -5,6 +5,7 @@ import Image from "next/image";
 
 interface ProfileIconProps {
   className?: string;
+  src?: string;
 }
 
 export default function ProfileIcon({ className = "size-45", }: ProfileIconProps) {
