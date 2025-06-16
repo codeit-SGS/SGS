@@ -16,7 +16,7 @@ export default function Filter() {
   const ratingOptions = ["전체", "4.5 - 5.0", "4.0 - 4.5", "3.5 - 4.0", "3.0 - 3.5"];
 
   return (
-    <div className="bg-none text-white p-4 rounded-xl space-y-6 w-[250px]">
+    <div className="bg-none text-white p-4 rounded-xl space-y-6 w-284 h-628">
 
       {/* WINE TYPES */}
       <div className="pb-6 border-b border-[#F2F4F8]">
