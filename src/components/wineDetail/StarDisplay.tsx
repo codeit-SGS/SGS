@@ -8,7 +8,7 @@ export default function StarDisplay({ rating }: { rating: number }) {
   const empty = 5 - full - (half ? 1 : 0);
 
   return (
-    <div className="flex text-purple-500">
+    <div className="flex text-main">
       {[...Array(full)].map((_, i) => (
         <Star key={`full-${i}`} fill="currentColor" stroke="none" />
       ))}

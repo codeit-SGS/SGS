@@ -7,6 +7,7 @@ import FlavorTagSelector from './FlavorTagSelector'; // 향 선택 태그 버튼
 import { useState } from 'react';
 import Image from 'next/image';
 import { postReview } from '@/lib/api/review';
+import { useRouter } from 'next/navigation';
 
 export default function ReviewModal({
   onClose,
@@ -32,6 +33,9 @@ export default function ReviewModal({
   // 향 태그 선택 상태
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
 
+  // 슬라이더 값 초기값
+  const router = useRouter();
+
   const handleSliderChange = (
     key: keyof typeof sliderValues,
     value: number
@@ -46,7 +50,7 @@ export default function ReviewModal({
       smoothTannic: sliderValues.tannin,
       drySweet: sliderValues.sweetness,
       softAcidic: sliderValues.acidity,
-      aroma: selectedFlavors,
+      aroma: selectedFlavors.map((f) => f.toUpperCase()), // 선택된 향을 대문자로 변환
       content: reviewText,
       wineId,
     };
@@ -54,29 +58,19 @@ export default function ReviewModal({
     try {
       const res = await postReview(payload);
       console.log('리뷰 등록 성공:', res);
-      onClose(); // 성공하면 모달 닫기
+      onClose(); //-> 성공하면 모달 닫기
+      router.refresh(); //-> 페이지 새로고침
     } catch (err) {
       console.error('리뷰 등록 실패:', err);
     }
   };
 
-  // const reviewData = {
-  //   wineId,
-  //   rating,
-  //   text: reviewText,
-  //   sliders: sliderValues,
-  //   flavors: selectedFlavors,
-  // };
-
-  // console.log('리뷰 전송 데이터:', reviewData);
-  // onClose();
-
   return (
     <div className="p-6 fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-      <div className="bg-white w-[528px] h-[1006px] rounded-2xl p-10 space-y-6 relative">
+      <div className="bg-white w-528 h-1006 rounded-2xl p-10 space-y-6 relative">
         {/* ❌ 닫기 버튼 */}{' '}
         {/* 클릭 시 부모에서 넘긴 onClose 실행 → 모달 닫힘 */}
-        <div className="flex items-center justify-between w-[480px] h-[34px] mt-20 mx-auto">
+        <div className="flex items-center justify-between w-480 h-34 mt-20 mx-auto">
           {/* 제목 */}
           <h2 className="text-2xl font-bold text-gray-800">리뷰 등록</h2>
 
@@ -119,14 +113,14 @@ export default function ReviewModal({
             onChange={(e) => setReviewText(e.target.value)} // 후기 작성 텍스트 상태 업데이트
             maxLength={600} // 최대 600자
             placeholder="후기를 작성해 주세요"
-            className="my-10 w-full h-120 border rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="mt-10 mb-5 w-full h-120 border rounded-xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           {/* 맛 슬라이더 */}
-          <div className="mㅛ-10 flex flex-col space-y-6">
+          <div className="mt-10 flex flex-col space-y-6">
             <SliderInput values={sliderValues} onChange={handleSliderChange} />
           </div>
           {/* 향 선택 */}
-          <div className="my-20 w-[476px] h-[270px] space-y-6">
+          <div className="mt-5 mb-10 w-476 h-270 space-y-6">
             <FlavorTagSelector
               value={selectedFlavors} // 현재 선택된 향 목록
               onChange={setSelectedFlavors} // 태그 클릭 시 업데이트
@@ -135,7 +129,7 @@ export default function ReviewModal({
           {/* 리뷰 등록 버튼 */}
           <button
             onClick={handleSubmit} // 클릭 시 리뷰 제출 함수 실행
-            className="w-full h-54 bg-main text-white my-20 mb-10 py-5 rounded-xl font-semibold hover:bg-purple-600"
+            className="w-full h-54 bg-main text-white mt-30 mb-10 py-5 rounded-xl font-semibold hover:bg-purple-600"
           >
             리뷰 남기기
           </button>

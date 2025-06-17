@@ -16,7 +16,7 @@ function RatingBar({
       </span>
       <div className="relative ml-15 w-241 h-6 bg-gray-200 rounded">
         <div
-          className="absolute left-0 top-0 h-6 bg-purple-500 rounded"
+          className="absolute left-0 top-0 h-6 bg-main rounded"
           style={{ width: `${percent}%` }}
         />
       </div>

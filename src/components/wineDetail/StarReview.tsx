@@ -22,7 +22,7 @@ export default function StarRatingSummary({
   return (
     <>
       {/* ✅ PC용: 너가 만든 코드 100% 유지 */}
-      <div className="hidden lg:block p-4 rounded-xl shadow-subtle bg-white w-[280px]">
+      <div className="hidden lg:block p-4 rounded-xl bg-none w-[280px]">
         <div className="text-4xl font-bold text-gray-800 mb-2">
           {average.toFixed(1)}
         </div>
@@ -44,14 +44,14 @@ export default function StarRatingSummary({
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-113 h-42 px-5 py-2 rounded-12 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
+          className="w-113 h-42 mt-15 px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
         >
           리뷰 남기기
         </button>
       </div>
 
       {/* ✅ 모바일 & 태블릿 */}
-      <div className="block lg:hidden p-4 md:p-6 rounded-xl shadow-subtle bg-white w-full">
+      <div className="block lg:hidden p-4 md:p-6 rounded-xl bg-none w-full">
         <div className="md:flex md:justify-between md:items-start md:gap-8">
           {/* 왼쪽 (모바일은 전체, 태블릿은 왼쪽 열) */}
           <div className="flex flex-col items-start gap-1">
@@ -66,7 +66,7 @@ export default function StarRatingSummary({
               {/* ✅ 모바일: 평균 옆 / ✅ 태블릿: 후기 수 아래 */}
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="md:hidden w-113 h-42 px-5 py-2 rounded-12 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
+                className="md:hidden w-113 h-42 px-5 py-2 rounded-24 bg-purple-500 text-white text-sm font-semibold hover:bg-purple-600 transition"
               >
                 리뷰 남기기
               </button>
