@@ -36,3 +36,8 @@ export async function postReview(payload: ReviewPayload) {
   const res = await api.post('/reviews', payload);
   return res.data;
 }
+
+export async function editReview(id: number, payload: ReviewPayload) {
+  const res = await api.patch(`/reviews/${id}`, payload);
+  return res.data;
+}

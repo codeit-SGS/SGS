@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { TasteData } from '@/types/tasteType';
 import TasteSummary from '@/components/wineDetail/TasteSummary';
 import FlavorTop3 from '@/components/wineDetail/FlavorTop3';
+import ReviewCard from '@/components/card/ReviewCard';
 
 export default function WinePage({ params }: { params: { wineId: string } }) {
   const wineId = Number(params.wineId);
@@ -71,14 +72,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
             리뷰 목록
           </h3>
           {[...Array(3)].map((_, idx) => (
-            <div key={idx} className="relative w-full h-260 xl:h-481">
-              <Image
-                src="/page/review.png"
-                alt={`Review ${idx + 1}`}
-                fill
-                className="rounded-xl shadow-md object-cover"
-              />
-            </div>
+            <ReviewCard key={idx} />
           ))}
         </div>
 
@@ -105,15 +99,11 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
 
         {/* 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-6 md:space-y-8">
+          <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mb-20">
+            리뷰 목록
+          </h3>
           {[...Array(3)].map((_, idx) => (
-            <div key={idx} className="relative w-full h-200 md:h-260">
-              <Image
-                src="/page/review.png"
-                alt={`Review ${idx + 1}`}
-                fill
-                className="rounded-xl shadow-md object-cover"
-              />
-            </div>
+            <ReviewCard key={idx} />
           ))}
         </div>
       </div>
