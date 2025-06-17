@@ -64,7 +64,8 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
       <header className="p-20 text-center text-2xl font-bold bg-black text-white rounded-[16px] h-70 w-full">
         gnb
       </header>
-      <section className="flex flex-col items-center pc:mt-37 mt-20 tablet:mt-17 ">
+
+      <section className="flex flex-col items-center pc:mt-37 mt-20 tablet:mt-17">
         {/* 프로필 카드에 상태와 함수 props로 전달 */}
         <ProfileCard
           profileImageUrl={profileImageUrl}
@@ -74,6 +75,7 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
           nicknamePlaceholder="변경할 닉네임을 입력해주세요."
         />
       </section>
+      
       <main>{children}</main>
     </div>
   );
