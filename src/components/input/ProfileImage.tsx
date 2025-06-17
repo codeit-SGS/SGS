@@ -7,7 +7,7 @@ interface ProfileIconProps {
   className?: string;
 }
 
-export default function ProfileIcon({ className = "w-[45px] h-[45px]" }: ProfileIconProps) {
+export default function ProfileIcon({ className = "size-45" }: ProfileIconProps) {
   const [isHovering, setIsHovering] = useState(false);
 
   return (
@@ -26,4 +26,3 @@ export default function ProfileIcon({ className = "w-[45px] h-[45px]" }: Profile
     </div>
   );
 }
-  
