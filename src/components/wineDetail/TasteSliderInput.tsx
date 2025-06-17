@@ -24,7 +24,10 @@ interface SliderInputProps {
   onChange: (key: keyof SliderInputProps['values'], value: number) => void;
 }
 
-export default function SliderInput({ values, onChange }: SliderInputProps) {
+export default function TasteSliderInput({
+  values,
+  onChange,
+}: SliderInputProps) {
   return (
     <div className="space-y-6 pt-20">
       <p className="text-xl mb-10 pt-10 font-bold text-gray-800">

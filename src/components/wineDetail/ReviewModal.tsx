@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react'; // ❌ 닫기 아이콘
 import StarInput from './StarInput'; // 별점 선택 컴포넌트
-import SliderInput from './SliderInput'; // 바디/타닌/당도/산미 슬라이더
+import TasteSliderInput from './TasteSliderInput'; // 바디/타닌/당도/산미 슬라이더
 import FlavorTagSelector from './FlavorTagSelector'; // 향 선택 태그 버튼
 import { useState } from 'react';
 import Image from 'next/image';
@@ -117,7 +117,10 @@ export default function ReviewModal({
           />
           {/* 맛 슬라이더 */}
           <div className="mt-10 flex flex-col space-y-6">
-            <SliderInput values={sliderValues} onChange={handleSliderChange} />
+            <TasteSliderInput
+              values={sliderValues}
+              onChange={handleSliderChange}
+            />
           </div>
           {/* 향 선택 */}
           <div className="mt-5 mb-10 w-476 h-270 space-y-6">
