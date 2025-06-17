@@ -83,7 +83,7 @@ return (
 {/* 프로필 사진과 닉네임 표시 영역 */}
 <div className="flex items-center pc:flex-col gap-16 tablet:gap-32">
     {/* 프로필 이미지 (클릭하면 파일 선택창이 열림) */}
-    <div onClick={handleImageClick} style={{ cursor: "pointer" }}>
+    <div onClick={handleImageClick} className="cursor-pointer">
     <ProfileImage
         className="size-60 tablet:size-80 pc:size-164"
         src={profileImageUrl}
