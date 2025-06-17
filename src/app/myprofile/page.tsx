@@ -11,7 +11,7 @@ const MyProfilePage = () => {
   const [wineCount, setWineCount] = useState(0);
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-30">
       <MyProfileTabs
         activeTab={activeTab}
         onTabChange={setActiveTab}

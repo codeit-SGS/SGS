@@ -78,12 +78,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   };
 
   return (
-    <div className="min-w-343 tablet:max-w-704 w-full h-241 tablet:h-247 pc:w-280 pc:h-530 p-20 table:px-40 table:py-23 pc:px-20 pc:py-28 rounded-[16px] border border-gray-300 shadow-subtle bg-white">
-      <div className="flex flex-col pc:items-center items-start gap-20 tablet:gap-30 pc:gap-48">
+    <div className="sm:w-343 w-280 tablet:w-704 h-241 tablet:h-247 pc:h-530 px-20 py-20 tablet:px-40 tablet:py-23 pc:px-20 pc:py-28 rounded-[16px] border border-gray-300 shadow-subtle bg-white">
+      <div className="flex flex-col pc:items-center items-start gap-20 tablet:gap-30 pc:gap-48 ">
         {/* 프로필 사진과 닉네임 표시 영역 */}
         <div className="flex items-center pc:flex-col gap-16 tablet:gap-32">
           {/* 프로필 이미지 (클릭하면 파일 선택창이 열림) */}
-          <div onClick={handleImageClick} style={{ cursor: "pointer" }}>
+          <div onClick={handleImageClick} className="cursor-pointer">
             <ProfileImage
               className="size-60 tablet:size-80 pc:size-164"
               src={profileImageUrl}
@@ -93,7 +93,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: "none" }}
+              className="display-none"
               onChange={handleImageChange}
             />
           </div>
