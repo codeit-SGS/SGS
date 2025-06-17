@@ -78,7 +78,7 @@ setIsFirstFocus(false);
 };
 
 return (
-<div className="min-w-343 tablet:max-w-704 w-full h-241 tablet:h-247 pc:w-280 pc:h-530 p-20 tablet:px-40 tablet:py-23 pc:px-20 pc:py-28 rounded-[16px] border border-gray-300 shadow-subtle bg-white">
+<div className="w-343 pc:max-w-280 tablet:max-w-704  h-241 tablet:h-247 pc:w-280 pc:h-530 p-20 tablet:px-40 tablet:py-23 pc:px-20 pc:py-28 rounded-[16px] border border-gray-300 shadow-subtle bg-white">
 <div className="flex flex-col pc:items-center items-start gap-20 tablet:gap-30 pc:gap-48">
 {/* 프로필 사진과 닉네임 표시 영역 */}
 <div className="flex items-center pc:flex-col gap-16 tablet:gap-32">
@@ -93,7 +93,7 @@ return (
         type="file"
         accept="image/*"
         ref={fileInputRef}
-        style={{ display: "none" }}
+        className="hidden"
         onChange={handleImageChange}
     />
     </div>

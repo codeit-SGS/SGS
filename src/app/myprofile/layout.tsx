@@ -61,10 +61,10 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
   // 실제 화면 렌더링
   return (
     <div className="max-W-800 mt-0 p-20 mx-auto">
-      <header>
-        <h1></h1>
+      <header className="p-20 text-center text-2xl font-bold bg-black text-white rounded-[16px] h-70 w-full">
+        gnb
       </header>
-      <section className="flex flex-col items-center">
+      <section className="flex flex-col items-center pc:mt-37 mt-20 tablet:mt-17 ">
         {/* 프로필 카드에 상태와 함수 props로 전달 */}
         <ProfileCard
           profileImageUrl={profileImageUrl}
