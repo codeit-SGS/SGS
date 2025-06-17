@@ -10,7 +10,7 @@ export default function MyProfileTabs({
   totalCount,
 }: MyProfileTabsProps) {
   return (
-    <div className="flex items-center justify-between w-full mb-4">
+    <div className="flex items-center justify-between w-full mb-16 tablet:mb-22">
       <div className="flex gap-16 tablet:gap-32">
         <button
           className={`text-2lg tablet:text-xl leading-18 tablet:leading-20 font-bold cursor-pointer ${
