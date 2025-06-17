@@ -18,11 +18,11 @@ export default function Page() {
       return;
     }
     try {
-      const res = await fetch('https://your.api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, nickname, password, passwordConfirm }),
-      });
+      const res = await fetch('https://winereview-api.vercel.app/15-3/auth/signUp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, nickname, password, passwordConfirmation: passwordConfirm}),
+    });
 
       if (res.ok) {
         router.push('/');
