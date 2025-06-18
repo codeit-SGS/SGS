@@ -36,7 +36,7 @@ const ReviewList = () => {
   if (reviews.length === 0) return <div>작성한 리뷰가 없습니다.</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-16">
       {reviews.map((review) => (
         <MyCard
           key={review.id}
