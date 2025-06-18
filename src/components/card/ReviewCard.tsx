@@ -121,7 +121,7 @@ export default function ReviewCard() {
             <EditModal
               isOpen={isEditModalOpen}
               onClose={() => setIsEditModalOpen(false)}
-              // {review}
+              // 원래는 => initialData={{review}}
               initialData={{
                 rating: 5,
                 content:

@@ -1,4 +1,5 @@
-// FlavorTagSelector.tsx
+'use client';
+
 interface FlavorTagSelectorProps {
   value: string[]; // 외부 상태로부터 받은 선택된 향
   onChange: (value: string[]) => void; // 외부 상태를 업데이트할 함수
