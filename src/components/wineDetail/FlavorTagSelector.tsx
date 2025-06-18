@@ -27,6 +27,28 @@ const FLAVORS = [
   '가죽',
 ];
 
+export const flavorToEng: Record<string, string> = {
+  체리: 'CHERRY',
+  베리: 'BERRY',
+  오크: 'OAK',
+  바닐라: 'VANILLA',
+  후추: 'PEPPER',
+  제빵: 'BREAD',
+  풀: 'GRASS',
+  사과: 'APPLE',
+  복숭아: 'PEACH',
+  시트러스: 'CITRUS',
+  트로피컬: 'TROPICAL',
+  미네랄: 'MINERAL',
+  꽃: 'FLOWER',
+  담뱃잎: 'TOBACCO',
+  흙: 'EARTHY',
+  초콜릿: 'CHOCOLATE',
+  스파이스: 'SPICE',
+  카라멜: 'CARAMEL',
+  가죽: 'LEATHER',
+};
+
 export default function FlavorTagSelector({
   value,
   onChange,

@@ -7,45 +7,141 @@ import { TasteData } from '@/types/tasteType';
 import TasteSummary from '@/components/wineDetail/TasteSummary';
 import FlavorTop3 from '@/components/wineDetail/FlavorTop3';
 import ReviewCard from '@/components/card/ReviewCard';
+import { ReviewResponse, ReviewsByWineId } from '@/lib/api/review';
+
+// ✅ 테스트용 더미 리뷰 데이터
+const dummyReviews: ReviewResponse[] = [
+  {
+    id: 1,
+    rating: 5,
+    lightBold: 9,
+    smoothTannic: 7,
+    drySweet: 3,
+    softAcidic: 2,
+    aroma: ['CHERRY', 'OAK'],
+    content: '풍부한 향과 부드러운 타닌이 인상 깊었어요.',
+    createdAt: '2025-06-18T12:00:00.000Z',
+    updatedAt: '2025-06-18T12:00:00.000Z',
+    user: {
+      id: 1,
+      nickname: '와인초보',
+      image: '/user1.png',
+    },
+    isLiked: false,
+    wineId: 1,
+    teamId: 'team-a',
+  },
+  {
+    id: 2,
+    rating: 4,
+    lightBold: 6,
+    smoothTannic: 5,
+    drySweet: 4,
+    softAcidic: 3,
+    aroma: ['CITRUS', 'CHERRY'],
+    content: '가볍고 산뜻한 맛이에요.',
+    createdAt: '2025-06-17T15:20:00.000Z',
+    updatedAt: '2025-06-17T15:20:00.000Z',
+    user: {
+      id: 2,
+      nickname: '레드마스터',
+      image: '/user2.png',
+    },
+    isLiked: true,
+    wineId: 1,
+    teamId: 'team-a',
+  },
+];
 
 export default function WinePage({ params }: { params: { wineId: string } }) {
   const wineId = Number(params.wineId);
 
-  // 와인 맛 평균 데이터 *예시로 사용 원래는 => <TasteData | null>(null);
-  const [tasteSummary, setTasteSummary] = useState<TasteData>({
-    body: 80,
-    tannin: 30,
-    sweetness: 50,
-    acidity: 60,
+  // 리뷰 리스트 상태 (서버에서 불러온 리뷰들 저장)
+  const [reviews, setReviews] = useState<ReviewResponse[]>([]);
+
+  // ⭐ 별점 통계 상태 (평균, 참여 수, 점수별 분포 저장)
+  const [ratingData, setRatingData] = useState<{
+    average: number;
+    count: number;
+    ratings: Record<number, number>;
+  }>({
+    average: 0,
+    count: 0,
+    ratings: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
   });
 
-  // 화인 향 TOP3 데이터 *예시로 사용, 원래는 => <string[]>([]);
-  const [flavorTop3, setFlavorTop3] = useState<string[]>([
-    '체리',
-    '바닐라',
-    '오크',
-  ]);
+  // 와인 맛 평균 데이터
+  const [tasteSummary, setTasteSummary] = useState<TasteData>({
+    body: 0,
+    tannin: 0,
+    sweetness: 0,
+    acidity: 0,
+  });
 
-  const ratingData = {
-    average: 4.8,
-    count: 5446,
-    ratings: {
-      5: 3000,
-      4: 1800,
-      3: 400,
-      2: 200,
-      1: 46,
-    },
-  };
+  // 와인 향 TOP3 데이터
+  const [flavorTop3, setFlavorTop3] = useState<string[]>([]);
 
-  // 평균 맛 & 향 top3 데이터 불러오기
+  // ⭐ 리뷰 데이터 기반 계산 수행
   useEffect(() => {
-    fetch(`/api/wine/${wineId}/taste-summary`)
-      .then((res) => res.json())
-      .then(setTasteSummary);
-    fetch(`/api/wine/${wineId}/flavor-top3`)
-      .then((res) => res.json())
-      .then(setFlavorTop3);
+    // ✅ 더미 데이터 테스트용
+    const fetchedReviews = dummyReviews;
+
+    // ✅ 실제 API 사용 시 아래 코드 주석 해제
+    // ReviewsByWineId(wineId).then((fetchedReviews) => {
+
+    setReviews(fetchedReviews);
+
+    const count = fetchedReviews.length;
+    const average =
+      count === 0
+        ? 0
+        : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
+
+    const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    fetchedReviews.forEach((r) => {
+      ratings[r.rating] += 1; // 점수별 분포 계산
+    });
+
+    setRatingData({
+      average: Number(average.toFixed(1)),
+      count,
+      ratings,
+    });
+
+    // 맛 요약 계산
+    if (count > 0) {
+      setTasteSummary({
+        body: Math.round(
+          fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
+        ),
+        tannin: Math.round(
+          fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
+        ),
+        sweetness: Math.round(
+          fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
+        ),
+        acidity: Math.round(
+          fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
+        ),
+      });
+    }
+
+    // 향 Top 3 계산
+    const aromaCounts: Record<string, number> = {};
+    fetchedReviews.forEach((r) => {
+      r.aroma.forEach((aroma) => {
+        aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
+      });
+    });
+
+    const top3 = Object.entries(aromaCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([aroma]) => aroma);
+
+    setFlavorTop3(top3);
+    // ✅ 실제 API 사용 시 닫힌 괄호 주석 해제
+    // });
   }, [wineId]);
 
   return (
@@ -63,28 +159,22 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">
                 어떤 맛이 나나요?
-                <span className="text-sm text-gray-500 ml-2">(47명 참여)</span>
+                <span className="text-sm text-gray-500 ml-2">
+                  ({ratingData.count}명 참여)
+                </span>
               </h3>
-              {/* 원래는 => values={tasteSummary} */}
-              <TasteSummary
-                values={{
-                  body: 8,
-                  tannin: 6,
-                  sweetness: 4,
-                  acidity: 2,
-                }}
-                readOnly
-              />
+              <TasteSummary values={tasteSummary} readOnly />
             </div>
 
             {/* 어떤 향이 있나요? */}
             <div className="flex-1">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">
                 어떤 향이 있나요?
-                <span className="text-sm text-gray-500 ml-2">(47명 참여)</span>
+                <span className="text-sm text-gray-500 ml-2">
+                  ({ratingData.count}명 참여)
+                </span>
               </h3>
-              {/* 원래는 => flavors={flavorTop3} */}
-              <FlavorTop3 flavors={['체리', '오크', '시트러스']} />
+              <FlavorTop3 flavors={flavorTop3} />
             </div>
           </div>
         </section>
@@ -97,6 +187,10 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
           <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mb-20">
             리뷰 목록
           </h3>
+          {/* {reviews.map((review) => (
+            // 리뷰 데이터 전달
+            <ReviewCard key={review.id} review={review} />
+          ))} */}
           {[...Array(3)].map((_, idx) => (
             <ReviewCard key={idx} />
           ))}
@@ -108,7 +202,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
             average={ratingData.average}
             count={ratingData.count}
             ratings={ratingData.ratings}
-            wineId={Number(params.wineId)} // ✅ string → number 변환
+            wineId={wineId} // ✅ string → number 변환
           />
         </div>
       </div>
@@ -120,7 +214,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
           average={ratingData.average}
           count={ratingData.count}
           ratings={ratingData.ratings}
-          wineId={wineId} // ✅ string → number 변환
+          wineId={wineId}
         />
 
         {/* 리뷰 카드 리스트 */}
@@ -128,6 +222,10 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
           <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mb-20">
             리뷰 목록
           </h3>
+          {/* {reviews.map((review) => (
+            // 리뷰 데이터 전달
+            <ReviewCard key={idx} review={review} />
+          ))} */}
           {[...Array(3)].map((_, idx) => (
             <ReviewCard key={idx} />
           ))}

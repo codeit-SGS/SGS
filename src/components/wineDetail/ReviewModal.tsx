@@ -3,7 +3,7 @@
 import { X } from 'lucide-react'; // ❌ 닫기 아이콘
 import StarInput from './StarInput'; // 별점 선택 컴포넌트
 import TasteSliderInput from './TasteSliderInput'; // 바디/타닌/당도/산미 슬라이더
-import FlavorTagSelector from './FlavorTagSelector'; // 향 선택 태그 버튼
+import FlavorTagSelector, { flavorToEng } from './FlavorTagSelector'; // 향 선택 태그 버튼
 import { useState } from 'react';
 import Image from 'next/image';
 import { postReview } from '@/lib/api/review';
@@ -44,13 +44,15 @@ export default function ReviewModal({
   };
 
   const handleSubmit = async () => {
+    const englishAromas = selectedFlavors.map((tag) => flavorToEng[tag]);
+
     const payload = {
       rating,
       lightBold: sliderValues.body,
       smoothTannic: sliderValues.tannin,
       drySweet: sliderValues.sweetness,
       softAcidic: sliderValues.acidity,
-      aroma: selectedFlavors.map((f) => f.toUpperCase()), // 선택된 향을 대문자로 변환
+      aroma: englishAromas, // 선택된 향을 영어로 변환
       content: reviewText,
       wineId,
     };
