@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signup } from '@/lib/api/auth';
+
 
 export default function Page() {
   const router = useRouter();
@@ -12,27 +14,27 @@ export default function Page() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  const handleSignup = async () => {
-    if (password !== passwordConfirm) {
-      alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
-      return;
-    }
-    try {
-      const res = await fetch('https://winereview-api.vercel.app/15-3/auth/signUp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, nickname, password, passwordConfirmation: passwordConfirm}),
-    });
+ const handleSignup = async () => {
+  if (password !== passwordConfirm) {
+    alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
+    return;
+  }
 
-      if (res.ok) {
-        router.push('/');
-      } else {
-        alert('회원가입 실패. 다시 시도해주세요.');
-      }
-    } catch (error) {
-      alert('오류가 발생했습니다.');
+  try {
+    const res = await signup(email, nickname, password, passwordConfirm);
+    
+    if (res.status === 200 || res.status === 201) {
+      alert('회원가입 성공!');
+      router.push('/login');  // after signup, go to login page
+    } else {
+      alert('회원가입 실패. 다시 시도해주세요.');
     }
-  };
+    } catch (err: any) {
+      console.error('Signup failed:', err.response?.data || err.message);
+      alert(`오류 발생: ${err.response?.data?.message || '알 수 없는 오류'}`);
+    }
+  };  
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">

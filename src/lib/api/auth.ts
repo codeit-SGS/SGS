@@ -1,13 +1,21 @@
 // src/lib/api/auth.ts
+
 import api from './axios';
 
 const TEAM_ID = '15-3';
 
 // POST /{teamId}/auth/signUp
-export const signup = (email: string, password: string) => {
+export const signup = (
+  email: string,
+  nickname: string,
+  password: string,
+  passwordConfirmation: string
+) => {
   return api.post(`/${TEAM_ID}/auth/signUp`, {
     email,
+    nickname,
     password,
+    passwordConfirmation,
   });
 };
 

@@ -10,26 +10,31 @@ import { login } from '@/lib/api/auth';
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
       const res = await login(email, password);
-      console.log('✅ Login success:', res.data);
 
-      // Optionally store token
-      // localStorage.setItem('token', res.data.token);
+      if (res.status === 200) {
+        alert('로그인 성공!');
 
-      // Redirect
-      router.push('/somewhere');
+        // Example: save token
+        localStorage.setItem('accessToken', res.data.accessToken);
+        localStorage.setItem('refreshToken', res.data.refreshToken);
 
+        // Redirect after login
+        router.push('/');
+      } else {
+        alert('로그인 실패. 다시 시도해주세요.');
+      }
     } catch (err: any) {
-      console.error('❌ Login failed:', err.response?.data || err.message);
+      console.error('Login failed', err.response?.data || err.message);
       alert(`오류 발생: ${err.response?.data?.message || '알 수 없는 오류'}`);
     }
-
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
