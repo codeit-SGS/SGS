@@ -4,23 +4,23 @@ import Image from 'next/image';
 
 export default function HomePage() {
   return (
-    <main className="bg-gray-50 text-black px-16">
+    <main className="flex flex-col bg-gray-100 px-16 gap-48">
 
       {/* main Section */}
-      <section className="flex flex-col justify-between min-h-403 text-white text-center mt-24 rounded-[16px] bg-[#171A21]">
+      <section className="relative flex flex-col justify-between h-403 pt-56 text-white text-center mt-24 rounded-[16px] bg-[#171A21] overflow-hidden">
         <div>
           <div className="flex items-center justify-center mb-24">
             <Image src="/logo/logo-purple.png" alt="로고" width={81} height={23} />
           </div>
-          <p className="mt-2 text-2xl font-bold">한 곳에서 관리하는<br />나만의 와인창고</p>
+          <p className="text-2xl font-bold leading-40">한 곳에서 관리하는<br />나만의 와인창고</p>
         </div>
-        <div className="mt-6 flex overflow-x-auto gap-4 px-4">
-          {/* 와인 카드 캐러셀 더미 */} 
+        <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/2 h-403">
+          <Image src="/banner/main-banner1-pc.png" alt="메인배너1" fill priority className="object-cover" />
         </div>
       </section>
 
       {/* ✅ 추천 콘텐츠 */}
-      <section className="py-16 px-4">
+      <section className="rounded-[16px] bg-white p-8 shadow-md">
         <h3 className="text-lg font-semibold">매달 새롭게 만나는 와인 추천 콘텐츠</h3>
         {/* 더미 와인 카드 2개 */}
         <div className="mt-4 flex gap-4 flex-wrap">
