@@ -12,6 +12,10 @@
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.04);
   }
 
+  .shadow-sub-banner {
+    box-shadow: 4px 4px 20px 0px rgba(224, 230, 238, 0.25)
+  }
+
   .text-overflow-line3 {
     @apply overflow-hidden;
     @apply break-words;
