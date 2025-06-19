@@ -32,7 +32,7 @@ const CommonInput = forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {/* input과 아이콘을 감싸는 컨테이너, 상대 위치 지정 */}
-        <div className="relative w-[400px] h-12">
+        <div className="relative w-full h-12">
           <input
             ref={ref}
             className={`w-full h-full
