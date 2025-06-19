@@ -40,7 +40,7 @@ export const flavorToEng: Record<string, string> = {
   시트러스: 'CITRUS',
   트로피컬: 'TROPICAL',
   미네랄: 'MINERAL',
-  꽃: 'FLOWER',
+  꽃: 'FLORAL',
   담뱃잎: 'TOBACCO',
   흙: 'EARTHY',
   초콜릿: 'CHOCOLATE',
