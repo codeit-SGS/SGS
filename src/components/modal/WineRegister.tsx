@@ -2,12 +2,20 @@
 
 import React, { useState } from 'react';
 
-const WineRegister = ({ onClose }: { onClose: () => void }) => {
+type WineRegisterProps = {
+  onClose: () => void;
+  onSuccess: (wineId: number) => void;
+  teamId: string;
+};
+
+const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   const [wineName, setWineName] = useState('');
   const [price, setPrice] = useState('');
   const [origin, setOrigin] = useState('');
   const [type, setType] = useState('Red');
   const [image, setImage] = useState<File | null>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -15,9 +23,57 @@ const WineRegister = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ wineName, price, origin, type, image });
+
+    if (!wineName || !price || !origin || !type || !image) {
+      setError('모든 항목을 입력해주세요.');
+      return;
+    }
+    setError('');
+    setLoading(true);
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      console.log("🔐 accessToken:", accessToken);
+
+      if (!accessToken) {
+        setError('로그인이 필요합니다.');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`https://winereview-api.vercel.app/${teamId}/wines`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          name: wineName,
+          type,
+          country: origin,
+          price: Number(price),
+          rating: 4.0,
+        }),
+      });
+
+      console.log("📡 status:", response.status);
+      const text = await response.text();
+      console.log("📨 response body:", text);
+
+      if (!response.ok) {
+        throw new Error('와인 등록 실패');
+      }
+
+      const data = JSON.parse(text);
+      onSuccess(data.id); //
+    } catch (err) {
+      console.error('등록 에러:', err);
+      setError('와인 등록 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -125,8 +181,9 @@ const WineRegister = ({ onClose }: { onClose: () => void }) => {
         <button
           type="submit"
           className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
+          disabled={loading}
         >
-          와인 등록하기
+          {loading ? "등록 중..." : "와인 등록하기"}
         </button>
       </div>
     </form>
