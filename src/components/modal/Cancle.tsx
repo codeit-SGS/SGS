@@ -3,7 +3,7 @@
 import CommonButton from "../button/CommonButton";
 
 // 모달 컴포넌트의 props 타입 정의
-interface CancleModalProps {
+interface CancelModalProps {
   open: boolean; // 모달 오픈 여부
   onCancel: () => void; // 취소(닫기) 버튼 클릭 시 실행 함수
   onConfirm: () => void; // 삭제(확인) 버튼 클릭 시 실행 함수
@@ -11,12 +11,12 @@ interface CancleModalProps {
 }
 
 // 취소/삭제 모달 컴포넌트
-export default function CancleModal({
+export default function CancelModal({
   open,
   onCancel,
   onConfirm,
   message = "정말 삭제하시겠습니까?",
-}: CancleModalProps) {
+}: CancelModalProps) {
   // open이 false면 아무것도 렌더링하지 않음
   if (!open) return null;
 
