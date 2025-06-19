@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { fetchMyWines } from "@/lib/api/user";
-import MylistCard from "@/components/card/mylistCard";
+import { useEffect, useState } from 'react';
+import { fetchMyWines } from '@/lib/api/user';
+import MylistCard from '@/components/card/MylistCard';
 
 interface Wine {
   id: number;
@@ -23,7 +23,7 @@ const WineList = () => {
         const data = await fetchMyWines();
         setWines(data); // API 응답 구조에 따라 수정 필요
       } catch (e) {
-        setError("등록한 와인을 불러오지 못했습니다.");
+        setError('등록한 와인을 불러오지 못했습니다.');
       } finally {
         setLoading(false);
       }

@@ -1,6 +1,6 @@
 'use client';
 
-import DetailCard from '@/components/card/detailCard';
+import DetailCard from '@/components/card/DetailCard';
 import StarReview from '@/components/wineDetail/StarReview';
 import { useEffect, useState } from 'react';
 import { TasteData } from '@/types/tasteType';
