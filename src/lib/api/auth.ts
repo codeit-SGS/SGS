@@ -2,16 +2,18 @@
 
 import api from './axios';
 
-const TEAM_ID = '15-3';
+// .env 파일에서 NEXT_PUBLIC_API_URL에 이미 /15-3/가 포함되어 있으므로
+// axios 인스턴스(api)는 baseURL: https://...app/15-3/ 로 설정됨
+// 따라서 아래 endpoint에는 teamId를 중복해서 넣지 않아야 함
 
-// POST /{teamId}/auth/signUp
+// 회원가입
 export const signup = (
   email: string,
   nickname: string,
   password: string,
   passwordConfirmation: string
 ) => {
-  return api.post(`/${TEAM_ID}/auth/signUp`, {
+  return api.post(`auth/signUp`, {
     email,
     nickname,
     password,
@@ -19,20 +21,19 @@ export const signup = (
   });
 };
 
-// POST /{teamId}/auth/signIn
+// 로그인
 export const login = (email: string, password: string) => {
-  return api.post(`/${TEAM_ID}/auth/signIn`, {
+  return api.post(`auth/signIn`, {
     email,
     password,
   });
 };
 
-// PATCH /{teamId}/users/me
+// 내 프로필 수정
 export const updateUserProfile = (nickname: string) => {
   const token = localStorage.getItem('token');
-
   return api.patch(
-    `/${TEAM_ID}/users/me`,
+    `users/me`,
     {
       nickname,
     },
