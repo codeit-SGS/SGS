@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const WineRegister = () => {
+const WineRegister = ({ onClose }: { onClose: () => void }) => {
   const [wineName, setWineName] = useState('');
   const [price, setPrice] = useState('');
   const [origin, setOrigin] = useState('');
@@ -26,6 +26,7 @@ const WineRegister = () => {
     setOrigin('');
     setType('Red');
     setImage(null);
+    onClose();
   };
 
   return (
@@ -112,6 +113,7 @@ const WineRegister = () => {
         </div>
       </div>
 
+      {/* 버튼(취소/와인 등록하기) 영역 */}
       <div className="flex justify-between space-x-4 pt-4">
         <button
           type="button"
