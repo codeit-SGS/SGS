@@ -1,20 +1,34 @@
-import { CommonButton, ButtonVariant } from '@/components/button';
-import GoogleIcon from "@/icon/google.svg";
-import KakaoIcon from "@/icon/kakao.svg";
 
-export default function MyComponent() {
+import CommonButton from "@/components/button/CommonButton";
+import SocialGoogleButton from "@/components/button/SocialGoogleButton";
+import SocialKakaoButton from "@/components/button/SocialKakaoButton";
+
+export default function TestButtonsPage() {
+
+
   return (
-    <>
-      <CommonButton variant="social-google" icon={<GoogleIcon />}>
-        Google로 시작하기
-      </CommonButton>
-      <CommonButton variant="social-kakao" icon={<KakaoIcon />}>
-        Kakao로 시작하기
-      </CommonButton>
-      <CommonButton variant="modal-cancel">취소</CommonButton>
-      <CommonButton variant="modal-submit">링크 보내기</CommonButton>
-      <CommonButton variant="signup">가입하기</CommonButton>
-      <CommonButton variant="review">리뷰 남기기</CommonButton>
-    </>
+    <main className="p-6 space-y-8 max-w-md mx-auto">
+      <h1 className="text-2xl font-bold">버튼 테스트 페이지</h1>
+
+      {/* CommonButton 테스트 */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">✅ CommonButton</h2>
+        <CommonButton variant="landing-go-to-wine" className="w-full h-50">
+          와인 보러가기
+        </CommonButton>
+      </section>
+
+      {/* SocialGoogleButton 테스트 */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">✅ SocialGoogleButton</h2>
+        <SocialGoogleButton className="w-400 h-52 mobile:w-303 mobile:h-48" />
+      </section>
+
+      {/* SocialKakaoButton 테스트 */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">✅ SocialKakaoButton</h2>
+        <SocialKakaoButton className="w-400 h-52 mobile:w-303 mobile:h-48" />
+      </section>
+    </main>
   );
 }
