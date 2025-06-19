@@ -10,7 +10,6 @@ import CommonButton from '@/components/button/CommonButton';
 
 const SigninPage = () => {
   const router = useRouter();
-
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
