@@ -1,8 +1,17 @@
- 'use client';
+'use client';
 
-const MyCard = () => {
+import React from 'react';
+
+interface MyCardProps {
+  rating: number;
+  createdAt: string;
+  name: string;
+  content: string;
+}
+
+const MyCard = ({ rating, createdAt, name, content }: MyCardProps) => {
   return (
-     <div className="flex flex-col w-full max-w-[800px] px-40 pt-24 pb-18 bg-white rounded-[16px] border border-gray-300">
+    <div className="flex flex-col w-full max-w-[800px] px-40 pt-24 pb-18 bg-white rounded-[16px] border border-gray-300">
       {/* 상단: 별점 + 시간 + 옵션 */}
       <div className="flex justify-between pb-20">
         <div className="flex items-center gap-15">
@@ -13,13 +22,13 @@ const MyCard = () => {
               width={20}
               height={20}
             />
-            <span>5.0</span>
+            <span>{rating.toFixed(1)}</span>
           </div>
-          <span className="text-gray-500 text-16 leading-26">10시간 전</span>
+          <span className="text-gray-500 text-16 leading-26">{createdAt}</span>
         </div>
         <button>
           <img
-            src="/icon/menu.svg" // 점 세개 아이콘
+            src="/icon/menu.svg"
             alt="더보기"
             width={26}
             height={26}
@@ -28,16 +37,11 @@ const MyCard = () => {
       </div>
 
       {/* 와인명 */}
-      <p className="text-16 text-gray-500 leading-26 pb-10">
-        Sentinal Carbernet Sauvignon 2016
-      </p>
+      <p className="text-16 text-gray-500 leading-26 pb-10">{name}</p>
 
       {/* 리뷰 내용 */}
       <p className="text-16 text-gray-800 leading-26 text-overflow-line3">
-        Deep maroon color, tasting notes of blackberry, dark chocolate, plum. Super jammy and bold with
-        some smoky after notes. Big flavor. Amazing value (would pay three times the price for it), well
-        balanced flavor. Could drink all day everyday with or without food. I need more immediately.
-        hout food. I need more immediately
+        {content}
       </p>
     </div>
   );
