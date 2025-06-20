@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/api/auth';
-import Image from 'next/image';
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,35 +30,35 @@ export default function LoginPage() {
     }
   };
 
-  return (
+   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-white rounded-2xl shadow-md w-full max-w-md border border-gray-300 px-12 py-20 flex flex-col items-center gap-10 space-x-10">
+      <div className="bg-white rounded-[16px] shadow-md w-[400px] border border-[#CFDBEA] px-[48px] py-[80px] flex flex-col items-center gap-[10px]">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <Image src="/logo/logo-bk.svg" alt="Logo" width={64} height={64} priority />
+          <img src="/logo/logo-bk.svg" alt="Logo" className="h-16" />
         </div>
 
         {/* 이메일 */}
-        <div className="flex flex-col items-start gap-2.5 h-20 w-full">
+        <div className="flex flex-col items-start gap-[10px] h-[84px] w-full">
           <label className="text-sm font-medium text-gray-700">이메일</label>
           <input
             type="email"
             placeholder="이메일 입력"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-12 px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full h-[48px] px-[20px] py-[14px] border border-[#CFDBEA] rounded-[16px] focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
         {/* 비밀번호 */}
-        <div className="flex flex-col items-start gap-2.5 h-20 w-full">
+        <div className="flex flex-col items-start gap-[10px] h-[84px] w-full">
           <label className="text-sm font-medium text-gray-700">비밀번호</label>
           <input
             type="password"
             placeholder="비밀번호 입력"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-12 px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full h-[48px] px-[20px] py-[14px] border border-[#CFDBEA] rounded-[16px] focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
@@ -70,29 +70,33 @@ export default function LoginPage() {
         {/* 로그인 버튼 */}
         <button
           onClick={handleLogin}
-          className="w-full text-white font-semibold transition hover:brightness-110 mb-4 flex justify-center items-center rounded-xl h-12 bg-purple-700"
+          className="w-full text-white font-semibold transition hover:brightness-110 mb-4 flex justify-center items-center rounded-[16px] cursor-pointer"
+          style={{
+            height: '50px',
+            backgroundColor: '#6A42DB',
+          }}
         >
           로그인
         </button>
 
         {/* 소셜 로그인 */}
         <button
-          className="w-full h-12 mb-3 flex items-center justify-center"
+          className="w-full h-[48px] mb-3"
           onClick={() =>
             (window.location.href = 'https://myaccount.google.com/')
           }
         >
-          <Image src="/img/social-login-google.png" alt="Google로 시작하기" width={200} height={48} />
+          <img src="/img/social-login-google.png" alt="Google로 시작하기" />
         </button>
 
         <button
-          className="w-full h-12 mb-6 flex items-center justify-center"
+          className="w-full h-[48px] mb-6"
           onClick={() =>
             (window.location.href = 'https://accounts.kakao.com/')
           }
         >
-          <Image src="/img/social-login-kakao.png" alt="Kakao로 시작하기" width={200} height={48} />
-        </button>
+          <img src="/img/social-login-kakao.png" alt="Kakao로 시작하기" />
+        </button> 
 
         {/* 회원가입 링크 */}
         <div className="text-center text-sm text-gray-500">
@@ -100,8 +104,7 @@ export default function LoginPage() {
           <Link href="/signin" className="text-purple-600 font-semibold hover:underline">
             회원가입하기
           </Link>
-          </div>
-          
+        </div>
       </div>
     </div>
   );
