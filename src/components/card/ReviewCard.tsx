@@ -5,6 +5,7 @@ import Image from 'next/image';
 import ProfileIcon from '@/components/input/ProfileImage';
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
+import EditModal from '../wineDetail/EditModal';
 
 // 스타일링된 슬라이더 컴포넌트
 const PurpleSlider = styled(Slider)({
@@ -25,22 +26,28 @@ const PurpleSlider = styled(Slider)({
   '& .MuiSlider-track': {
     backgroundColor: '#F2F4F8',
     opacity: 1,
-    border: '1px solid #CFDBEA'
+    border: '1px solid #CFDBEA',
   },
   '& .MuiSlider-rail': {
     backgroundColor: '#F2F4F8',
     opacity: 1,
-    border: '1px solid #CFDBEA'
+    border: '1px solid #CFDBEA',
   },
 });
 
 export default function ReviewCard() {
   const [isOpen, setIsOpen] = useState(true); // 본문 토글
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // 드롭다운 전용
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleToggle = () => setIsOpen((prev) => !prev);
   const handleDropdownToggle = () => setIsDropdownOpen((prev) => !prev);
+
+  const handleEditClick = () => {
+    setIsDropdownOpen(false);
+    setIsEditModalOpen(true); // 👈 수정 모달 열기
+  };
 
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
@@ -66,7 +73,9 @@ export default function ReviewCard() {
         <div className="flex gap-16 pc:gap-20 items-center">
           <ProfileIcon className="size-42 tablet:size-64" />
           <div className="text-sm tablet:gap-4 flex flex-col">
-            <p className="text-16 tablet:text-xl font-semibold text-gray-800">와인러버</p>
+            <p className="text-16 tablet:text-xl font-semibold text-gray-800">
+              와인러버
+            </p>
             <p className="text-gray-400 text-14 tablet:text-lg">10시간 전</p>
           </div>
         </div>
@@ -95,11 +104,41 @@ export default function ReviewCard() {
             {/* 드롭다운 메뉴 */}
             {isDropdownOpen && (
               <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">
-                <button className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">수정하기</button>
-                <button className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">삭제하기</button>
+                <button
+                  onClick={handleEditClick}
+                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
+                >
+                  수정하기
+                </button>
+                <button className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">
+                  삭제하기
+                </button>
               </div>
             )}
           </div>
+          {/* 수정 모달 */}
+          {isEditModalOpen && (
+            <EditModal
+              isOpen={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              // 원래는 => initialData={{review}}
+              initialData={{
+                rating: 5,
+                content:
+                  'Deep maroon color, tasting notes of blackberry, dark chocolate...',
+                taste: {
+                  body: 80,
+                  tannin: 30,
+                  sweetness: 50,
+                  acidity: 60,
+                },
+                aroma: ['체리', '오크', '카라멜'],
+                wineId: 1,
+                wineName: 'Sentinel Carbernet Sauvignon 2016',
+                reviewId: 123,
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -120,7 +159,12 @@ export default function ReviewCard() {
         {/* 별점 */}
         <div className="absolute right-0 top-0">
           <div className="bg-main-10 text-main text-md tablet:text-lg font-semibold px-10 py-6 tablet:px-15 tablet:py-8 rounded-[12px] flex items-center gap-2">
-            <Image src="/icon/purple-star.svg" alt="별점" width={16} height={16} />
+            <Image
+              src="/icon/purple-star.svg"
+              alt="별점"
+              width={16}
+              height={16}
+            />
             <span>5.0</span>
           </div>
         </div>
@@ -131,9 +175,11 @@ export default function ReviewCard() {
         <>
           {/* 텍스트 후기 */}
           <p className="text-md tablet:text-lg text-gray-800 leading-24 tablet:leading-26 mb-16 tablet:mb-24 pc:mb-20">
-            Deep maroon color, tasting notes of blackberry, dark chocolate, plum. Super jammy and bold
-            with some smoky after notes. Big flavor. Amazing value (would pay three times the price for it), well
-            balanced flavor. Could drink all day everyday with or without food. I need more immediately.
+            Deep maroon color, tasting notes of blackberry, dark chocolate,
+            plum. Super jammy and bold with some smoky after notes. Big flavor.
+            Amazing value (would pay three times the price for it), well
+            balanced flavor. Could drink all day everyday with or without food.
+            I need more immediately.
           </p>
 
           {/* 슬라이더 */}
@@ -144,12 +190,25 @@ export default function ReviewCard() {
               ['당도', '드라이해요', '달아요', 50],
               ['산미', '안셔요', '많이셔요', 60],
             ].map(([label, left, right, percent], idx) => (
-              <div key={idx} className="flex flex-row items-center gap-10 tablet:gap-16 pc:gap-26">
-                <div className="w-48 tablet:w-62 text-xs tablet:text-lg text-gray-500 font-semibold px-8 py-5 tablet:px-10 tablet:py-2 bg-gray-100 rounded-[6px] text-center">{label}</div>
+              <div
+                key={idx}
+                className="flex flex-row items-center gap-10 tablet:gap-16 pc:gap-26"
+              >
+                <div className="w-48 tablet:w-62 text-xs tablet:text-lg text-gray-500 font-semibold px-8 py-5 tablet:px-10 tablet:py-2 bg-gray-100 rounded-[6px] text-center">
+                  {label}
+                </div>
                 <div className="flex flex-row flex-1 items-center justify-between tablet:gap-15">
-                  <span className="inline-block w-62 tablet:w-70 text-md tablet:text-lg text-gray-800">{left}</span>
-                  <PurpleSlider className="max-w-110 tablet:max-w-380 pc:max-w-470" value={Number(percent)} disabled />
-                  <span className="inline-block w-50 tablet:w-60 text-md tablet:text-lg text-gray-800">{right}</span>
+                  <span className="inline-block w-62 tablet:w-70 text-md tablet:text-lg text-gray-800">
+                    {left}
+                  </span>
+                  <PurpleSlider
+                    className="max-w-110 tablet:max-w-380 pc:max-w-470"
+                    value={Number(percent)}
+                    disabled
+                  />
+                  <span className="inline-block w-50 tablet:w-60 text-md tablet:text-lg text-gray-800">
+                    {right}
+                  </span>
                 </div>
               </div>
             ))}
