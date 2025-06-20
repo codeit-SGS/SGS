@@ -44,7 +44,7 @@ export default function StarRatingSummary({
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-113 h-42 mt-15 px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
+          className="w-113 h-42 cursor-pointer mt-15 px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
         >
           리뷰 남기기
         </button>
