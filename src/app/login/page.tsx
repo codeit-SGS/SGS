@@ -32,7 +32,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-white rounded-2xl shadow-md w-full max-w-md border border-gray-300 px-12 py-20 flex flex-col items-center gap-2.5">
+      <div className="bg-white rounded-2xl shadow-md w-full max-w-md border border-gray-300 px-12 py-20 flex flex-col items-center gap-10 space-x-10">
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image src="/logo/logo-bk.svg" alt="Logo" width={64} height={64} priority />
@@ -100,7 +100,8 @@ export default function LoginPage() {
           <Link href="/signin" className="text-purple-600 font-semibold hover:underline">
             회원가입하기
           </Link>
-        </div>
+          </div>
+          
       </div>
     </div>
   );

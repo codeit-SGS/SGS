@@ -4,38 +4,31 @@ export const fetchMyProfile = async () => {
   const res = await api.get("users/me");
   return res.data;
 };
-/*
-users/me 엔드포인트로 GET 요청을 보냅니다.
-서버에서 내 프로필 정보를 받아옵니다.
-응답 객체(res)에서 실제 데이터(res.data)만 반환합니다.
-*/
 
 export const patchMyProfile = async ({
   nickname,
   image,
+  prevNickname,
+  prevImage,
 }: {
-  nickname: string;
-  image: string;
+  nickname?: string;
+  image?: string;
+  prevNickname: string;
+  prevImage: string;
 }) => {
-  const res = await api.patch("users/me", { nickname, image });
+  // nickname이나 image가 빈 문자열이면 기존 값 사용
+  const payload: { nickname: string; image: string } = {
+    nickname: nickname && nickname.trim() !== "" ? nickname : prevNickname,
+    image: image && image.trim() !== "" ? image : prevImage,
+  };
+  const res = await api.patch("users/me", payload);
   return res.data;
 };
-/*
-users/me 엔드포인트로 PATCH 요청을 보냅니다.
-요청 본문에 { nickname, image }를 담아 보냅니다.
-서버에서 내 프로필(닉네임, 이미지)을 수정합니다.
-응답 객체(res)에서 실제 데이터(res.data)만 반환합니다.
- */
 
 export const fetchMyReviews = async () => {
   const res = await api.get("users/me/reviews");
   return res.data;
 };
-/*
-users/me/reviews 엔드포인트로 GET 요청을 보냅니다.
-서버에서 내 리뷰 목록을 받아옵니다.
-응답 객체(res)에서 실제 데이터(res.data)만 반환합니다.
-*/
 
 export const fetchMyWines = async () => {
   const res = await api.get("users/me/wines");
