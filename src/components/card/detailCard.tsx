@@ -2,7 +2,7 @@
 
 const DetailCard = () => {
   return (
-    <div className="flex flex-col w-full max-w-1140 rounded-[12px] bg-white cursor-pointer border border-gray-300">
+    <div className="flex flex-col w-full max-w-1140 rounded-[12px] bg-white border border-gray-300">
       <div className="flex pt-51 pr-45">
         <div className="relative w-full px-100 max-w-250">
           {/* 와인 이미지 */}

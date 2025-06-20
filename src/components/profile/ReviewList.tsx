@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { fetchMyReviews } from "@/lib/api/user";
-import MyCard from "@/components/card/myCard";
+import { useEffect, useState } from 'react';
+import { fetchMyReviews } from '@/lib/api/user';
+import MyCard from '@/components/card/MyCard';
 
 interface Review {
   id: number;
@@ -23,7 +23,7 @@ const ReviewList = () => {
         const data = await fetchMyReviews();
         setReviews(data); // API 응답 구조에 따라 수정 필요
       } catch (e) {
-        setError("리뷰를 불러오지 못했습니다.");
+        setError('리뷰를 불러오지 못했습니다.');
       } finally {
         setLoading(false);
       }
