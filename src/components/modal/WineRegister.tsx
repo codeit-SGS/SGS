@@ -35,7 +35,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
 
     try {
       const accessToken = localStorage.getItem('accessToken');
-      console.log("🔐 accessToken:", accessToken);
+      console.log('accessToken:', accessToken);
 
       if (!accessToken) {
         setError('로그인이 필요합니다.');
@@ -43,7 +43,26 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         return;
       }
 
-      const response = await fetch(`https://winereview-api.vercel.app/${teamId}/wines`, {
+      // 이미지 올리기
+      const formDataImg = new FormData();
+      formDataImg.append('image', image);
+
+      const imgRes = await fetch(`https://winereview-api.vercel.app/15-3/images/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formDataImg,
+      });
+
+      const imgJson = await imgRes.json();
+      if (!imgRes.ok) {
+        throw new Error('이미지 업로드에 실패했습니다.');
+      }
+
+      const imageId = imgJson.imageId;
+
+      const wineRes = await fetch(`https://winereview-api.vercel.app/15-3/wines`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,25 +71,21 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         body: JSON.stringify({
           name: wineName,
           type,
-          country: origin,
+          region: origin,
           price: Number(price),
           rating: 4.0,
+          imageId,
         }),
       });
 
-      console.log("📡 status:", response.status);
-      const text = await response.text();
-      console.log("📨 response body:", text);
-
-      if (!response.ok) {
+      const wineJson = await wineRes.json();
+      if (!wineRes.ok) {
         throw new Error('와인 등록 실패');
       }
 
-      const data = JSON.parse(text);
-      onSuccess(data.id); //
+      onSuccess(wineJson.id); // ✅ 콜백 실행
     } catch (err) {
-      console.error('등록 에러:', err);
-      setError('와인 등록 중 오류가 발생했습니다.');
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
