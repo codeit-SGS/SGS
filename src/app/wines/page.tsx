@@ -10,6 +10,7 @@ import WineCard from "@/components/card/wineCard";
 import CommonButton from "@/components/button/CommonButton";
 import WineRegister from "@/components/modal/WineRegister";
 
+
 export default function WineListPage() {
   const router = useRouter();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
