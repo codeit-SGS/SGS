@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import MonthlyCard from "@/components/card/monthlyCard";
@@ -9,24 +9,63 @@ import Filter from "@/components/modal/Filter";
 import WineCard from "@/components/card/wineCard";
 import CommonButton from "@/components/button/CommonButton";
 import WineRegister from "@/components/modal/WineRegister";
+import api from '@/lib/api/axios';
 
+interface Wine {
+  id: number;
+  name: string;
+  region: string;
+  image: string;
+  price: number;
+  avgRating: number;
+  reviewCount?: number;
+  recentReview?: string;
+}
 
 export default function WineListPage() {
   const router = useRouter();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [wineList, setWineList] = useState<Wine[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const wineList = [
-    { id: 1, name: '샤또 마고', region: 'France', imageUrl: '/images/wine1.jpg', rating: 5.0 },
-    { id: 2, name: '오퍼스 원', region: 'USA', imageUrl: '/images/wine2.jpg', rating: 4.5 },
-    { id: 3, name: '빈티지 포트', region: 'Portugal', imageUrl: '/images/wine3.jpg', rating: 4.0 },
-  ];
+  useEffect(() => {
+    const fetchWines = async () => {
+      try {
+        const limit = 20;
+        const res = await api.get('/wines', {
+          params: { limit }
+        });
 
-  const sortedWineList = [...wineList].sort((a, b) => b.rating - a.rating);
+        console.log('와인 데이터:', res.data);
+        setWineList(res.data.list ?? []);
+      } catch (err: any) {
+        console.error('와인 목록 에러:', err.response?.data || err.message);
+        setError('와인 목록을 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWines();
+  }, []);
+
+  const sortedWineList = Array.isArray(wineList)
+    ? [...wineList].sort((a, b) => b.avgRating - a.avgRating)
+    : [];
 
   const filteredWineList = sortedWineList.filter((wine) =>
     wine.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (loading) {
+    return <p className="text-center mt-20">와인 목록을 불러오는 중입니다...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center mt-20 text-red-600">{error}</p>;
+  }
 
   return (
     <main className="max-w-1140 min-h-screen bg-white px-4 py-6 pt-10 mx-auto">
@@ -58,7 +97,7 @@ export default function WineListPage() {
         <div className="lg:w-3/4 w-full flex flex-col gap-4">
           {filteredWineList.length > 0 ? (
             filteredWineList.map((wine) => (
-              <WineCard key={wine.id} id={wine.id} name={wine.name} region={wine.region} image={wine.imageUrl} avgRating={wine.rating} />
+              <WineCard key={wine.id} id={wine.id} name={wine.name} region={wine.region} image={wine.image} price={wine.price} avgRating={wine.avgRating} reviewCount={wine.reviewCount ?? 0} recentReview={wine.recentReview ?? '등록된 후기가 없습니다.'} />
             ))
           ) : (<p className="text-center text-gray-500 mt-10">검색하는 와인이 없습니다.</p>)}
         </div>
@@ -68,7 +107,7 @@ export default function WineListPage() {
       {isRegisterOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setIsRegisterOpen(false)}>
           <div className="bg-white rounded-xl p-6 relative" onClick={(e) => e.stopPropagation()}>
-            <WineRegister teamId="15-3" onClose={() => setIsRegisterOpen(false)} onSuccess={(id) => router.push(`/wine/${id}`)} />
+            <WineRegister teamId="15-3" onClose={() => setIsRegisterOpen(false)} onSuccess={(id) => router.push(`/reviews/${id}`)} />
           </div>
         </div>
       )}
