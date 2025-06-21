@@ -1,10 +1,12 @@
 import api from "./axios";
 
+// 내 프로필 조회
 export const fetchMyProfile = async () => {
   const res = await api.get("users/me");
   return res.data;
 };
 
+// 내 프로필 수정
 export const patchMyProfile = async ({
   nickname,
   image,
@@ -25,11 +27,13 @@ export const patchMyProfile = async ({
   return res.data;
 };
 
+// 내가 쓴 리뷰 목록
 export const fetchMyReviews = async () => {
   const res = await api.get("users/me/reviews");
   return res.data;
 };
 
+// 내가 등록한 와인 목록
 export const fetchMyWines = async () => {
   const res = await api.get("users/me/wines");
   return res.data;
