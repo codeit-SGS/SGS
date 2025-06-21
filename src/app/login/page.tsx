@@ -30,7 +30,7 @@ export default function LoginPage() {
     }
   };
 
-   return (
+  return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="bg-white rounded-[16px] shadow-md w-[400px] border border-[#CFDBEA] px-[48px] py-[80px] flex flex-col items-center gap-[10px]">
         {/* Logo */}
