@@ -3,11 +3,15 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 
-export default function Search() {
+type SearchProps = {
+  onSearch: (query: string) => void;
+};
+
+export default function Search({ onSearch }: SearchProps) {
   const [query, setQuery] = useState('');
 
   const handleSearch = () => {
-    alert(`검색어: ${query}`);
+    onSearch(query.trim());
   };
 
   return (
