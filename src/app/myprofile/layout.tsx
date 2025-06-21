@@ -3,7 +3,9 @@
 // 리액트와 필요한 컴포넌트, API 함수 import
 import React, { useEffect, useState } from "react";
 import ProfileCard from "@/components/profile/ProfileCard";
-import { fetchMyProfile, patchMyProfile } from "@/lib/api/user";
+import { fetchMyProfile } from "@/lib/api/user";
+import { uploadImageToServer } from "@/lib/api/image";
+import { patchMyProfile } from "@/lib/api/user";
 
 // 레이아웃 컴포넌트 props 타입 정의
 interface MyProfileLayoutProps {
@@ -48,11 +50,24 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
   };
 
   // 이미지 변경 함수 (ProfileCard에서 호출)
-  const handleChangeImage = async (newImageUrl: string) => {
+  const handleChangeImage = async (fileOrUrl: File | string) => {
     try {
-      // API로 이미지 변경 요청
-      const data = await patchMyProfile({ nickname, image: newImageUrl });
-      setProfileImageUrl(data.image || newImageUrl); // 변경된 이미지 반영
+      let imageUrl = "";
+      if (typeof fileOrUrl === "string") {
+        // 이미 URL이면 그대로 사용
+        imageUrl = fileOrUrl;
+      } else {
+        // 파일이면 업로드 후 URL 획득
+        imageUrl = await uploadImageToServer(fileOrUrl);
+      }
+      // PATCH로 이미지 URL만 전달
+      const data = await patchMyProfile({
+        nickname,
+        image: imageUrl,
+        prevNickname: nickname,
+        prevImage: profileImageUrl,
+      });
+      setProfileImageUrl(data.image || imageUrl);
     } catch {
       alert("이미지 변경에 실패했습니다.");
     }
@@ -60,11 +75,7 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
 
   // 실제 화면 렌더링
   return (
-    <div className="max-w-1140 mt-20 p-20 pc:p-0 mx-auto">
-      <header className="p-20 mb-20 pc:pb-37 text-center text-2xl font-bold bg-black text-white rounded-[16px] h-70 w-full">
-        gnb
-      </header>
-
+    <div className="max-w-1140 mt-20 p-20 pc:p-0 mx-auto">   
       <div className="flex flex-col pc:flex-row items-center pc:items-start justify-start pc:justify-between gap-y-30 tablet:gap-y-37 pc:gap-0">        
         <section className="flex flex-col items-center w-auto">
           {/* 프로필 카드에 상태와 함수 props로 전달 */}
