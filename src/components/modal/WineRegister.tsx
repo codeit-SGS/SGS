@@ -1,13 +1,23 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-const WineRegister = () => {
+type WineRegisterProps = {
+  onClose: () => void;
+  onSuccess: (wineId: number) => void;
+  teamId: string;
+};
+
+const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   const [wineName, setWineName] = useState('');
   const [price, setPrice] = useState('');
   const [origin, setOrigin] = useState('');
   const [type, setType] = useState('Red');
   const [image, setImage] = useState<File | null>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -15,9 +25,79 @@ const WineRegister = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ wineName, price, origin, type, image });
+
+    if (!wineName || !price || !origin || !type || !image) {
+      setError('모든 항목을 입력해주세요.');
+      return;
+    }
+    setError('');
+    setLoading(true);
+
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      console.log('accessToken:', accessToken);
+
+      if (!accessToken) {
+        setError('로그인이 필요합니다.');
+        setLoading(false);
+        return;
+      }
+
+      // 이미지 업로드 요청
+      const formDataImg = new FormData();
+      formDataImg.append('image', image);
+
+      const imgRes = await fetch(`https://winereview-api.vercel.app/15-3/images/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formDataImg,
+      });
+
+      const imgJson = await imgRes.json();
+      console.log("📸 image upload response:", imgJson);
+
+      if (!imgRes.ok || !imgJson.url) {
+        throw new Error('이미지 업로드에 실패했습니다.');
+      }
+
+      const imageUrl = imgJson.url;
+
+      const wineRes = await fetch(`https://winereview-api.vercel.app/15-3/wines`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: wineName,
+          region: origin,
+          image: imageUrl,
+          price: Number(price),
+          type: type.toUpperCase(),
+        }),
+      });
+
+      const wineJson = await wineRes.json();
+      console.log("📨 응답 내용:", wineJson);
+
+      if (!wineRes.ok) {
+        throw new Error('와인 등록 실패');
+      }
+
+      const newWineId = wineJson.id;
+      onSuccess(newWineId);
+
+      router.push(`/wines/${newWineId}`);
+
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -26,6 +106,7 @@ const WineRegister = () => {
     setOrigin('');
     setType('Red');
     setImage(null);
+    onClose();
   };
 
   return (
@@ -112,6 +193,7 @@ const WineRegister = () => {
         </div>
       </div>
 
+      {/* 버튼(취소/와인 등록하기) 영역 */}
       <div className="flex justify-between space-x-4 pt-4">
         <button
           type="button"
@@ -123,8 +205,9 @@ const WineRegister = () => {
         <button
           type="submit"
           className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
+          disabled={loading}
         >
-          와인 등록하기
+          {loading ? "등록 중..." : "와인 등록하기"}
         </button>
       </div>
     </form>
