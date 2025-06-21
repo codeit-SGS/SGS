@@ -11,7 +11,7 @@ export default function TasteSummary({
   readOnly = false,
 }: TasteSliderInputProps) {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col justify-center space-y-6">
       <TasteSliderAverage
         label="바디감"
         value={values.body}
