@@ -6,7 +6,9 @@ import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 import EditModal from '../wineDetail/EditModal';
 import CancelModal from '@/components/modal/Cancle';
+import { likeReview, unlikeReview } from '@/lib/api/review';
 
+// 날짜를 상대 시간으로 포맷하는 함수 (e.g. 5분 전, 2일 전)
 const getRelativeTime = (dateString?: string) => {
   if (!dateString) return null;
 
@@ -28,6 +30,7 @@ const getRelativeTime = (dateString?: string) => {
   return `${Math.floor(diff / year)}년 전`;
 };
 
+// 리뷰 카드 Props 타입 정의
 interface ReviewCardProps {
   review?: {
     id?: number;
@@ -49,6 +52,7 @@ interface ReviewCardProps {
   };
 }
 
+// 슬라이더 커스터마이징 (퍼플 테마)
 const PurpleSlider = styled(Slider)({
   color: '#F2F4F8',
   height: 5,
@@ -76,12 +80,15 @@ const PurpleSlider = styled(Slider)({
 });
 
 export default function ReviewCard({ review = {} }: ReviewCardProps) {
+  // 상태 관리
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(review?.isLiked || false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // 삭제 관련 핸들러
   const handleDeleteClick = () => {
     setIsDropdownOpen(false);
     setIsDeleteModalOpen(true);
@@ -92,6 +99,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
     console.log('삭제 확인'); // 실제 삭제 API 호출 또는 처리 로직 여기에 작성
   };
 
+  // UI 토글 핸들러
   const handleToggle = () => setIsOpen((prev) => !prev);
   const handleDropdownToggle = () => setIsDropdownOpen((prev) => !prev);
   const handleEditClick = () => {
@@ -99,6 +107,26 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
     setIsEditModalOpen(true);
   };
 
+  // 좋아요 토글 핸들러 (API 요청 포함)
+  const handleLikeToggle = async () => {
+    try {
+      const reviewId = review?.id;
+      if (!reviewId) return;
+
+      if (isLiked) {
+        await unlikeReview(reviewId); // 좋아요 해제
+      } else {
+        await likeReview(reviewId);   // 좋아요 추가
+      }
+
+      setIsLiked((prev) => !prev); // UI 반영
+    } catch (error) {
+      console.error('좋아요 토글 실패:', error);
+      alert('좋아요 처리 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -114,6 +142,8 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
 
   return (
     <div className="w-full max-w-343 tablet:max-w-704 pc:max-w-800 bg-white rounded-[16px] border border-gray-300 px-20 py-16 tablet:px-40 tablet:py-30 pc:py-16 duration-300 ease-in transition-all">
+
+      {/* 유저 정보 + 좋아요 + 더보기 버튼 */}
       <div className="flex justify-between items-start gap-16 mb-16 tablet:mb-20 pc:mb-24">
         <div className="flex gap-16 pc:gap-20 items-center">
           <Image
@@ -136,16 +166,19 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
             </p>
           </div>
         </div>
-
+        
+        {/* 좋아요 */}
         <div className="flex items-center gap-18 tablet:gap-24">
-          <div className="relative size-32 tablet:size-38 cursor-pointer">
+          <div onClick={handleLikeToggle} className="relative size-32 tablet:size-38 cursor-pointer">
             <Image
-              src={review?.isLiked ? '/icon/like-fill.svg' : '/icon/like.svg'}
+              src={isLiked ? '/icon/liked.svg' : '/icon/like.svg'}
               alt="좋아요"
               fill
               className="object-contain"
             />
           </div>
+          
+          {/* 더보기 드롭다운 */}
           <div className="relative" ref={dropdownRef}>
             <div
               className="relative size-32 tablet:size-38 cursor-pointer"
@@ -173,6 +206,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
             )}
           </div>
 
+          {/* 수정 모달 */}
           {isEditModalOpen && (
             <EditModal
               isOpen={isEditModalOpen}
@@ -196,6 +230,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
         </div>
       </div>
 
+      {/* 향 */}
       <div className="relative flex items-start mb-16 tablet:mb-20 pc:mb-24">
         <div className="flex overflow-x-auto gap-4 tablet:gap-10 scrollbar-hide">
           {(review?.aroma || []).map((tag) => (
@@ -220,6 +255,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
         </div>
       </div>
 
+      {/* 후기 내용 */}
       {isOpen && (
         <>
           <p className="text-md tablet:text-lg text-gray-800 leading-24 tablet:leading-26 mb-16 tablet:mb-24 pc:mb-20">
@@ -258,6 +294,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
         </>
       )}
 
+      {/* 접기/펼치기 버튼 */}
       <div className="flex justify-center pt-4">
         <button onClick={handleToggle}>
           <div className="relative size-25 tablet:size-30">
@@ -270,6 +307,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
           </div>
         </button>
       </div>
+
       {/* 삭제 확인 모달 */}
         <CancelModal
           open={isDeleteModalOpen}
