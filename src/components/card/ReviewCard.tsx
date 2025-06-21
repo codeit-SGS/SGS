@@ -79,7 +79,18 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleDeleteClick = () => {
+    setIsDropdownOpen(false);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setIsDeleteModalOpen(false);
+    console.log('삭제 확인'); // 실제 삭제 API 호출 또는 처리 로직 여기에 작성
+  };
 
   const handleToggle = () => setIsOpen((prev) => !prev);
   const handleDropdownToggle = () => setIsDropdownOpen((prev) => !prev);
@@ -100,23 +111,6 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  // "삭제하기" 클릭 시 모달 열기
-  const handleDeleteClick = () => {
-    setIsDropdownOpen(false);
-    setIsModalOpen(true);
-  };
-
-  // 모달 취소 버튼
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  // 모달 확인(삭제) 버튼
-  const handleConfirm = () => {
-    setIsModalOpen(false);
-    console.log('삭제 완료');
-  };
 
   return (
     <div className="w-full max-w-343 tablet:max-w-704 pc:max-w-800 bg-white rounded-[16px] border border-gray-300 px-20 py-16 tablet:px-40 tablet:py-30 pc:py-16 duration-300 ease-in transition-all">
@@ -171,9 +165,8 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
                   수정하기
                 </button>
                 <button
-                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
                   onClick={handleDeleteClick}
-                >
+                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">
                   삭제하기
                 </button>
               </div>
@@ -277,6 +270,12 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
           </div>
         </button>
       </div>
+      {/* 삭제 확인 모달 */}
+        <CancelModal
+          open={isDeleteModalOpen}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleDeleteConfirm}
+        />
     </div>
   );
 }
