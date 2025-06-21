@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from './axios';
 
 const Base_URL = 'https://winereview-api.vercel.app/15-3';
 
@@ -45,7 +46,7 @@ export interface ReviewResponse {
 // 와인 데이터 받아오기
 export async function getWineData(id: number): Promise<WineDetail> {
   try {
-    const response = await axios.get(`${Base_URL}/wines/${id}`);
+    const response = await api.get(`/wines/${id}`);
     return response.data;
   } catch (error) {
     console.error('와인 데이터를 받아오지 못했습니다:', error);
@@ -56,7 +57,7 @@ export async function getWineData(id: number): Promise<WineDetail> {
 // 리뷰 남기기
 export async function postReview(payload: ReviewPayload) {
   try {
-    const res = await axios.post(`${Base_URL}/reviews`, payload);
+    const res = await api.post(`/reviews`, payload);
     return res.data;
   } catch (error) {
     console.error('리뷰를 남기는데 실패했습니다:', error);
@@ -67,7 +68,7 @@ export async function postReview(payload: ReviewPayload) {
 // 리뷰 수정하기
 export async function editReview(id: number, payload: ReviewPayload) {
   try {
-    const res = await axios.patch(`${Base_URL}/reviews/${id}`, payload);
+    const res = await api.patch(`/reviews/${id}`, payload);
     return res.data;
   } catch (error) {
     console.error('리뷰를 수정하지 못했습니다:', error);
@@ -78,7 +79,7 @@ export async function editReview(id: number, payload: ReviewPayload) {
 // 특정 와인의 리뷰 목록 가져오기
 export async function ReviewsByWineId(wineId: number) {
   try {
-    const res = await axios.get(`${Base_URL}/reviews?wineId=${wineId}`);
+    const res = await api.get(`/reviews?wineId=${wineId}`);
     return res.data as ReviewResponse[];
   } catch (error) {
     console.error('와인의 리뷰 목록을 가져오지 못했습니다:', error);
