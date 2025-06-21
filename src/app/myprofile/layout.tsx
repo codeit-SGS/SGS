@@ -38,10 +38,11 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
   // 닉네임 변경 함수 (ProfileCard에서 호출)
   const handleChangeNickname = async (newNickname: string) => {
     try {
-      // API로 닉네임 변경 요청
       const data = await patchMyProfile({
         nickname: newNickname,
         image: profileImageUrl,
+        prevNickname: nickname,
+        prevImage: profileImageUrl,
       });
       setNickname(data.nickname || newNickname); // 변경된 닉네임 반영
     } catch {
