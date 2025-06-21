@@ -16,6 +16,9 @@ export default function ReviewModal({
   onClose: () => void;
   wineId: number;
 }) {
+  // ✔️ 와인 아이디 확인
+  console.log('💡 ReviewModal wineId:', wineId);
+
   // ⭐ 별점 상태
   const [rating, setRating] = useState<number>(0);
 
@@ -80,13 +83,21 @@ export default function ReviewModal({
       wineId,
     };
 
+    // ✔️ 리뷰 데이터가 잘 가는지 확인
+    console.log('📦 리뷰 전송 payload:', JSON.stringify(payload, null, 2));
+
     // 🔁 API 호출 → 성공 시 모달 닫고 새로고침
     try {
+      const teamId = localStorage.getItem('teamId');
+      if (!teamId) throw new Error('teamId가 없습니다!');
+
       const res = await postReview(payload);
+      // ✔️ 등록 되는지 확인
       console.log('리뷰 등록 성공:', res);
       onClose(); //-> 성공하면 모달 닫기
       router.refresh(); //-> 페이지 새로고침
     } catch (err) {
+      // ✔️ 등록 실패 인지 확인
       console.error('리뷰 등록 실패:', err);
     }
   };
@@ -116,7 +127,7 @@ export default function ReviewModal({
             <X size={34} />
           </button>
         </div>
-        {/*  와인 정보 + 별점 */}
+        {/*  🍷와인 정보 + ⭐별점 */}
         <div className="mt-30 p-10 space-y-6">
           <div className="flex items-center gap-3">
             {/* 임시 아이콘 */}
