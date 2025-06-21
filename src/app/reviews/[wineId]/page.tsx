@@ -194,64 +194,63 @@ export default function WinePage({
   // 📝🧮 리뷰 데이터 기반 계산 수행
   useEffect(() => {
     // ✅ 더미 데이터 테스트용
-    const fetchedReviews = dummyReviews;
+    // const fetchedReviews = dummyReviews;
 
     // ✅ 실제 API 사용 시 아래 코드 주석 해제
-    // ReviewsByWineId(wineId).then((fetchedReviews) => {
+    ReviewsByWineId(wineId).then((fetchedReviews) => {
+      setReviews(fetchedReviews);
 
-    setReviews(fetchedReviews);
+      const count = fetchedReviews.length;
+      const average =
+        count === 0
+          ? 0
+          : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
 
-    const count = fetchedReviews.length;
-    const average =
-      count === 0
-        ? 0
-        : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
-
-    const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    fetchedReviews.forEach((r) => {
-      ratings[r.rating] += 1; // 점수별 분포 계산
-    });
-
-    setRatingData({
-      average: Number(average.toFixed(1)),
-      count,
-      ratings,
-    });
-
-    // 🎚️🧮맛 요약 계산
-    if (count > 0) {
-      setTasteSummary({
-        body: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
-        ),
-        tannin: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
-        ),
-        sweetness: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
-        ),
-        acidity: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
-        ),
+      const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      fetchedReviews.forEach((r) => {
+        ratings[r.rating] += 1; // 점수별 분포 계산
       });
-    }
 
-    // 🌸🧮 향 Top 3 계산
-    const aromaCounts: Record<string, number> = {};
-    fetchedReviews.forEach((r) => {
-      r.aroma.forEach((aroma) => {
-        aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
+      setRatingData({
+        average: Number(average.toFixed(1)),
+        count,
+        ratings,
       });
+
+      // 🎚️🧮맛 요약 계산
+      if (count > 0) {
+        setTasteSummary({
+          body: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
+          ),
+          tannin: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
+          ),
+          sweetness: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
+          ),
+          acidity: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
+          ),
+        });
+      }
+
+      // 🌸🧮 향 Top 3 계산
+      const aromaCounts: Record<string, number> = {};
+      fetchedReviews.forEach((r) => {
+        r.aroma.forEach((aroma) => {
+          aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
+        });
+      });
+
+      const top3 = Object.entries(aromaCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([aroma]) => aroma);
+
+      setFlavorTop3(top3);
+      // ✅ 실제 API 사용 시 닫힌 괄호 주석 해제
     });
-
-    const top3 = Object.entries(aromaCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([aroma]) => aroma);
-
-    setFlavorTop3(top3);
-    // ✅ 실제 API 사용 시 닫힌 괄호 주석 해제
-    // });
   }, [wineId]);
 
   return (
@@ -317,7 +316,7 @@ export default function WinePage({
       </div>
 
       {/* ✅ 태블릿 전용 */}
-      <div className="hidden md:flex pc:hidden flex-col w-full max-w-[744px] gap-10">
+      <div className="hidden md:flex lg:hidden flex-col w-full max-w-[744px] gap-10">
         {/* 🎚️ 맛/🌸 향 요약 섹션 */}
         <section className="w-full mt-15 mb-20">
           <div className="flex flex-col gap-12">
@@ -365,7 +364,7 @@ export default function WinePage({
       </div>
 
       {/* ✅ 모바일 전용 */}
-      <div className="flex md:hidden pc:hidden flex-col w-full px-4 gap-10">
+      <div className="flex md:hidden flex-col w-full px-4 gap-10">
         {/* 🎚️ 맛/🌸 향 요약 섹션 */}
         <section className="w-full mt-15 mb-20">
           <div className="flex flex-col gap-12">

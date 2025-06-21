@@ -88,8 +88,8 @@ export default function ReviewModal({
 
     // 🔁 API 호출 → 성공 시 모달 닫고 새로고침
     try {
-      const teamId = localStorage.getItem('teamId');
-      if (!teamId) throw new Error('teamId가 없습니다!');
+      // const teamId = localStorage.getItem('teamId');
+      // if (!teamId) throw new Error('teamId가 없습니다!');
 
       const res = await postReview(payload);
       // ✔️ 등록 되는지 확인
