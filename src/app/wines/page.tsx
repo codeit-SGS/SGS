@@ -59,7 +59,7 @@ export default function WineListPage() {
 
       {/* WineRegister 모달 */}
       {isRegisterOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setIsRegisterOpen(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setIsRegisterOpen(false)}>
           <div className="bg-white rounded-xl p-6 relative" onClick={(e) => e.stopPropagation()}>
             <WineRegister teamId="15-3" onClose={() => setIsRegisterOpen(false)} onSuccess={(id) => router.push(`/wine/${id}`)} />
           </div>
