@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import MonthlyCard from "@/components/card/monthlyCard";
+import MonthlyCard from "@/components/card/MonthlyCard";
 import Search from "@/components/input/Search";
 import Filter from "@/components/modal/Filter";
-import WineCard from "@/components/card/wineCard";
+import WineCard from "@/components/card/WineCard";
 import CommonButton from "@/components/button/CommonButton";
 import WineRegister from "@/components/modal/WineRegister";
 
