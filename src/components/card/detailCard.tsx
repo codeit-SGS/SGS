@@ -3,7 +3,7 @@
 interface DetailCardProps {
   name: string;
   region: string;
-  price: number;
+  price?: number; // optional
   image?: string;
 }
 
@@ -34,7 +34,7 @@ const DetailCard = ({
               {region}
             </p>
             <div className="inline-block text-18 font-bold py-5 px-15 rounded-[12px] bg-main-10 text-main mb-40">
-              ₩ {price.toLocaleString()}
+              {price !== undefined ? `₩ ${price?.toLocaleString()}` : '0'}
             </div>
           </div>
         </div>
