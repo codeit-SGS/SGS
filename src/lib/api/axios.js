@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 // JWT의 payload를 파싱하는 함수
 function parseJwt(token) {

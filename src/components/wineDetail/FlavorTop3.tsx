@@ -7,16 +7,16 @@ const flavorToIcon: Record<string, string> = {
   OAK: '/taste/oak.svg',
   VANILLA: '/taste/vanilla.svg',
   PEPPER: '/taste/pepper.svg',
-  BREAD: '/taste/bread.svg',
+  BAKING: '/taste/bread.svg',
   GRASS: '/taste/grass.svg',
   APPLE: '/taste/apple.svg',
   PEACH: '/taste/peach.svg',
   CITRUS: '/taste/citrus.svg',
   TROPICAL: '/taste/tropical.svg',
   MINERAL: '/taste/mineral.svg',
-  FLORAL: '/taste/floral.svg',
+  FLOWER: '/taste/floral.svg',
   TOBACCO: '/taste/tobacco.svg',
-  EARTHY: '/taste/earthy.svg',
+  EARTH: '/taste/earthy.svg',
   CHOCOLATE: '/taste/chocolate.svg',
   SPICE: '/taste/spice.svg',
   CARAMEL: '/taste/caramel.svg',
@@ -29,16 +29,16 @@ const flavorLabel: Record<string, string> = {
   OAK: '오크',
   VANILLA: '바닐라',
   PEPPER: '후추',
-  BREAD: '제빵',
+  BAKING: '제빵',
   GRASS: '풀',
   APPLE: '사과',
   PEACH: '복숭아',
   CITRUS: '시트러스',
   TROPICAL: '트로피컬',
   MINERAL: '미네랄',
-  FLORAL: '꽃',
+  FLOWER: '꽃',
   TOBACCO: '담뱃잎',
-  EARTHY: '흙',
+  EARTH: '흙',
   CHOCOLATE: '초콜릿',
   SPICE: '스파이스',
   CARAMEL: '카라멜',
@@ -47,7 +47,7 @@ const flavorLabel: Record<string, string> = {
 
 export default function FlavorTop3({ flavors }: { flavors: string[] }) {
   return (
-    <div className="flex gap-4 flex-wrap">
+    <div className="flex gap-10 flex-wrap">
       {flavors.map((tag) => (
         <div
           key={tag}
