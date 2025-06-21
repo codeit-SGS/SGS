@@ -161,7 +161,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         >
           <option value="Red">Red</option>
           <option value="White">White</option>
-          <option value="Rose">Sparkling</option>
+          <option value="Sparkling">Sparkling</option>
         </select>
       </div>
 
