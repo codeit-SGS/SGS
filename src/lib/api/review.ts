@@ -43,9 +43,9 @@ export interface ReviewResponse {
 }
 
 // 와인 데이터 받아오기
-export async function getWineData(wineId: number): Promise<WineDetail> {
+export async function getWineData(id: number): Promise<WineDetail> {
   try {
-    const response = await axios.get(`${Base_URL}/wines/${wineId}`);
+    const response = await axios.get(`${Base_URL}/wines/${id}`);
     return response.data;
   } catch (error) {
     console.error('와인 데이터를 받아오지 못했습니다:', error);
