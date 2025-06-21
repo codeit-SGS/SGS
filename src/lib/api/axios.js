@@ -35,51 +35,55 @@ api.interceptors.request.use(
   async (config) => {
     if (typeof window !== "undefined") {
       let token = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+      let needRefresh = false;
+
       if (token) {
-        // access token의 만료 시간(exp) 확인
         const payload = parseJwt(token);
         const now = Math.floor(Date.now() / 1000);
-        // 만료 5분 이내면 refresh 시도
+        // 만료 5분 이내면 refresh
         if (payload && payload.exp && payload.exp - now < 300) {
-          // 이미 리프레시 중이 아니면 리프레시 시작
-          if (!isRefreshing) {
-            isRefreshing = true;
-            try {
-              const refreshToken = localStorage.getItem("refreshToken");
-              // refresh token으로 access token 재발급 요청
-              const res = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-                {},
-                {
-                  headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                  },
-                }
-              );
-              // 새 access token 저장
-              const newAccessToken = res.data.accessToken;
-              localStorage.setItem("accessToken", newAccessToken);
-              token = newAccessToken;
-              // 대기 중인 요청들에 새 토큰 전달
-              onRefreshed(newAccessToken);
-            } catch (e) {
-              // 리프레시 실패 시 로그아웃 처리
-              localStorage.removeItem("accessToken");
-              localStorage.removeItem("refreshToken");
-              window.location.href = "/login";
-              return Promise.reject(e);
-            } finally {
-              isRefreshing = false;
-            }
-          }
-
-          // 리프레시 중이면 대기
-          await new Promise((resolve) => {
-            addRefreshSubscriber(resolve);
-          });
-          token = localStorage.getItem("accessToken");
+          needRefresh = true;
         }
-        // Authorization 헤더에 access token 추가
+      } else if (refreshToken) {
+        // access token이 없고 refresh token이 있으면 refresh 시도
+        needRefresh = true;
+      }
+
+      if (needRefresh && refreshToken) {
+        if (!isRefreshing) {
+          isRefreshing = true;
+          try {
+            // ✅ 명세에 맞게 body에 refreshToken 전달
+            const res = await axios.post(
+              "/auth/refresh-token",
+              { refreshToken }, // body에 담음
+              {
+                baseURL: process.env.NEXT_PUBLIC_API_URL,
+              }
+            );
+            const newAccessToken = res.data.accessToken;
+            localStorage.setItem("accessToken", newAccessToken);
+            token = newAccessToken;
+            onRefreshed(newAccessToken);
+          } catch (e) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            window.location.href = "/login";
+            return Promise.reject(e);
+          } finally {
+            isRefreshing = false;
+          }
+        }
+        // 리프레시 중이면 대기
+        await new Promise((resolve) => {
+          addRefreshSubscriber(resolve);
+        });
+        token = localStorage.getItem("accessToken");
+      }
+
+      // access token이 있으면 Authorization 헤더 추가
+      if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     }
@@ -106,12 +110,10 @@ api.interceptors.response.use(
         if (!refreshToken) throw new Error("No refresh token");
 
         const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-          {},
+          "/auth/refresh-token",
+          { refreshToken },
           {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
+            baseURL: process.env.NEXT_PUBLIC_API_URL,
           }
         );
         const newAccessToken = res.data.accessToken;
