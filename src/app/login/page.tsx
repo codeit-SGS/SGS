@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/api/axios'; 
 import { login } from '@/lib/api/auth';
 
 
@@ -19,12 +18,8 @@ export default function LoginPage() {
 
       if (res.status === 200) {
         alert('로그인 성공!');
-
-        // Example: save token
         localStorage.setItem('accessToken', res.data.accessToken);
         localStorage.setItem('refreshToken', res.data.refreshToken);
-
-        // Redirect after login
         router.push('/');
       } else {
         alert('로그인 실패. 다시 시도해주세요.');
@@ -35,8 +30,7 @@ export default function LoginPage() {
     }
   };
 
-
-  return (
+   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="bg-white rounded-[16px] shadow-md w-[400px] border border-[#CFDBEA] px-[48px] py-[80px] flex flex-col items-center gap-[10px]">
         {/* Logo */}
@@ -76,7 +70,7 @@ export default function LoginPage() {
         {/* 로그인 버튼 */}
         <button
           onClick={handleLogin}
-          className="w-full text-white font-semibold transition hover:brightness-110 mb-4 flex justify-center items-center rounded-[16px]"
+          className="w-full text-white font-semibold transition hover:brightness-110 mb-4 flex justify-center items-center rounded-[16px] cursor-pointer"
           style={{
             height: '50px',
             backgroundColor: '#6A42DB',
