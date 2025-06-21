@@ -14,6 +14,7 @@ import WineRegister from "@/components/modal/WineRegister";
 export default function WineListPage() {
   const router = useRouter();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const wineList = [
     { id: 1, name: '샤또 마고', region: 'France', imageUrl: '/images/wine1.jpg', rating: 5.0 },
@@ -22,6 +23,10 @@ export default function WineListPage() {
   ];
 
   const sortedWineList = [...wineList].sort((a, b) => b.rating - a.rating);
+
+  const filteredWineList = sortedWineList.filter((wine) =>
+    wine.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <main className="max-w-1140 min-h-screen bg-white px-4 py-6 pt-10 mx-auto">
@@ -38,7 +43,7 @@ export default function WineListPage() {
 
       {/* 검색 */}
       <div className="mt-30 mb-50">
-        <Search />
+        <Search onSearch={setSearchQuery} />
       </div>
 
       {/* 필터와 와인 카드 리스트 */}
@@ -51,9 +56,11 @@ export default function WineListPage() {
 
         {/* 와인 카드 리스트 */}
         <div className="lg:w-3/4 w-full flex flex-col gap-4">
-          {wineList.map((wine) => (
-            <WineCard key={wine.id} {...wine} />
-          ))}
+          {filteredWineList.length > 0 ? (
+            filteredWineList.map((wine) => (
+              <WineCard key={wine.id} id={wine.id} name={wine.name} region={wine.region} image={wine.imageUrl} avgRating={wine.rating} />
+            ))
+          ) : (<p className="text-center text-gray-500 mt-10">검색하는 와인이 없습니다.</p>)}
         </div>
       </section>
 
