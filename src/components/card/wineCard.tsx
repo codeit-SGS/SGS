@@ -28,7 +28,7 @@ const WineCard = ({
 
   const handleClick = () => {
     if (id) {
-      router.push(`/wines/${id}`);
+      router.push(`/reviews/${id}`);
     }
   };
 
@@ -48,7 +48,9 @@ const WineCard = ({
         <div className="relative flex flex-col justify-between flex-1">
           <div className="flex justify-between items-start">
             <div className="max-w-300">
-              <h3 className="text-3xl font-bold text-gray-800 leading-42 pb-20">{name}</h3>
+              <h3 className="text-3xl font-bold text-gray-800 leading-42 pb-20">
+                {name}
+              </h3>
               <p className="text-16 text-gray-500 leading-26 pb-16">{region}</p>
               <div className="inline-block text-18 font-bold py-8 px-15 rounded-[12px] bg-main-10 text-main mb-23.5">
                 ₩ {price.toLocaleString()}
@@ -56,14 +58,28 @@ const WineCard = ({
             </div>
 
             <div className="text-left">
-              <p className="text-[48px] text-gray-800 gap-10 font-bold">{avgRating.toFixed(1)}</p>
+              <p className="text-[48px] text-gray-800 gap-10 font-bold">
+                {avgRating.toFixed(1)}
+              </p>
               <div className="flex flex-col gap-10 items-start">
                 <div className="flex">
                   {[...Array(fullStars)].map((_, i) => (
-                    <img key={i} src="/icon/purple-star.svg" alt={`별${i}`} width={24} height={24} />
+                    <img
+                      key={i}
+                      src="/icon/purple-star.svg"
+                      alt={`별${i}`}
+                      width={24}
+                      height={24}
+                    />
                   ))}
                   {[...Array(5 - fullStars)].map((_, i) => (
-                    <img key={i} src="/icon/star.svg" alt={`빈 별${i}`} width={24} height={24} />
+                    <img
+                      key={i}
+                      src="/icon/star.svg"
+                      alt={`빈 별${i}`}
+                      width={24}
+                      height={24}
+                    />
                   ))}
                 </div>
                 <span className="text-gray-500 text-14 leading-24">
@@ -73,7 +89,11 @@ const WineCard = ({
             </div>
 
             <div className="absolute bottom-23.5 right-0">
-              <img src="/icon/right.svg" alt="오른쪽 화살표 아이콘" className="w-36 h-36" />
+              <img
+                src="/icon/right.svg"
+                alt="오른쪽 화살표 아이콘"
+                className="w-36 h-36"
+              />
             </div>
           </div>
         </div>

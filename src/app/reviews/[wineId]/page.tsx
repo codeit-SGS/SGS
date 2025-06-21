@@ -1,13 +1,28 @@
 'use client';
 
-import DetailCard from '@/components/card/DetailCard';
+import { use } from 'react';
+import DetailCard from '@/components/card/detailCard';
 import StarReview from '@/components/wineDetail/StarReview';
 import { useEffect, useState } from 'react';
 import { TasteData } from '@/types/tasteType';
 import TasteSummary from '@/components/wineDetail/TasteSummary';
 import FlavorTop3 from '@/components/wineDetail/FlavorTop3';
 import ReviewCard from '@/components/card/ReviewCard';
-import { ReviewResponse, ReviewsByWineId } from '@/lib/api/review';
+import {
+  getWineData,
+  WineDetail,
+  ReviewResponse,
+  ReviewsByWineId,
+} from '@/lib/api/review';
+
+// ✅ 테스트용 더미 와인 데이터
+export const wineMock: WineDetail = {
+  id: 1,
+  name: '샤또 마고 2015',
+  region: 'France - Bordeaux',
+  image: '/wine/mock-wine.png',
+  price: 320000,
+};
 
 // ✅ 테스트용 더미 리뷰 데이터
 const dummyReviews: ReviewResponse[] = [
@@ -58,7 +73,7 @@ const dummyReviews: ReviewResponse[] = [
     smoothTannic: 4,
     drySweet: 5,
     softAcidic: 6,
-    aroma: ['APPLE', 'FLORAL'],
+    aroma: ['APPLE', 'FLOWER'],
     content: '산미가 꽤 느껴지고, 전체적으로 무난한 맛이에요.',
     createdAt: '2025-06-16T18:45:00.000Z',
     updatedAt: '2025-06-16T18:45:00.000Z',
@@ -138,7 +153,7 @@ const dummyReviews: ReviewResponse[] = [
     smoothTannic: 1,
     drySweet: 8,
     softAcidic: 8,
-    aroma: ['CITRUS', 'FLORAL'],
+    aroma: ['CITRUS', 'FLOWER'],
     content: '제 취향은 아니었어요. 너무 시고 달아요.',
     createdAt: '2025-06-12T10:30:00.000Z',
     updatedAt: '2025-06-12T10:30:00.000Z',
@@ -153,8 +168,16 @@ const dummyReviews: ReviewResponse[] = [
   },
 ];
 
-export default function WinePage({ params }: { params: { wineId: string } }) {
-  const wineId = Number(params.wineId);
+export default function WinePage({
+  params,
+}: {
+  params: Promise<{ wineId: string }>;
+}) {
+  const resolvedParams = use(params);
+  const wineId = Number(resolvedParams.wineId);
+
+  // 🍷 와인 상세 정보 상태
+  const [wine, setWine] = useState<WineDetail | null>(null);
 
   // 리뷰 리스트 상태 (서버에서 불러온 리뷰들 저장)
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
@@ -170,7 +193,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
     ratings: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
   });
 
-  // 와인 맛 평균 데이터
+  // 🧮 와인 맛 평균 데이터
   const [tasteSummary, setTasteSummary] = useState<TasteData>({
     body: 0,
     tannin: 0,
@@ -178,18 +201,24 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
     acidity: 0,
   });
 
-  // 와인 향 TOP3 데이터
+  // 🧮 와인 향 TOP3 데이터
   const [flavorTop3, setFlavorTop3] = useState<string[]>([]);
 
-  // ⭐ 리뷰 데이터 기반 계산 수행
+  // 📝🧮 리뷰 데이터 기반 계산 수행
   useEffect(() => {
+    // 🧪 Mock Data 테스트용
+    setWine(wineMock);
+    // 🍷 실제 와인 상세 정보 API 호출
+    getWineData(wineId).then((data) => {
+      setWine(data);
+    });
+
     // ✅ 더미 데이터 테스트용
     const fetchedReviews = dummyReviews;
 
     // ✅ 실제 API 사용 시 아래 코드 주석 해제
     // ReviewsByWineId(wineId).then((fetchedReviews) => {
-
-    setReviews(fetchedReviews);
+    //   setReviews(fetchedReviews);
 
     const count = fetchedReviews.length;
     const average =
@@ -208,7 +237,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
       ratings,
     });
 
-    // 맛 요약 계산
+    // 🎚️🧮맛 요약 계산
     if (count > 0) {
       setTasteSummary({
         body: Math.round(
@@ -226,7 +255,7 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
       });
     }
 
-    // 향 Top 3 계산
+    // 🌸🧮 향 Top 3 계산
     const aromaCounts: Record<string, number> = {};
     fetchedReviews.forEach((r) => {
       r.aroma.forEach((aroma) => {
@@ -246,17 +275,80 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
 
   return (
     <main className="min-h-screen px-4 py-10 flex flex-col items-center bg-white">
-      {/* ⭐ 와인 카드 */}
+      {/* 🍷 와인 정보 카드 */}
       <div className="relative w-full max-w-1140 h-200 md:h-260 lg:h-302 mb-30 lg:mb-16">
-        <DetailCard />
+        {wine && (
+          <DetailCard
+            name={wine.name}
+            region={wine.region}
+            price={wine.price}
+            image={wine.image}
+          />
+        )}
       </div>
 
-      {/* ⭐ 맛/향 요약 섹션 */}
-      {tasteSummary && (
-        <section className="w-full max-w-1140 mt-15 mb-20 px-4 md:px-0">
-          <div className="flex flex-col lg:flex-row justify-between gap-12">
-            {/* 어떤 맛이 나나요? */}
-            <div className="flex-1">
+      {/* 💻 PC: 리뷰 카드 + 별점 요약 나란히 */}
+      <div className="hidden lg:block w-full max-w-1140">
+        {/* 🎚️ 맛/🌸 향 요약 섹션 */}
+        {tasteSummary && (
+          <section className="w-full mt-15 mb-20 px-4 md:px-0">
+            <div className="flex justify-between gap-12">
+              {/* 🎚️ 어떤 맛이 나나요? */}
+              <div className="w-1/2">
+                <h3 className="text-xl font-semibold text-gray-800 mb-10">
+                  어떤 맛이 나나요?
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({ratingData.count}명 참여)
+                  </span>
+                </h3>
+                <TasteSummary values={tasteSummary} readOnly />
+              </div>
+
+              {/* 🌸 어떤 향이 있나요? */}
+              <div className="w-1/2">
+                <h3 className="text-xl font-semibold text-gray-800 mb-6">
+                  어떤 향이 있나요?
+                  <span className="text-sm text-gray-500 ml-2">
+                    ({ratingData.count}명 참여)
+                  </span>
+                </h3>
+                <FlavorTop3 flavors={flavorTop3} />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 💻 리뷰 카드 + 별점 요약 나란히 */}
+        <div className="flex justify-between gap-30">
+          {/* 리뷰 카드 리스트 */}
+          <div className="flex flex-col space-y-10 w-800">
+            <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mt-20 mb-20">
+              리뷰 목록
+            </h3>
+            {[...Array(3)].map((_, idx) => (
+              <ReviewCard key={idx} />
+            ))}
+          </div>
+
+          {/* 별점 요약 */}
+          <div className="sticky top-130 w-280 h-311 bg-none">
+            <StarReview
+              average={ratingData.average}
+              count={ratingData.count}
+              ratings={ratingData.ratings}
+              wineId={wineId}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ✅ 태블릿 전용 */}
+      <div className="hidden md:flex lg:hidden flex-col w-full max-w-[744px] gap-10">
+        {/* 🎚️ 맛/🌸 향 요약 섹션 */}
+        <section className="w-full mt-15 mb-20">
+          <div className="flex flex-col gap-12">
+            {/* 🎚️ 어떤 맛이 나나요? */}
+            <div className="w-full">
               <h3 className="text-xl font-semibold text-gray-800 mb-10">
                 어떤 맛이 나나요?
                 <span className="text-sm text-gray-500 ml-2">
@@ -266,8 +358,8 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
               <TasteSummary values={tasteSummary} readOnly />
             </div>
 
-            {/* 어떤 향이 있나요? */}
-            <div className="flex-1">
+            {/* 🌸 어떤 향이 있나요? */}
+            <div className="w-full">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">
                 어떤 향이 있나요?
                 <span className="text-sm text-gray-500 ml-2">
@@ -278,38 +370,56 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
             </div>
           </div>
         </section>
-      )}
 
-      {/* 💻 PC: 리뷰 카드 + 별점 요약 나란히 */}
-      <div className="mt-30 hidden lg:flex justify-between gap-30 w-full max-w-1140">
-        {/* 리뷰 카드 리스트 */}
-        <div className="flex flex-col space-y-10 w-800">
-          <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mb-20">
-            리뷰 목록
-          </h3>
-          {/* {reviews.map((review) => (
-            // 리뷰 데이터 전달
-            <ReviewCard key={review.id} review={review} />
-          ))} */}
-          {[...Array(3)].map((_, idx) => (
-            <ReviewCard key={idx} />
-          ))}
-        </div>
-
-        {/* 별점 요약 */}
-        <div className="sticky top-130 w-280 h-311 bg-none">
+        {/* ⭐ 별점 요약 */}
+        <div className="w-full">
           <StarReview
             average={ratingData.average}
             count={ratingData.count}
             ratings={ratingData.ratings}
-            wineId={wineId} // ✅ string → number 변환
+            wineId={wineId}
           />
+        </div>
+
+        {/* 📝 리뷰 카드 리스트 */}
+        <div className="flex flex-col space-y-8 w-full">
+          <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} />
+          ))}
         </div>
       </div>
 
-      {/* 📱📱 모바일/태블릿 전용: 별점 먼저 → 리뷰 카드들 */}
-      <div className="flex flex-col gap-10 w-full max-w-1140 lg:hidden">
-        {/* 별점 요약 */}
+      {/* ✅ 모바일 전용 */}
+      <div className="flex md:hidden flex-col w-full px-4 gap-10">
+        {/* 🎚️ 맛/🌸 향 요약 섹션 */}
+        <section className="w-full mt-15 mb-20">
+          <div className="flex flex-col gap-12">
+            {/* 🎚️ 어떤 맛이 나나요? */}
+            <div className="w-full">
+              <h3 className="text-xl font-semibold text-gray-800 mb-10">
+                어떤 맛이 나나요?
+                <span className="text-sm text-gray-500 ml-2">
+                  ({ratingData.count}명 참여)
+                </span>
+              </h3>
+              <TasteSummary values={tasteSummary} readOnly />
+            </div>
+
+            {/* 🌸 어떤 향이 있나요? */}
+            <div className="w-full">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">
+                어떤 향이 있나요?
+                <span className="text-sm text-gray-500 ml-2">
+                  ({ratingData.count}명 참여)
+                </span>
+              </h3>
+              <FlavorTop3 flavors={flavorTop3} />
+            </div>
+          </div>
+        </section>
+
+        {/* ⭐ 별점 요약 */}
         <StarReview
           average={ratingData.average}
           count={ratingData.count}
@@ -317,17 +427,11 @@ export default function WinePage({ params }: { params: { wineId: string } }) {
           wineId={wineId}
         />
 
-        {/* 리뷰 카드 리스트 */}
-        <div className="flex flex-col space-y-6 md:space-y-8">
-          <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mb-20">
-            리뷰 목록
-          </h3>
-          {/* {reviews.map((review) => (
-            // 리뷰 데이터 전달
-            <ReviewCard key={idx} review={review} />
-          ))} */}
-          {[...Array(3)].map((_, idx) => (
-            <ReviewCard key={idx} />
+        {/* 📝 리뷰 카드 리스트 */}
+        <div className="flex flex-col space-y-6 w-full">
+          <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} />
           ))}
         </div>
       </div>
