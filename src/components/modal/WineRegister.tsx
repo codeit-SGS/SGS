@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type WineRegisterProps = {
   onClose: () => void;
@@ -16,6 +17,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -86,7 +88,10 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         throw new Error('와인 등록 실패');
       }
 
-      onSuccess(wineJson.id); // ✅ 콜백 실행
+      const newWineId = wineJson.id;
+      onSuccess(newWineId);
+
+      router.push(`/wines/${newWineId}`);
 
     } catch (err) {
       setError((err as Error).message);
