@@ -23,18 +23,23 @@ export default function StarRatingSummary({
     <>
       {/* 💻 PC용: 1028px 이상 */}
       <div className="hidden lg:block p-4 rounded-xl bg-none w-[280px]">
-        <div className="text-5xl font-bold text-gray-800 mb-2">
-          {average.toFixed(1)}
+        {/* ⭐ 평균 숫자 + 별점 가로 정렬 */}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="text-5xl font-bold text-gray-800">
+            {average.toFixed(1)}
+          </div>
+          {/* ⭐ 평균 별점 */}
+          <div className="flex flex-col gap-2 ml-10 mb-1">
+            <StarDisplay rating={average} />
+            {/* 후기 수 */}
+            <span className="text-xs text-gray-500">
+              {count.toLocaleString()}개의 후기
+            </span>
+          </div>
         </div>
-        {/* ⭐ 평균 별점 */}
-        <div className="flex items-center gap-2 mb-1">
-          <StarDisplay rating={average} />
-          <span className="text-xs text-gray-500">
-            {count.toLocaleString()}개의 후기
-          </span>
-        </div>
+
         {/* 📊 RatingBar */}
-        <div className="space-y-2 my-4">
+        <div className="space-y-2 my-10">
           {[5, 4, 3, 2, 1].map((score) => (
             <RatingBar
               key={score}
@@ -44,6 +49,8 @@ export default function StarRatingSummary({
             />
           ))}
         </div>
+
+        {/* 리뷰 남기기 버튼 */}
         <button
           onClick={() => setIsModalOpen(true)}
           className="w-113 h-42 cursor-pointer mt-15 px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
