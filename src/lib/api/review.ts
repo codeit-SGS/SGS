@@ -32,6 +32,12 @@ export interface ReviewResponse {
   teamId: string;
 }
 
+// 와인 데이터 받아오기
+// export async function getWine(payload: ReviewPayload) {
+//   const res = await api.get(`/wines/${id}`, payload);
+//   return res.data;
+// }
+
 // 리뷰 남기기
 export async function postReview(payload: ReviewPayload) {
   const res = await api.post('/reviews', payload);

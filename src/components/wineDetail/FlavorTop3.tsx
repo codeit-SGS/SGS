@@ -47,7 +47,7 @@ const flavorLabel: Record<string, string> = {
 
 export default function FlavorTop3({ flavors }: { flavors: string[] }) {
   return (
-    <div className="flex gap-4 flex-wrap">
+    <div className="flex gap-10 flex-wrap">
       {flavors.map((tag) => (
         <div
           key={tag}

@@ -54,25 +54,36 @@ export default function StarRatingSummary({
 
       {/* 📲 태블릿용: 744px 이상, 1028px 미만 */}
       <div className="hidden md:flex lg:hidden p-6 rounded-xl bg-none w-full justify-between items-start gap-12">
-        {/* ⬅️ 왼쪽: 별점 수치 + 별 아이콘 + 후기 수 + 버튼 */}
-        <div className="flex flex-col items-start gap-2 w-1/3">
-          <div className="text-3xl font-bold text-gray-800">
-            {average.toFixed(1)}
+        {/* ✅ 왼쪽: 별점 수치 + 별 아이콘(가로) + 후기 수(아래) + 버튼 */}
+        <div className="flex flex-col gap-4 w-1/3">
+          {/* ⭐ 평균 별점 수치 + ⭐ 아이콘 → 가로 정렬 */} {/* 🔧 구조 변경 */}
+          <div className="flex items-center gap-4">
+            <div className="text-4xl font-bold text-gray-800">
+              {' '}
+              {/* 🔧 숫자 별점 */}
+              {average.toFixed(1)}
+            </div>
+            <div className="flex flex-col">
+              {' '}
+              {/* ⭐ 아이콘 + 후기 수 (세로로) */}
+              <StarDisplay rating={average} /> {/* 🔧 별점 아이콘 */}
+              <span className="text-sm text-gray-500">
+                {' '}
+                {/* 🔧 후기 수 */}
+                {count.toLocaleString()}개의 후기
+              </span>
+            </div>
           </div>
-          {/* ⭐ 평균 별점 */}
-          <StarDisplay rating={average} />
-          <span className="text-sm text-gray-500">
-            {count.toLocaleString()}개의 후기
-          </span>
+          {/* ✍️ 리뷰 남기기 버튼 */} {/* 🔧 아래 위치로 이동 */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-113 h-42 cursor-pointer mt-15 px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
+            className="w-113 h-42 cursor-pointer px-5 py-2 rounded-xl bg-main text-white text-sm font-semibold hover:bg-purple-600 transition"
           >
             리뷰 남기기
           </button>
         </div>
 
-        {/* ➡️ 오른쪽: 별점 분포 그래프 */}
+        {/* 📊 오른쪽: 별점 분포 슬라이더 */}
         <div className="flex flex-col gap-2 w-2/3">
           {[5, 4, 3, 2, 1].map((score) => (
             <RatingBar
