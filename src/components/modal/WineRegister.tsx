@@ -8,7 +8,7 @@ type WineRegisterProps = {
   teamId: string;
 };
 
-const WineRegister = ({ onClose, onSuccess }: WineRegisterProps) => {
+const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   const [wineName, setWineName] = useState('');
   const [price, setPrice] = useState('');
   const [origin, setOrigin] = useState('');
@@ -43,7 +43,7 @@ const WineRegister = ({ onClose, onSuccess }: WineRegisterProps) => {
         return;
       }
 
-      // 이미지 올리기
+      // 이미지 업로드 요청
       const formDataImg = new FormData();
       formDataImg.append('image', image);
 
@@ -58,14 +58,13 @@ const WineRegister = ({ onClose, onSuccess }: WineRegisterProps) => {
       const imgJson = await imgRes.json();
       console.log("📸 image upload response:", imgJson);
 
-      if (!imgRes.ok || !imgJson.imageId) {
+      if (!imgRes.ok || !imgJson.url) {
         throw new Error('이미지 업로드에 실패했습니다.');
       }
 
-      const teamId = "15-3";
-      const imageId = Number(imgJson.imageId);
+      const imageUrl = imgJson.url;
 
-      const wineRes = await fetch(`https://winereview-api.vercel.app/${teamId}/wines`, {
+      const wineRes = await fetch(`https://winereview-api.vercel.app/15-3/wines`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -74,14 +73,14 @@ const WineRegister = ({ onClose, onSuccess }: WineRegisterProps) => {
         body: JSON.stringify({
           name: wineName,
           region: origin,
-          imageId,
+          image: imageUrl,
           price: Number(price),
-          type,
+          type: type.toUpperCase(),
         }),
       });
 
       const wineJson = await wineRes.json();
-      console.log("🍷 wine register response:", wineJson);
+      console.log("📨 응답 내용:", wineJson);
 
       if (!wineRes.ok) {
         throw new Error('와인 등록 실패');
