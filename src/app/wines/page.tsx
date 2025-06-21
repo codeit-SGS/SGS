@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import MonthlyCard from "@/components/card/monthlyCard";
 import Search from "@/components/input/Search";
@@ -9,7 +10,9 @@ import WineCard from "@/components/card/wineCard";
 import CommonButton from "@/components/button/CommonButton";
 import WineRegister from "@/components/modal/WineRegister";
 
+
 export default function WineListPage() {
+  const router = useRouter();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   const wineList = [
@@ -56,9 +59,9 @@ export default function WineListPage() {
 
       {/* WineRegister 모달 */}
       {isRegisterOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-xl p-6 relative">
-            <WineRegister />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setIsRegisterOpen(false)}>
+          <div className="bg-white rounded-xl p-6 relative" onClick={(e) => e.stopPropagation()}>
+            <WineRegister teamId="15-3" onClose={() => setIsRegisterOpen(false)} onSuccess={(id) => router.push(`/wine/${id}`)} />
           </div>
         </div>
       )}

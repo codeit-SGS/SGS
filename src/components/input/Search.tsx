@@ -13,9 +13,9 @@ export default function Search() {
   return (
     <div className="relative w-full max-w-md mx-auto">
       {/* search 아이콘 */}
-      <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+      <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none pl-10">
         <Image
-          src="/img/icon/search.svg"
+          src="/icon/search.svg"
           alt="Search Icon"
           width={20}
           height={20}
@@ -29,7 +29,7 @@ export default function Search() {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         placeholder="와인을 검색해 보세요"
-        className="w-full pl-30 pr-4 py-2 rounded-full border border-gray-300 bg-white text-sm text-gray-600 placeholder-gray-400"
+        className="w-800 h-48 pl-50 pr-4 py-2 rounded-full border border-gray-300 bg-white text-16 text-gray-500 placeholder-gray-400"
       />
     </div>
   );
