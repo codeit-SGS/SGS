@@ -24,6 +24,7 @@ interface Wine {
   region: string;
   image: string;
   price: number;
+  type?: string;
   avgRating: number;
   reviewCount?: number;
   recentReview?: string | Review;
@@ -105,16 +106,22 @@ export default function WineListPage() {
 
   const filteredWineList = sortedWineList.filter((wine) => {
     const matchName = wine.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchType = filterOptions.wineType === "전체" || wine.name.toLowerCase().includes(filterOptions.wineType.toLowerCase());
-    const matchPrice = wine.price >= filterOptions.priceRange[0] && wine.price <= filterOptions.priceRange[1];
+
+    const matchType =
+      filterOptions.wineType === '전체' ||
+      wine.type?.toLowerCase() === filterOptions.wineType.toLowerCase();
+
+    const matchPrice =
+      wine.price >= filterOptions.priceRange[0] &&
+      wine.price <= filterOptions.priceRange[1];
 
     let matchRating = true;
-    if (filterOptions.rating !== "전체") {
-      const [min, max] = filterOptions.rating.split(" - ").map(parseFloat);
+    if (filterOptions.rating !== '전체') {
+      const [min, max] = filterOptions.rating.split(' - ').map(parseFloat);
       matchRating = wine.avgRating >= min && wine.avgRating <= max;
     }
 
-    return matchName && matchPrice && matchRating;
+    return matchName && matchType && matchPrice && matchRating;
   });
 
   if (loading) {
@@ -173,6 +180,7 @@ export default function WineListPage() {
                 region={wine.region}
                 image={wine.image}
                 price={wine.price}
+                type={wine.type}
                 avgRating={wine.avgRating}
                 reviewCount={wine.reviewCount ?? 0}
                 recentReview={
