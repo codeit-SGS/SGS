@@ -56,7 +56,7 @@ const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: Myl
           <img
             src={image}
             alt="와인 이미지"
-            className="absolute bottom-0 w-full h-4/3 max-w-180 left-1/2 -translate-x-1/2 object-contain"
+            className="absolute bottom-0 w-full h-4/3 max-w-76 left-1/2 -translate-x-1/2 object-contain"
           />
         </div>
 
