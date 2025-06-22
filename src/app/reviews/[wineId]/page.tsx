@@ -14,6 +14,7 @@ import {
   ReviewResponse,
   getReview,
 } from '@/lib/api/review';
+import ReviewPagination from '@/components/ui/ReviewPagination';
 
 export default function WinePage({
   params,
@@ -51,6 +52,24 @@ export default function WinePage({
 
   // 🧮 와인 향 TOP3 데이터
   const [flavorTop3, setFlavorTop3] = useState<string[]>([]);
+
+  // ✅ 페이지네이션 관련 상태 및 함수
+  const REVIEWS_PER_PAGE = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const startIndex = (currentPage - 1) * REVIEWS_PER_PAGE;
+  const paginatedReviews = reviews.slice(
+    startIndex,
+    startIndex + REVIEWS_PER_PAGE
+  );
+  const totalPages = Math.ceil(reviews.length / REVIEWS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   // 📝🧮 리뷰 데이터 기반 계산 수행
   useEffect(() => {
@@ -195,8 +214,12 @@ export default function WinePage({
             <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mt-20 mb-20">
               리뷰 목록
             </h3>
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+            {paginatedReviews.map((review) => (
+              <ReviewCard
+                key={review.id}
+                review={review}
+                setReviews={setReviews}
+              />
             ))}
           </div>
 
@@ -212,6 +235,16 @@ export default function WinePage({
             />
           </div>
         </div>
+        {/* 📄 페이지네이션: PC 버전 페이지 하단 중앙 */}
+        {totalPages > 1 && (
+          <div className="mt-16 flex justify-center w-full">
+            <ReviewPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
 
       {/* ✅ 태블릿 전용 */}
@@ -262,17 +295,31 @@ export default function WinePage({
         {/* 📝 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-8 w-full">
           <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+          {paginatedReviews.map((review) => (
+            <ReviewCard
+              key={review.id}
+              review={review}
+              setReviews={setReviews}
+            />
           ))}
         </div>
+        {/* 📄 페이지네이션: PC 버전 페이지 하단 중앙 */}
+        {totalPages > 1 && (
+          <div className="mt-16 flex justify-center w-full">
+            <ReviewPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
 
       {/* ✅ 모바일 전용 */}
       <div className="flex md:hidden flex-col w-full px-4 gap-10">
         {/* 🎚️ 맛/🌸 향 요약 섹션 */}
         {reviews.length > 0 && tasteSummary && (
-          <section className="w-full mt-15 mb-20">
+          <section className="w-full mt-50 mb-20">
             <div className="flex flex-col gap-12">
               {/* 🎚️ 어떤 맛이 나나요? */}
               <div className="w-full">
@@ -314,10 +361,24 @@ export default function WinePage({
         {/* 📝 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-6 w-full">
           <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+          {paginatedReviews.map((review) => (
+            <ReviewCard
+              key={review.id}
+              review={review}
+              setReviews={setReviews}
+            />
           ))}
         </div>
+        {/* 📄 Pagination (모바일 하단에도 있음) */}
+        {totalPages > 1 && (
+          <div className="mt-16 flex justify-center w-full">
+            <ReviewPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
     </main>
   );
