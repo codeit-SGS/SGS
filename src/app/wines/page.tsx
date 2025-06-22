@@ -11,6 +11,13 @@ import CommonButton from "@/components/button/CommonButton";
 import WineRegister from "@/components/modal/WineRegister";
 import api from '@/lib/api/axios';
 
+interface Review {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface Wine {
   id: number;
   name: string;
@@ -19,7 +26,13 @@ interface Wine {
   price: number;
   avgRating: number;
   reviewCount?: number;
-  recentReview?: string;
+  recentReview?: string | Review;
+}
+
+interface FilterOptions {
+  wineType: string;
+  priceRange: number[];
+  rating: string;
 }
 
 export default function WineListPage() {
@@ -27,6 +40,11 @@ export default function WineListPage() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [wineList, setWineList] = useState<Wine[]>([]);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    wineType: "White",
+    priceRange: [0, 74000],
+    rating: "4.5 - 5.0"
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +53,7 @@ export default function WineListPage() {
       try {
         const limit = 20;
         const res = await api.get('/wines', {
-          params: { limit }
+          params: { limit: 20 }
         });
 
         console.log('와인 데이터:', res.data);
@@ -51,13 +69,27 @@ export default function WineListPage() {
     fetchWines();
   }, []);
 
+  const handleApplyFilter = (filter: FilterOptions) => {
+    setFilterOptions(filter);
+  };
+
   const sortedWineList = Array.isArray(wineList)
     ? [...wineList].sort((a, b) => b.avgRating - a.avgRating)
     : [];
 
-  const filteredWineList = sortedWineList.filter((wine) =>
-    wine.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredWineList = sortedWineList.filter((wine) => {
+    const matchName = wine.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchType = filterOptions.wineType === "전체" || wine.name.toLowerCase().includes(filterOptions.wineType.toLowerCase());
+    const matchPrice = wine.price >= filterOptions.priceRange[0] && wine.price <= filterOptions.priceRange[1];
+
+    let matchRating = true;
+    if (filterOptions.rating !== "전체") {
+      const [min, max] = filterOptions.rating.split(" - ").map(parseFloat);
+      matchRating = wine.avgRating >= min && wine.avgRating <= max;
+    }
+
+    return matchName && matchPrice && matchRating;
+  });
 
   if (loading) {
     return <p className="text-center mt-20">와인 목록을 불러오는 중입니다...</p>;
@@ -89,7 +121,7 @@ export default function WineListPage() {
       <section className="mt-6 flex flex-col lg:flex-row gap-60">
         {/* 필터 */}
         <div className="lg:w-1/4 w-full">
-          <Filter />
+          <Filter onApplyFilter={handleApplyFilter} />
           <CommonButton variant="modal-add-wine" onClick={() => setIsRegisterOpen(true)} className="w-284 h-50 rounded-16">와인 등록하기</CommonButton>
         </div>
 
@@ -97,7 +129,19 @@ export default function WineListPage() {
         <div className="lg:w-3/4 w-full flex flex-col gap-4">
           {filteredWineList.length > 0 ? (
             filteredWineList.map((wine) => (
-              <WineCard key={wine.id} id={wine.id} name={wine.name} region={wine.region} image={wine.image} price={wine.price} avgRating={wine.avgRating} reviewCount={wine.reviewCount ?? 0} recentReview={wine.recentReview ?? '등록된 후기가 없습니다.'} />
+              <WineCard
+                key={wine.id}
+                id={wine.id}
+                name={wine.name}
+                region={wine.region}
+                image={wine.image}
+                price={wine.price}
+                avgRating={wine.avgRating}
+                reviewCount={wine.reviewCount ?? 0}
+                recentReview={
+                  typeof wine.recentReview === 'object'
+                    ? wine.recentReview?.content
+                    : wine.recentReview ?? '등록된 후기가 없습니다.'} />
             ))
           ) : (<p className="text-center text-gray-500 mt-10">검색하는 와인이 없습니다.</p>)}
         </div>
