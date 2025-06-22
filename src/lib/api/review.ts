@@ -74,9 +74,9 @@ export async function editReview(id: number, payload: ReviewPayload) {
 }
 
 // 특정 와인의 리뷰 목록 가져오기
-export async function ReviewsByWineId(wineId: number) {
+export async function getReview(id: number) {
   try {
-    const res = await api.get(`/reviews?wineId=${wineId}`);
+    const res = await api.get(`/reviews?wineId=${id}`);
     return res.data as ReviewResponse[];
   } catch (error) {
     console.error('와인의 리뷰 목록을 가져오지 못했습니다:', error);

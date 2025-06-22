@@ -12,7 +12,7 @@ import {
   getWineData,
   WineDetail,
   ReviewResponse,
-  ReviewsByWineId,
+  getReview,
 } from '@/lib/api/review';
 
 export default function WinePage({
@@ -59,18 +59,20 @@ export default function WinePage({
     });
 
     // ✅ 실제 API 사용 시 아래 코드 주석 해제
-    ReviewsByWineId(wineId).then((fetchedReviews) => {
+    getReview(wineId).then((fetchedReviews) => {
       setReviews(fetchedReviews);
 
+      // 참여 수
       const count = fetchedReviews.length;
       const average =
         count === 0
           ? 0
           : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
 
+      // 점수별 분포 계산
       const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
       fetchedReviews.forEach((r) => {
-        ratings[r.rating] += 1; // 점수별 분포 계산
+        ratings[r.rating] += 1;
       });
 
       setRatingData({
@@ -114,7 +116,20 @@ export default function WinePage({
     });
   }, [wineId]);
 
-  if (!wine) return <div>Loading...</div>;
+  if (!wine)
+    return (
+      <div className="w-full max-w-1140 mx-auto px-4 py-10">
+        {/* 와인 카드 스켈레톤 */}
+        <div className="w-full h-302 bg-gray-200 animate-pulse rounded-xl" />
+
+        {/* 맛/향/리뷰 영역 스켈레톤 */}
+        <div className="mt-10 space-y-6">
+          <div className="w-1/3 h-6 bg-gray-200 rounded animate-pulse" />
+          <div className="w-full h-24 bg-gray-200 rounded animate-pulse" />
+          <div className="w-full h-24 bg-gray-200 rounded animate-pulse" />
+        </div>
+      </div>
+    );
 
   return (
     <main className="min-h-screen px-4 py-10 flex flex-col items-center bg-white">
