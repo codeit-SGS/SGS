@@ -40,6 +40,8 @@ export interface ReviewResponse {
   teamId: string;
 }
 
+export type EditReviewPayload = Omit<ReviewPayload, 'wineId'>;
+
 // 와인 데이터 받아오기
 export async function getWineData(id: number): Promise<WineDetail> {
   try {
@@ -63,16 +65,14 @@ export async function postReview(payload: ReviewPayload) {
 }
 
 // 리뷰 수정하기
-export async function editReview(reviewId: number, payload: {
-  content: string;
-  rating: number;
-  lightBold: number;
-  smoothTannic: number;
-  drySweet: number;
-  softAcidic: number;
-  aroma: string[];
-}) {
-  return await api.patch(`/reviews/${reviewId}`, payload);
+export async function editReview(reviewId: number, payload: EditReviewPayload) {
+  try {
+    const res = await api.patch(`/reviews/${reviewId}`, payload);
+    return res.data;
+  } catch (error) {
+    console.error('리뷰를 수정하지 못했습니다:', error);
+    throw error;
+  }
 }
 
 // 특정 와인의 리뷰 목록 가져오기
