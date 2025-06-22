@@ -118,12 +118,24 @@ export default function ReviewCard({
       if (!reviewId) return;
 
       if (isLiked) {
-        await unlikeReview(reviewId); // 좋아요 해제
+        await unlikeReview(reviewId);
       } else {
-        await likeReview(reviewId); // 좋아요 추가
+        await likeReview(reviewId);
       }
 
-      setIsLiked((prev) => !prev); // UI 반영
+      setIsLiked((prev) => !prev);
+
+      // 외부 리뷰 리스트 상태도 동기화
+      setReviews((prev) =>
+        prev.map((item) =>
+          item.id === reviewId
+            ? {
+                ...item,
+                isLiked: !item.isLiked,
+              }
+            : item
+        )
+      );
     } catch (error) {
       console.error('좋아요 토글 실패:', error);
       alert('좋아요 처리 중 오류가 발생했습니다.');
