@@ -67,24 +67,29 @@ export default function WineListPage() {
     };
 
     const fetchRecommendedWines = async () => {
-    try {
-      const res = await api.get('/wines/recommended', {
-        params: { limit: 8 } // ✅ 여기만 추가하면 끝
-      });
-      console.log('추천 와인 데이터:', res.data);
-      setRecommendedWines(res.data ?? []);
-    } catch (err: any) {
-      if (err.response) {
-        console.error('추천 와인 에러 상태코드:', err.response.status);
-        console.error('추천 와인 에러 응답 내용:', err.response.data);
-        console.error('추천 와인 요청 경로:', err.config?.url);
-      } else if (err.request) {
-        console.error('추천 와인 요청 에러:', err.request);
-      } else {
-        console.error('추천 와인 일반 에러:', err.message);
+      try {
+        const res = await api.get('/wines/recommended', {
+          params: {
+            teamId: '15-3',
+            limit: 20
+          }
+        });
+        console.log('추천 와인 데이터:', res.data);
+        console.log('추천 와인 개수:', Array.isArray(res.data) ? res.data.length : '응답이 배열이 아님');
+
+        setRecommendedWines(res.data ?? []);
+      } catch (err: any) {
+        if (err.response) {
+          console.error('추천 와인 에러 상태코드:', err.response.status);
+          console.error('추천 와인 에러 응답 내용:', err.response.data);
+          console.error('추천 와인 요청 경로:', err.config?.url);
+        } else if (err.request) {
+          console.error('추천 와인 요청 에러:', err.request);
+        } else {
+          console.error('추천 와인 일반 에러:', err.message);
+        }
       }
-    }
-  };
+    };
 
     fetchWines();
     fetchRecommendedWines();
