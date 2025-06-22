@@ -7,6 +7,7 @@ interface WineCardProps {
   name?: string;
   region?: string;
   price?: number;
+  type?: string;
   image?: string;
   avgRating?: number;
   reviewCount?: number;
@@ -18,6 +19,7 @@ const WineCard = ({
   name = '와인 이름 없음',
   region = '지역 정보 없음',
   price = 0,
+  type = '와인 타입 없음',
   image = '/wine/wine-type1.svg',
   avgRating = 0,
   reviewCount = 0,
