@@ -4,32 +4,33 @@ import MyCard from '@/components/card/MyCard';
 
 interface Review {
   id: number;
-  wineName: string;
+  wine: { id: number; name: string }; // wineName → wine 객체로 변경
   rating: number;
   content: string;
   createdAt: string;
 }
 
-const ReviewList = () => {
+const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => void }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchReviewsData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchMyReviews();
-        setReviews(data); // API 응답 구조에 따라 수정 필요
-      } catch (e) {
+        const reviews = await fetchMyReviews(20);
+        setReviews(reviews);
+        setReviewCount(reviews.length);
+      } catch {
         setError('리뷰를 불러오지 못했습니다.');
       } finally {
         setLoading(false);
       }
     };
-    fetchReviews();
-  }, []);
+    fetchReviewsData();
+  }, [setReviewCount]);
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
@@ -42,7 +43,7 @@ const ReviewList = () => {
           key={review.id}
           rating={review.rating}
           createdAt={review.createdAt}
-          wineName={review.wineName}
+          wineName={review.wine.name}  // 여기!
           content={review.content}
         />
       ))}
