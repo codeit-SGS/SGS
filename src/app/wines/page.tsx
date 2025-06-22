@@ -40,6 +40,7 @@ export default function WineListPage() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [wineList, setWineList] = useState<Wine[]>([]);
+  const [recommendedWines, setRecommendedWines] = useState<Wine[]>([]);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     wineType: "전체",
     priceRange: [0, 100000],
@@ -66,7 +67,17 @@ export default function WineListPage() {
       }
     };
 
+    const fetchRecommendedWines = async () => {
+      try {
+        const res = await api.get('/wines/recommend');
+        setRecommendedWines(res.data.list ?? []);
+      } catch (err: any) {
+        console.error('추천 와인 에러:', err.response?.data || err.message);
+      }
+    };
+
     fetchWines();
+    fetchRecommendedWines();
   }, []);
 
   const handleApplyFilter = (filter: FilterOptions) => {
@@ -103,11 +114,16 @@ export default function WineListPage() {
     <main className="max-w-1140 min-h-screen bg-white px-4 py-6 pt-10 mx-auto">
 
       {/* 이번 달 추천 와인 */}
-      <section className="w-1140 h-299 bg-gray-100 rounded-lg">
+      <section className="w-1140 h-299 bg-gray-100 rounded-lg mt-10">
         <h2 className="text-lg font-semibold mb-2">이번 달 추천 와인</h2>
         <div className="flex gap-4 overflow-x-auto">
-          {sortedWineList.map((wine) => (
-            <MonthlyCard key={wine.id} />
+          {recommendedWines.map((wine) => (
+            <MonthlyCard
+              key={wine.id}
+              id={wine.id}
+              name={wine.name}
+              image={wine.image}
+              avgRating={wine.avgRating} />
           ))}
         </div>
       </section>
