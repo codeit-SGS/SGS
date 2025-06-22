@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import CancelModal from '@/components/modal/Cancle';
+import CancelModal from '@/components/modal/Cancel';
 
 // 시간 차이를 "몇 분 전", "몇 시간 전" 등으로 변환하는 함수
 const getRelativeTime = (dateString: string) => {
@@ -93,7 +93,7 @@ const MyCard = ({ id, rating, createdAt, wineName, content, onDelete, onEdit }: 
           {/* 옵션 드롭다운 */}
           <div className="relative" ref={dropdownRef}>
             <button onClick={handleDropdownToggle}>
-              <Image src="/icon/menu.svg" alt="더보기" width={26} height={26} />
+              <Image src="/icon/menu.svg" className='cursor-pointer' alt="더보기" width={26} height={26} />
             </button>
             {isDropdownOpen && (
               <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">

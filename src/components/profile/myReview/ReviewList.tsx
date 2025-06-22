@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { fetchMyReviews } from '@/lib/api/user';
+import { deleteReview } from '@/lib/api/review';
 import MyCard from '@/components/card/MyCard';
 import MyEditModal from './MyEditModal'; // 경로 주의!
+import CancelModal from '@/components/modal/Cancel';
 
 interface Review {
   id: number;
@@ -24,13 +26,31 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
   const [error, setError] = useState<string | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
+  const [open, setOpen] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null);
+
+  const fetchReviewsData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const reviews = await fetchMyReviews(20);
+      setReviews(reviews);
+      setReviewCount(reviews.length);
+    } catch {
+      setError('리뷰를 불러오지 못했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 삭제 핸들러
-  const handleDelete = (id: number) => {
-    const newReviews = reviews.filter((review) => review.id !== id);
-    setReviews(newReviews);
-    setReviewCount(newReviews.length);
-    // 실제 삭제 API 호출이 필요하다면 여기에 추가
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteReview(id); // id는 리뷰 id
+      fetchReviewsData();
+    } catch (e) {
+      alert('리뷰 삭제에 실패했습니다.');
+    }
   };
 
   // 수정 핸들러
@@ -46,20 +66,17 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
     setEditModalOpen(true);
   };
 
+  const openModal = (id: number) => {
+    setSelectedReviewId(id);
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+    setSelectedReviewId(null);
+  };
+
   useEffect(() => {
-    const fetchReviewsData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const reviews = await fetchMyReviews(20);
-        setReviews(reviews);
-        setReviewCount(reviews.length - 1); // 또는 setReviewCount(reviews.length)로 일관성 있게 사용
-      } catch {
-        setError('리뷰를 불러오지 못했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchReviewsData();
   }, [setReviewCount]);
 
@@ -77,7 +94,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
           createdAt={review.createdAt}
           wineName={review.wine.name}
           content={review.content}
-          onDelete={handleDelete}
+          onDelete={() => openModal(review.id)}
           onEdit={handleEdit}
         />
       ))}
@@ -106,6 +123,18 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
             />
           </div>
         </div>
+      )}
+      {open && (
+        <CancelModal
+          open={open}
+          onCancel={closeModal}
+          onConfirm={() => {
+            if (selectedReviewId !== null) {
+              handleDelete(selectedReviewId);
+              closeModal();
+            }
+          }}
+        />
       )}
     </div>
   );

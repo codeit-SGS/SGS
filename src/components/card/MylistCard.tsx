@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import CancelModal from '@/components/modal/Cancle';
+import CancelModal from '@/components/modal/Cancel';
 import Image from 'next/image';
 
 interface MylistCardProps {

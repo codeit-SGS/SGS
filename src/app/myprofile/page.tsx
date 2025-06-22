@@ -3,7 +3,7 @@
 import { useState } from "react";
 import MyProfileTabs from "@/components/profile/MyProfileTabs";
 import ReviewList from "@/components/profile/myReview/ReviewList";
-import WineList from "@/components/profile/WineList";
+import WineList from "@/components/profile/myWine/WineList";
 
 const MyProfilePage = () => {
   const [activeTab, setActiveTab] = useState<"review" | "wine">("review");

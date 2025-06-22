@@ -99,6 +99,6 @@ export const unlikeReview = async (reviewId: number) => {
 
 // 리뷰 삭제
 export const deleteReview = async (reviewId: number) => {
-  const res = await api.delete(`/wines/${reviewId}`);
+  const res = await api.delete(`/reviews/${reviewId}`);
   return res.data;
 };
