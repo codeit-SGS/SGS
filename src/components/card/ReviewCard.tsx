@@ -116,7 +116,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
       if (isLiked) {
         await unlikeReview(reviewId); // 좋아요 해제
       } else {
-        await likeReview(reviewId);   // 좋아요 추가
+        await likeReview(reviewId); // 좋아요 추가
       }
 
       setIsLiked((prev) => !prev); // UI 반영
@@ -129,7 +129,10 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -142,7 +145,6 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
 
   return (
     <div className="w-full max-w-343 tablet:max-w-704 pc:max-w-800 bg-white rounded-[16px] border border-gray-300 px-20 py-16 tablet:px-40 tablet:py-30 pc:py-16 duration-300 ease-in transition-all">
-
       {/* 유저 정보 + 좋아요 + 더보기 버튼 */}
       <div className="flex justify-between items-start gap-16 mb-16 tablet:mb-20 pc:mb-24">
         <div className="flex gap-16 pc:gap-20 items-center">
@@ -166,10 +168,13 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
             </p>
           </div>
         </div>
-        
+
         {/* 좋아요 */}
         <div className="flex items-center gap-18 tablet:gap-24">
-          <div onClick={handleLikeToggle} className="relative size-32 tablet:size-38 cursor-pointer">
+          <div
+            onClick={handleLikeToggle}
+            className="relative size-32 tablet:size-38 cursor-pointer"
+          >
             <Image
               src={isLiked ? '/icon/liked.svg' : '/icon/like.svg'}
               alt="좋아요"
@@ -177,7 +182,7 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
               className="object-contain"
             />
           </div>
-          
+
           {/* 더보기 드롭다운 */}
           <div className="relative" ref={dropdownRef}>
             <div
@@ -193,13 +198,16 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
             </div>
             {isDropdownOpen && (
               <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">
-                <button onClick={handleEditClick}
-                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">
+                <button
+                  onClick={handleEditClick}
+                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
+                >
                   수정하기
                 </button>
                 <button
                   onClick={handleDeleteClick}
-                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main">
+                  className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
+                >
                   삭제하기
                 </button>
               </div>
@@ -309,11 +317,11 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
       </div>
 
       {/* 삭제 확인 모달 */}
-        <CancelModal
-          open={isDeleteModalOpen}
-          onCancel={() => setIsDeleteModalOpen(false)}
-          onConfirm={handleDeleteConfirm}
-        />
+      <CancelModal
+        open={isDeleteModalOpen}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }

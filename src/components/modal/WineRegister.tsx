@@ -49,16 +49,19 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       const formDataImg = new FormData();
       formDataImg.append('image', image);
 
-      const imgRes = await fetch(`https://winereview-api.vercel.app/15-3/images/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: formDataImg,
-      });
+      const imgRes = await fetch(
+        `https://winereview-api.vercel.app/15-3/images/upload`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formDataImg,
+        }
+      );
 
       const imgJson = await imgRes.json();
-      console.log("📸 image upload response:", imgJson);
+      console.log('📸 image upload response:', imgJson);
 
       if (!imgRes.ok || !imgJson.url) {
         throw new Error('이미지 업로드에 실패했습니다.');
@@ -66,23 +69,26 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
 
       const imageUrl = imgJson.url;
 
-      const wineRes = await fetch(`https://winereview-api.vercel.app/15-3/wines`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: wineName,
-          region: origin,
-          image: imageUrl,
-          price: Number(price),
-          type: type.toUpperCase(),
-        }),
-      });
+      const wineRes = await fetch(
+        `https://winereview-api.vercel.app/15-3/wines`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: wineName,
+            region: origin,
+            image: imageUrl,
+            price: Number(price),
+            type: type.toUpperCase(),
+          }),
+        }
+      );
 
       const wineJson = await wineRes.json();
-      console.log("📨 응답 내용:", wineJson);
+      console.log('📨 응답 내용:', wineJson);
 
       if (!wineRes.ok) {
         throw new Error('와인 등록 실패');
@@ -91,8 +97,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       const newWineId = wineJson.id;
       onSuccess(newWineId);
 
-      router.push(`/wines/${newWineId}`);
-
+      router.push(`/reviews/${newWineId}`);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -115,12 +120,14 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       className="bg-white rounded-2xl p-6 space-y-25 w-327 h-620 md:w-412 md:h-657"
     >
       <h2 className="text-2xl font-bold text-gray-800">
-        <span className='block md:hidden'>필터</span>
-        <span className='hidden md:block'>와인 등록</span>
+        <span className="block md:hidden">필터</span>
+        <span className="hidden md:block">와인 등록</span>
       </h2>
 
-      <div className='space-y-1'>
-        <label className='block text-lg font-medium text-gray-800 mb-10'>와인 이름</label>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-800 mb-10">
+          와인 이름
+        </label>
         <input
           type="text"
           placeholder="와인 이름 입력"
@@ -130,8 +137,10 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         />
       </div>
 
-      <div className='space-y-1'>
-        <label className='block text-lg font-medium text-gray-800 mb-10'>가격</label>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-800 mb-10">
+          가격
+        </label>
         <input
           type="number"
           placeholder="가격 입력"
@@ -141,8 +150,10 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         />
       </div>
 
-      <div className='space-y-1'>
-        <label className='block text-lg font-medium text-gray-800 mb-10'>원산지</label>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-800 mb-10">
+          원산지
+        </label>
         <input
           type="text"
           placeholder="원산지 입력"
@@ -152,8 +163,10 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         />
       </div>
 
-      <div className='space-y-1'>
-        <label className='block text-lg font-medium text-gray-800 mb-10'>타입</label>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-800 mb-10">
+          타입
+        </label>
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
@@ -166,7 +179,9 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       </div>
 
       <div className="space-y-1">
-        <label className="block text-lg font-medium text-gray-700 mb-10">와인 사진</label>
+        <label className="block text-lg font-medium text-gray-700 mb-10">
+          와인 사진
+        </label>
         <div className="size-140 border border-gray-300 rounded-2xl bg-gray-50 flex items-center justify-center cursor-pointer">
           {image ? (
             <img
@@ -207,7 +222,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
           disabled={loading}
         >
-          {loading ? "등록 중..." : "와인 등록하기"}
+          {loading ? '등록 중...' : '와인 등록하기'}
         </button>
       </div>
     </form>

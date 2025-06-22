@@ -111,7 +111,7 @@ export default function EditModal({ onClose, initialData }: EditModalProps) {
             </div>
             <div>
               <div className="text-lg font-semibold">
-                Sentinel Carbernet Sauvignon 2016 {/* {initialData.wineName} */}
+                {initialData.wineName}
               </div>
               <StarInput value={rating} onChange={setRating} />
             </div>

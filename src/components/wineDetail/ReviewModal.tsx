@@ -12,9 +12,13 @@ import { useRouter } from 'next/navigation';
 export default function ReviewModal({
   onClose, // 모달 닫기 함수
   wineId, // 리뷰 대상 와인 ID
+  name,
+  onSubmitSuccess,
 }: {
+  name: string;
   onClose: () => void;
   wineId: number;
+  onSubmitSuccess?: () => void;
 }) {
   // ✔️ 와인 아이디 확인
   console.log('💡 ReviewModal wineId:', wineId);
@@ -95,6 +99,7 @@ export default function ReviewModal({
       // ✔️ 등록 되는지 확인
       console.log('리뷰 등록 성공:', res);
       onClose(); //-> 성공하면 모달 닫기
+      onSubmitSuccess?.();
       router.refresh(); //-> 페이지 새로고침
     } catch (err) {
       // ✔️ 등록 실패 인지 확인
@@ -143,9 +148,7 @@ export default function ReviewModal({
 
             <div>
               {/* 🍷 와인 이름 */}
-              <div className="w-fill h-hug text-lg font-semibold">
-                Sentinel Carbernet Sauvignon 2016
-              </div>
+              <div className="w-fill h-hug text-lg font-semibold">{name}</div>
 
               {/* ⭐ 별점 선택 */}
               <StarInput value={rating} onChange={setRating} />
