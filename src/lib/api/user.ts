@@ -28,13 +28,13 @@ export const patchMyProfile = async ({
 };
 
 // 내가 쓴 리뷰 목록
-export const fetchMyReviews = async () => {
-  const res = await api.get("users/me/reviews");
-  return res.data;
+export const fetchMyReviews = async (limit = 20) => {
+  const res = await api.get("users/me/reviews", { params: { limit } });
+  return res.data.list; // 반드시 .list로 반환!
 };
 
 // 내가 등록한 와인 목록
-export const fetchMyWines = async () => {
-  const res = await api.get("users/me/wines");
-  return res.data;
+export const fetchMyWines = async (limit = 20) => {
+  const res = await api.get("users/me/wines", { params: { limit } });
+  return res.data.list;
 };

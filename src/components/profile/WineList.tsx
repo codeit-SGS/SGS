@@ -4,32 +4,33 @@ import MylistCard from '@/components/card/MylistCard';
 
 interface Wine {
   id: number;
+  image: string; // imageUrl이 아니라 image로 맞추세요 (API 응답에 맞게)
   name: string;
-  imageUrl: string;
   region: string;
   price: number;
 }
 
-const WineList = () => {
+const WineList = ({ setWineCount }: { setWineCount: (count: number) => void }) => {
   const [wines, setWines] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchWines = async () => {
+    const fetchWinesData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchMyWines();
-        setWines(data); // API 응답 구조에 따라 수정 필요
-      } catch (e) {
-        setError('등록한 와인을 불러오지 못했습니다.');
+        const wines = await fetchMyWines(20);
+        setWines(wines);
+        setWineCount(wines.length);
+      } catch {
+        setError('와인을 불러오지 못했습니다.');
       } finally {
         setLoading(false);
       }
     };
-    fetchWines();
-  }, []);
+    fetchWinesData();
+  }, [setWineCount]);
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
@@ -40,7 +41,7 @@ const WineList = () => {
       {wines.map((wine) => (
         <MylistCard
           key={wine.id}
-          imageUrl={wine.imageUrl}
+          image={wine.image} // imageUrl → image로 수정
           name={wine.name}
           region={wine.region}
           price={wine.price}

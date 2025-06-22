@@ -27,11 +27,12 @@ const getRelativeTime = (dateString: string) => {
 interface MyCardProps {
   rating: number;
   createdAt: string;
-  name: string;
+  wineName: string;
   content: string;
+  // ...다른 props
 }
 
-const MyCard = ({ rating, createdAt, name, content }: MyCardProps) => {
+const MyCard = ({ rating, createdAt, wineName, content }: MyCardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -112,7 +113,7 @@ const MyCard = ({ rating, createdAt, name, content }: MyCardProps) => {
         </div>
 
         {/* 와인명 및 내용 */}
-        <p className="text-16 text-gray-500 leading-26 pb-10">{name}</p>
+        <p className="text-16 text-gray-500 leading-26 pb-10">{wineName}</p>
         <p className="text-16 text-gray-800 leading-26 text-overflow-line3">{content}</p>
       </div>
 
