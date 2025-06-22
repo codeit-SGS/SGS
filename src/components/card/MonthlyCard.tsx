@@ -20,9 +20,11 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
     typeof avgRating === 'number' && !isNaN(avgRating) ? avgRating : 0;
   const fullStars = Math.max(0, Math.min(5, Math.round(safeRating)));
 
-  // 카드 클릭 시 상세 페이지 이동
+  // 카드 클릭시 상세페이지 이동
   const handleClick = () => {
-    if (id) router.push(`/wines/${id}`);
+    if (id) {
+      router.push(`/reviews/${id}`);
+    }
   };
 
   return (
