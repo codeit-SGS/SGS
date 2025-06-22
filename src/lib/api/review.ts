@@ -85,3 +85,19 @@ export async function ReviewsByWineId(wineId: number) {
     throw error;
   }
 }
+
+// 리뷰 카드 좋아요 추가
+export const likeReview = async (reviewId: number) => {
+  return await axios.post(`${Base_URL}/reviews/${reviewId}/like`);
+};
+
+// 리뷰 카드 좋아요 취소 (만약 DELETE 방식이라면, 이건 백엔드 명세에 따라 다름)
+export const unlikeReview = async (reviewId: number) => {
+  return await axios.delete(`${Base_URL}/reviews/${reviewId}/like`);
+};
+
+// 리뷰 삭제
+export const deleteReview = async (reviewId: number) => {
+  const res = await axios.delete(`${Base_URL}/wines/${reviewId}`);
+  return res.data;
+};
