@@ -11,6 +11,7 @@ export default function GNB() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+  // 로그인 상태 및 초기 프로필 이미지 설정
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     setIsLoggedIn(!!token);
@@ -26,6 +27,37 @@ export default function GNB() {
         }
       }
     }
+
+    // 프로필 이미지 실시간 업데이트 감지
+    const handleProfileUpdate = () => {
+      const updated = JSON.parse(localStorage.getItem('userInfo') || '{}');
+      setProfileImage(updated.image || '');
+    };
+
+    window.addEventListener('userInfoUpdated', handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener('userInfoUpdated', handleProfileUpdate);
+    };
+  }, []);
+
+  // localStorage 'userInfo' 변경 시 프로필 이미지 갱신
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'userInfo') {
+        try {
+          const newUser = JSON.parse(e.newValue || '{}');
+          setProfileImage(newUser.image || '');
+        } catch {
+          setProfileImage('');
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   // 외부 클릭 시 드롭다운 닫기

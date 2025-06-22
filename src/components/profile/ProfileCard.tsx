@@ -55,6 +55,15 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
       // 2. 부모(onChangeImage)에게 URL만 전달 & 변경된 경우에만 반영 + alert
       if (imageUrl !== profileImageUrl) {
         onChangeImage(imageUrl);
+
+        // localStorage.userInfo도 업데이트
+      const userData = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        localStorage.setItem(
+          'userInfo',
+          JSON.stringify({ ...userData, image: imageUrl })
+        );
+
+        window.dispatchEvent(new Event('userInfoUpdated')); // 다른 컴포넌트에 변경 알림
         alert('변경되었습니다!');
       }
     } catch {
