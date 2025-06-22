@@ -18,10 +18,11 @@ import {
 export default function WinePage({
   params,
 }: {
-  params: Promise<{ wineId: string }>;
+  params: Promise<{ wineId: string; name: string }>;
 }) {
   const resolvedParams = use(params);
   const wineId = Number(resolvedParams.wineId);
+  const name = String(resolvedParams.name);
 
   // 🍷 와인 상세 정보 상태
   const [wine, setWine] = useState<WineDetail | null>(null);
@@ -53,23 +54,32 @@ export default function WinePage({
 
   // 📝🧮 리뷰 데이터 기반 계산 수행
   useEffect(() => {
-    // 🍷 실제 와인 상세 정보 API 호출
     getWineData(wineId).then((data) => {
       setWine(data);
     });
 
-    // ✅ 실제 API 사용 시 아래 코드 주석 해제
+    fetchReviews(); // ✅ 리뷰 데이터 초기 로딩
+  }, [wineId]);
+
+  // ✅ 리뷰 다시 불러오기 + 관련 요약 정보 재계산 함수
+  const fetchReviews = () => {
     getReview(wineId).then((fetchedReviews) => {
+      console.log('🔍 fetchedReviews 타입 확인:', fetchedReviews);
+      console.log('🔍 타입은 배열인가?', Array.isArray(fetchedReviews));
+
+      if (!Array.isArray(fetchedReviews)) {
+        console.error('❌ fetchedReviews가 배열이 아님!', fetchedReviews);
+        return;
+      }
+
       setReviews(fetchedReviews);
 
-      // 참여 수
       const count = fetchedReviews.length;
       const average =
         count === 0
           ? 0
-          : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
+          : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count;
 
-      // 점수별 분포 계산
       const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
       fetchedReviews.forEach((r) => {
         ratings[r.rating] += 1;
@@ -81,28 +91,30 @@ export default function WinePage({
         ratings,
       });
 
-      // 🎚️🧮맛 요약 계산
       if (count > 0) {
         setTasteSummary({
           body: Math.round(
-            fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
+            fetchedReviews.reduce((sum, r) => sum + (r.lightBold ?? 0), 0) /
+              count
           ),
           tannin: Math.round(
-            fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
+            fetchedReviews.reduce((sum, r) => sum + (r.smoothTannic ?? 0), 0) /
+              count
           ),
           sweetness: Math.round(
-            fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
+            fetchedReviews.reduce((sum, r) => sum + (r.drySweet ?? 0), 0) /
+              count
           ),
           acidity: Math.round(
-            fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
+            fetchedReviews.reduce((sum, r) => sum + (r.softAcidic ?? 0), 0) /
+              count
           ),
         });
       }
 
-      // 🌸🧮 향 Top 3 계산
       const aromaCounts: Record<string, number> = {};
       fetchedReviews.forEach((r) => {
-        r.aroma.forEach((aroma) => {
+        (r.aroma ?? []).forEach((aroma: string) => {
           aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
         });
       });
@@ -114,7 +126,7 @@ export default function WinePage({
 
       setFlavorTop3(top3);
     });
-  }, [wineId]);
+  };
 
   if (!wine)
     return (
@@ -183,18 +195,20 @@ export default function WinePage({
             <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mt-20 mb-20">
               리뷰 목록
             </h3>
-            {[...Array(3)].map((_, idx) => (
-              <ReviewCard key={idx} />
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
             ))}
           </div>
 
           {/* 별점 요약 */}
           <div className="sticky top-130 w-280 h-311 bg-none">
             <StarReview
+              name={wine.name}
               average={ratingData.average}
               count={ratingData.count}
               ratings={ratingData.ratings}
               wineId={wineId}
+              onSubmitSuccess={fetchReviews}
             />
           </div>
         </div>
@@ -236,18 +250,20 @@ export default function WinePage({
         {/* ⭐ 별점 요약 */}
         <div className="w-full">
           <StarReview
+            name={wine.name}
             average={ratingData.average}
             count={ratingData.count}
             ratings={ratingData.ratings}
             wineId={wineId}
+            onSubmitSuccess={fetchReviews}
           />
         </div>
 
         {/* 📝 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-8 w-full">
           <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
-          {[...Array(3)].map((_, idx) => (
-            <ReviewCard key={idx} />
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
         </div>
       </div>
@@ -287,17 +303,19 @@ export default function WinePage({
 
         {/* ⭐ 별점 요약 */}
         <StarReview
+          name={wine.name}
           average={ratingData.average}
           count={ratingData.count}
           ratings={ratingData.ratings}
           wineId={wineId}
+          onSubmitSuccess={fetchReviews}
         />
 
         {/* 📝 리뷰 카드 리스트 */}
         <div className="flex flex-col space-y-6 w-full">
           <h3 className="text-2xl font-bold text-gray-800 mb-20">리뷰 목록</h3>
-          {[...Array(3)].map((_, idx) => (
-            <ReviewCard key={idx} />
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
         </div>
       </div>

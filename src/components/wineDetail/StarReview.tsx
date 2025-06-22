@@ -6,15 +6,19 @@ import ReviewModal from './ReviewModal';
 import RatingBar from './RatingBar';
 
 export default function StarRatingSummary({
+  name,
   average,
   count,
   ratings,
   wineId,
+  onSubmitSuccess,
 }: {
+  name: string;
   average: number;
   count: number;
   ratings: Record<number, number>;
   wineId: number;
+  onSubmitSuccess?: () => void;
 }) {
   const total = Object.values(ratings).reduce((a, b) => a + b, 0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -149,7 +153,12 @@ export default function StarRatingSummary({
 
       {/* ✏️ 리뷰 작성 모달 */}
       {isModalOpen && (
-        <ReviewModal onClose={() => setIsModalOpen(false)} wineId={wineId} />
+        <ReviewModal
+          onClose={() => setIsModalOpen(false)}
+          wineId={wineId}
+          name={name}
+          onSubmitSuccess={onSubmitSuccess}
+        />
       )}
     </>
   );

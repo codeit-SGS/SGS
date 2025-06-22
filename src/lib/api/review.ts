@@ -74,10 +74,11 @@ export async function editReview(id: number, payload: ReviewPayload) {
 }
 
 // 특정 와인의 리뷰 목록 가져오기
-export async function getReview(id: number) {
+export async function getReview(wineId: number) {
   try {
-    const res = await api.get(`/reviews?wineId=${id}`);
-    return res.data as ReviewResponse[];
+    const res = await api.get(`/wines/${wineId}`);
+    console.log('📥 리뷰 응답:', res.data);
+    return res.data.reviews;
   } catch (error) {
     console.error('와인의 리뷰 목록을 가져오지 못했습니다:', error);
     throw error;
@@ -86,16 +87,16 @@ export async function getReview(id: number) {
 
 // 리뷰 카드 좋아요 추가
 export const likeReview = async (reviewId: number) => {
-  return await axios.post(`${Base_URL}/reviews/${reviewId}/like`);
+  return await api.post(`/reviews/${reviewId}/like`);
 };
 
 // 리뷰 카드 좋아요 취소 (만약 DELETE 방식이라면, 이건 백엔드 명세에 따라 다름)
 export const unlikeReview = async (reviewId: number) => {
-  return await axios.delete(`${Base_URL}/reviews/${reviewId}/like`);
+  return await api.delete(`/reviews/${reviewId}/like`);
 };
 
 // 리뷰 삭제
 export const deleteReview = async (reviewId: number) => {
-  const res = await axios.delete(`${Base_URL}/wines/${reviewId}`);
+  const res = await api.delete(`/wines/${reviewId}`);
   return res.data;
 };
