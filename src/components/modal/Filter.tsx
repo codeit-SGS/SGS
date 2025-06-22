@@ -3,10 +3,18 @@
 import { useState, SetStateAction } from "react";
 import Slider from "@mui/material/Slider";
 
-export default function Filter() {
-  const [selectedWine, setSelectedWine] = useState("White");
+type FilterProps = {
+  onApplyFilter: (filter: {
+    wineType: string;
+    priceRange: number[];
+    rating: string;
+  }) => void;
+};
+
+export default function Filter({ onApplyFilter }: FilterProps) {
+  const [selectedWine, setSelectedWine] = useState("Red");
   const [priceRange, setPriceRange] = useState([0, 74000]);
-  const [selectedRating, setSelectedRating] = useState("4.5 - 5.0");
+  const [selectedRating, setSelectedRating] = useState("전체");
 
   const handlePriceChange = (_event: any, newValue: SetStateAction<number[]>) => {
     setPriceRange(newValue);
@@ -14,6 +22,14 @@ export default function Filter() {
 
   const wineTypes = ["Red", "White", "Sparkling"];
   const ratingOptions = ["전체", "4.5 - 5.0", "4.0 - 4.5", "3.5 - 4.0", "3.0 - 3.5"];
+
+  const handleApplyFilter = () => {
+    onApplyFilter({
+      wineType: selectedWine,
+      priceRange,
+      rating: selectedRating,
+    });
+  };
 
   return (
     <div className="bg-none text-white p-4 rounded-xl space-y-6 w-284 h-628">
@@ -98,22 +114,16 @@ export default function Filter() {
       <div className="pt-24 flex justify-between gap-4">
         <button
           onClick={() => {
-            setSelectedWine("White");
+            setSelectedWine("Red");
             setPriceRange([0, 74000]);
-            setSelectedRating("4.5 - 5.0");
+            setSelectedRating("전체");
           }}
           className="text-md w-1/4 py-7 font-semibold border border-main-10 text-main rounded-lg hover:bg-main-10">
           초기화
         </button>
 
         <button
-          onClick={() => {
-            console.log("적용된 필터:", {
-              wineType: selectedWine,
-              priceRange,
-              rating: selectedRating,
-            });
-          }}
+          onClick={handleApplyFilter}
           className="text-md w-3/4 py-7 font-semibold bg-main text-white rounded-lg hover:bg-[#5a35c6] transition-colors">
           필터 적용하기
         </button>
