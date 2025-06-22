@@ -1,7 +1,4 @@
-import axios from 'axios';
 import api from './axios';
-
-const Base_URL = 'https://winereview-api.vercel.app/15-3';
 
 export interface WineDetail {
   id: number;

@@ -6,6 +6,7 @@ import ProfileIcon from '@/components/input/ProfileImage';
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 import EditModal from '../wineDetail/EditModal';
+import { ReviewResponse } from '@/lib/api/review';
 
 // 스타일링된 슬라이더 컴포넌트
 const PurpleSlider = styled(Slider)({

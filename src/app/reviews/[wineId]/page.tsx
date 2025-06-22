@@ -15,159 +15,6 @@ import {
   ReviewsByWineId,
 } from '@/lib/api/review';
 
-// ✅ 테스트용 더미 와인 데이터
-export const wineMock: WineDetail = {
-  id: 1,
-  name: '샤또 마고 2015',
-  region: 'France - Bordeaux',
-  image: '/wine/mock-wine.png',
-  price: 320000,
-};
-
-// ✅ 테스트용 더미 리뷰 데이터
-const dummyReviews: ReviewResponse[] = [
-  {
-    id: 1,
-    rating: 5,
-    lightBold: 9,
-    smoothTannic: 7,
-    drySweet: 3,
-    softAcidic: 2,
-    aroma: ['CHERRY', 'OAK'],
-    content: '풍부한 향과 부드러운 타닌이 인상 깊었어요.',
-    createdAt: '2025-06-18T12:00:00.000Z',
-    updatedAt: '2025-06-18T12:00:00.000Z',
-    user: {
-      id: 1,
-      nickname: '와인초보',
-      image: '/user1.png',
-    },
-    isLiked: false,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 2,
-    rating: 4,
-    lightBold: 6,
-    smoothTannic: 5,
-    drySweet: 4,
-    softAcidic: 3,
-    aroma: ['CITRUS', 'CHERRY'],
-    content: '가볍고 산뜻한 맛이에요.',
-    createdAt: '2025-06-17T15:20:00.000Z',
-    updatedAt: '2025-06-17T15:20:00.000Z',
-    user: {
-      id: 2,
-      nickname: '레드마스터',
-      image: '/user2.png',
-    },
-    isLiked: true,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 3,
-    rating: 3,
-    lightBold: 5,
-    smoothTannic: 4,
-    drySweet: 5,
-    softAcidic: 6,
-    aroma: ['APPLE', 'FLOWER'],
-    content: '산미가 꽤 느껴지고, 전체적으로 무난한 맛이에요.',
-    createdAt: '2025-06-16T18:45:00.000Z',
-    updatedAt: '2025-06-16T18:45:00.000Z',
-    user: {
-      id: 3,
-      nickname: '화이트러버',
-      image: '/user3.png',
-    },
-    isLiked: false,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 4,
-    rating: 2,
-    lightBold: 3,
-    smoothTannic: 2,
-    drySweet: 6,
-    softAcidic: 7,
-    aroma: ['GRASS', 'MINERAL'],
-    content: '조금 심심하고 밋밋한 느낌이었어요.',
-    createdAt: '2025-06-15T13:10:00.000Z',
-    updatedAt: '2025-06-15T13:10:00.000Z',
-    user: {
-      id: 4,
-      nickname: '시음단1',
-      image: '/user4.png',
-    },
-    isLiked: false,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 5,
-    rating: 5,
-    lightBold: 8,
-    smoothTannic: 9,
-    drySweet: 2,
-    softAcidic: 4,
-    aroma: ['VANILLA', 'SPICE', 'CHOCOLATE'],
-    content: '진하고 깊은 풍미가 너무 좋았어요. 고기랑 찰떡!',
-    createdAt: '2025-06-14T19:30:00.000Z',
-    updatedAt: '2025-06-14T19:30:00.000Z',
-    user: {
-      id: 5,
-      nickname: '미트페어링러버',
-      image: '/user5.png',
-    },
-    isLiked: true,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 6,
-    rating: 4,
-    lightBold: 4,
-    smoothTannic: 3,
-    drySweet: 7,
-    softAcidic: 5,
-    aroma: ['PEACH', 'TROPICAL'],
-    content: '달콤하고 과일 향이 풍부해서 디저트랑 잘 어울려요.',
-    createdAt: '2025-06-13T20:05:00.000Z',
-    updatedAt: '2025-06-13T20:05:00.000Z',
-    user: {
-      id: 6,
-      nickname: '디저트와인러버',
-      image: '/user6.png',
-    },
-    isLiked: true,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-  {
-    id: 7,
-    rating: 1,
-    lightBold: 2,
-    smoothTannic: 1,
-    drySweet: 8,
-    softAcidic: 8,
-    aroma: ['CITRUS', 'FLOWER'],
-    content: '제 취향은 아니었어요. 너무 시고 달아요.',
-    createdAt: '2025-06-12T10:30:00.000Z',
-    updatedAt: '2025-06-12T10:30:00.000Z',
-    user: {
-      id: 7,
-      nickname: '신맛민감러',
-      image: '/user7.png',
-    },
-    isLiked: false,
-    wineId: 1,
-    teamId: 'team-a',
-  },
-];
-
 export default function WinePage({
   params,
 }: {
@@ -206,72 +53,68 @@ export default function WinePage({
 
   // 📝🧮 리뷰 데이터 기반 계산 수행
   useEffect(() => {
-    // 🧪 Mock Data 테스트용
-    setWine(wineMock);
     // 🍷 실제 와인 상세 정보 API 호출
     getWineData(wineId).then((data) => {
       setWine(data);
     });
 
-    // ✅ 더미 데이터 테스트용
-    const fetchedReviews = dummyReviews;
-
     // ✅ 실제 API 사용 시 아래 코드 주석 해제
-    // ReviewsByWineId(wineId).then((fetchedReviews) => {
-    //   setReviews(fetchedReviews);
+    ReviewsByWineId(wineId).then((fetchedReviews) => {
+      setReviews(fetchedReviews);
 
-    const count = fetchedReviews.length;
-    const average =
-      count === 0
-        ? 0
-        : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
+      const count = fetchedReviews.length;
+      const average =
+        count === 0
+          ? 0
+          : fetchedReviews.reduce((sum, r) => sum + r.rating, 0) / count; // 평균 별점 계산
 
-    const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    fetchedReviews.forEach((r) => {
-      ratings[r.rating] += 1; // 점수별 분포 계산
-    });
-
-    setRatingData({
-      average: Number(average.toFixed(1)),
-      count,
-      ratings,
-    });
-
-    // 🎚️🧮맛 요약 계산
-    if (count > 0) {
-      setTasteSummary({
-        body: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
-        ),
-        tannin: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
-        ),
-        sweetness: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
-        ),
-        acidity: Math.round(
-          fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
-        ),
+      const ratings: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      fetchedReviews.forEach((r) => {
+        ratings[r.rating] += 1; // 점수별 분포 계산
       });
-    }
 
-    // 🌸🧮 향 Top 3 계산
-    const aromaCounts: Record<string, number> = {};
-    fetchedReviews.forEach((r) => {
-      r.aroma.forEach((aroma) => {
-        aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
+      setRatingData({
+        average: Number(average.toFixed(1)),
+        count,
+        ratings,
       });
+
+      // 🎚️🧮맛 요약 계산
+      if (count > 0) {
+        setTasteSummary({
+          body: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.lightBold, 0) / count
+          ),
+          tannin: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.smoothTannic, 0) / count
+          ),
+          sweetness: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.drySweet, 0) / count
+          ),
+          acidity: Math.round(
+            fetchedReviews.reduce((sum, r) => sum + r.softAcidic, 0) / count
+          ),
+        });
+      }
+
+      // 🌸🧮 향 Top 3 계산
+      const aromaCounts: Record<string, number> = {};
+      fetchedReviews.forEach((r) => {
+        r.aroma.forEach((aroma) => {
+          aromaCounts[aroma] = (aromaCounts[aroma] || 0) + 1;
+        });
+      });
+
+      const top3 = Object.entries(aromaCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([aroma]) => aroma);
+
+      setFlavorTop3(top3);
     });
-
-    const top3 = Object.entries(aromaCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([aroma]) => aroma);
-
-    setFlavorTop3(top3);
-    // ✅ 실제 API 사용 시 닫힌 괄호 주석 해제
-    // });
   }, [wineId]);
+
+  if (!wine) return <div>Loading...</div>;
 
   return (
     <main className="min-h-screen px-4 py-10 flex flex-col items-center bg-white">
