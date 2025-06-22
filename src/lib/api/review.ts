@@ -95,3 +95,9 @@ export const likeReview = async (reviewId: number) => {
 export const unlikeReview = async (reviewId: number) => {
   return await axios.delete(`${Base_URL}/reviews/${reviewId}/like`);
 };
+
+// 리뷰 삭제
+export const deleteReview = async (reviewId: number) => {
+  const res = await axios.delete(`${Base_URL}/wines/${reviewId}`);
+  return res.data;
+};
