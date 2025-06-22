@@ -86,7 +86,7 @@ export default function GNB() {
   };
 
   return (
-    <div className="relative">
+    <div className="fixed top-40 left-0 z-50 w-full">
       <div className="flex justify-between items-center bg-black w-full max-w-[1140px] h-[70px] px-60 py-4 rounded-[16px] mx-auto">
         <Image
           src="/logo/logo-wh.svg"
