@@ -40,8 +40,6 @@ export interface ReviewResponse {
   teamId: string;
 }
 
-export type EditReviewPayload = Omit<ReviewPayload, 'wineId'>;
-
 // 와인 데이터 받아오기
 export async function getWineData(id: number): Promise<WineDetail> {
   try {
@@ -65,9 +63,9 @@ export async function postReview(payload: ReviewPayload) {
 }
 
 // 리뷰 수정하기
-export async function editReview(reviewId: number, payload: EditReviewPayload) {
+export async function editReview(id: number, payload: ReviewPayload) {
   try {
-    const res = await api.patch(`/reviews/${reviewId}`, payload);
+    const res = await api.patch(`/reviews/${id}`, payload);
     return res.data;
   } catch (error) {
     console.error('리뷰를 수정하지 못했습니다:', error);
