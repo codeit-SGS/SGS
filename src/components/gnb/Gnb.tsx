@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -85,8 +86,14 @@ export default function GNB() {
     router.push('/');
   };
 
+  const pathname = usePathname();
+
   return (
-    <div className="fixed top-40 left-0 z-50 w-full">
+    <div
+      className={`sticky pt-40 -top-40 z-50 w-full ${
+        pathname === '/' ? 'bg-gray-100' : 'bg-white'
+      }`}
+    >
       <div className="flex justify-between items-center bg-black w-full max-w-[1140px] h-[70px] px-60 py-4 rounded-[16px] mx-auto">
         <Image
           src="/logo/logo-wh.svg"

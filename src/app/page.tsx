@@ -8,7 +8,7 @@ export default function HomePage() {
   const router = useRouter();
 
   return (
-    <main className="pt-90 tablet:pt-118 pc:pt-147 flex flex-col items-center bg-gray-100 px-16 tablet:px-20 gap-48 tablet:gap-80 pc:gap-96 shadow-subtle">
+    <main className="flex flex-col items-center bg-gray-100 px-16 tablet:px-20 gap-48 tablet:gap-80 pc:gap-96 shadow-subtle">
 
       {/* 메인 배너 */}
       <section className="relative flex flex-col justify-between h-403 w-full max-w-1140 tablet:h-394 pc:h-535 pt-56 tablet:pt-73 pc:pt-110 text-gray-100 text-center mt-24 rounded-[16px] bg-[#171A21] overflow-hidden">

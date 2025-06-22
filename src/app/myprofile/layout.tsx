@@ -76,7 +76,7 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
 
   // 실제 화면 렌더링
   return (
-    <div className="max-w-1140 mt-20 p-20 pc:p-0 mx-auto pt-90 tablet:pt-118 pc:pt-147">   
+    <div className="max-w-1140 mt-20 p-20 pc:p-0 mx-auto">   
       <div className="flex flex-col pc:flex-row items-center pc:items-start justify-start pc:justify-between gap-y-30 tablet:gap-y-37 pc:gap-0">        
         <section className="flex flex-col items-center w-auto">
           {/* 프로필 카드에 상태와 함수 props로 전달 */}
