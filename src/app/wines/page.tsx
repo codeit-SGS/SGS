@@ -52,7 +52,6 @@ export default function WineListPage() {
   useEffect(() => {
     const fetchWines = async () => {
       try {
-        const limit = 20;
         const res = await api.get('/wines', {
           params: { limit: 20 }
         });
@@ -68,13 +67,24 @@ export default function WineListPage() {
     };
 
     const fetchRecommendedWines = async () => {
-      try {
-        const res = await api.get('/wines/recommend');
-        setRecommendedWines(res.data.list ?? []);
-      } catch (err: any) {
-        console.error('추천 와인 에러:', err.response?.data || err.message);
+    try {
+      const res = await api.get('/wines/recommended', {
+        params: { limit: 8 } // ✅ 여기만 추가하면 끝
+      });
+      console.log('추천 와인 데이터:', res.data);
+      setRecommendedWines(res.data ?? []);
+    } catch (err: any) {
+      if (err.response) {
+        console.error('추천 와인 에러 상태코드:', err.response.status);
+        console.error('추천 와인 에러 응답 내용:', err.response.data);
+        console.error('추천 와인 요청 경로:', err.config?.url);
+      } else if (err.request) {
+        console.error('추천 와인 요청 에러:', err.request);
+      } else {
+        console.error('추천 와인 일반 에러:', err.message);
       }
-    };
+    }
+  };
 
     fetchWines();
     fetchRecommendedWines();
@@ -112,7 +122,6 @@ export default function WineListPage() {
 
   return (
     <main className="max-w-1140 min-h-screen bg-white px-4 py-6 pt-10 mx-auto">
-
       {/* 이번 달 추천 와인 */}
       <section className="w-1140 h-299 bg-gray-100 rounded-lg mt-10">
         <h2 className="text-lg font-semibold mb-2">이번 달 추천 와인</h2>
@@ -123,7 +132,8 @@ export default function WineListPage() {
               id={wine.id}
               name={wine.name}
               image={wine.image}
-              avgRating={wine.avgRating} />
+              avgRating={wine.avgRating}
+            />
           ))}
         </div>
       </section>
@@ -138,7 +148,13 @@ export default function WineListPage() {
         {/* 필터 */}
         <div className="lg:w-1/4 w-full">
           <Filter onApplyFilter={handleApplyFilter} />
-          <CommonButton variant="modal-add-wine" onClick={() => setIsRegisterOpen(true)} className="w-284 h-50 rounded-16">와인 등록하기</CommonButton>
+          <CommonButton
+            variant="modal-add-wine"
+            onClick={() => setIsRegisterOpen(true)}
+            className="w-284 h-50 rounded-16"
+          >
+            와인 등록하기
+          </CommonButton>
         </div>
 
         {/* 와인 카드 리스트 */}
@@ -157,17 +173,31 @@ export default function WineListPage() {
                 recentReview={
                   typeof wine.recentReview === 'object'
                     ? wine.recentReview?.content
-                    : wine.recentReview ?? '등록된 후기가 없습니다.'} />
+                    : wine.recentReview ?? '등록된 후기가 없습니다.'
+                }
+              />
             ))
-          ) : (<p className="text-center text-gray-500 mt-10">검색하는 와인이 없습니다.</p>)}
+          ) : (
+            <p className="text-center text-gray-500 mt-10">검색하는 와인이 없습니다.</p>
+          )}
         </div>
       </section>
 
       {/* WineRegister 모달 */}
       {isRegisterOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setIsRegisterOpen(false)}>
-          <div className="bg-white rounded-xl p-6 relative" onClick={(e) => e.stopPropagation()}>
-            <WineRegister teamId="15-3" onClose={() => setIsRegisterOpen(false)} onSuccess={(id) => router.push(`/reviews/${id}`)} />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={() => setIsRegisterOpen(false)}
+        >
+          <div
+            className="bg-white rounded-xl p-6 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <WineRegister
+              teamId="15-3"
+              onClose={() => setIsRegisterOpen(false)}
+              onSuccess={(id) => router.push(`/reviews/${id}`)}
+            />
           </div>
         </div>
       )}
