@@ -3,15 +3,27 @@
 import { useState, useEffect, useRef } from 'react';
 import CancelModal from '@/components/modal/Cancel';
 import Image from 'next/image';
+import CommonButton from '@/components/button/CommonButton';
 
-interface MylistCardProps {
+interface Wine {
   name: string;
   region: string;
-  price: number;
+  price?: number;
   image?: string;
+  type?: string;
 }
 
-const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: MylistCardProps) => {
+interface MylistCardProps {
+  wine: Wine;
+  onDelete?: () => void;
+  onEdit?: () => void;
+}
+
+const MylistCard = ({
+  wine,
+  onDelete,
+  onEdit,
+}: MylistCardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -46,7 +58,7 @@ const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: Myl
   // 삭제 확정
   const handleConfirm = () => {
     setIsModalOpen(false);
-    console.log('와인 삭제 완료');
+    if (onDelete) onDelete();
   };
 
   return (
@@ -54,19 +66,21 @@ const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: Myl
       <div className="relative flex pt-30 pr-40 max-h-228 rounded-[16px] bg-white border border-gray-300">
         <div className="relative w-full px-70 max-w-180">
           <img
-            src={image}
+            src={wine?.image || '/wine/wine-type2.svg'}
             alt="와인 이미지"
+            onError={(e) => { e.currentTarget.src = '/wine/wine-type2.svg'; }}
             className="absolute bottom-0 w-full h-4/3 max-w-76 left-1/2 -translate-x-1/2 object-contain"
           />
         </div>
 
         <div className="flex flex-col justify-between gap-5">
           <div className="max-w-300">
-            <h3 className="text-3xl font-bold text-gray-800 pb-20">{name}</h3>
-            <p className="text-16 text-gray-500 leading-26 pb-13">{region}</p>
+            <h3 className="text-3xl font-bold text-gray-800 pb-20">{wine.name || '이름 없음'}</h3>
+            <p className="text-16 text-gray-500 leading-26 pb-13">{wine.region || '지역 정보 없음'}</p>
             <div className="inline-block text-18 font-bold py-5 px-15 rounded-[12px] bg-main-10 text-main mb-40">
-              ₩ {price.toLocaleString()}
+              {wine.price != null ? `₩ ${Number(wine.price).toLocaleString()}` : '가격 정보 없음'}
             </div>
+            <div className="text-14 text-gray-400">{wine.type || '타입 정보 없음'}</div>
           </div>
         </div>
 
@@ -81,18 +95,22 @@ const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: Myl
           />
           {isDropdownOpen && (
             <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">
-              <button
-                className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
-                onClick={() => alert('수정 기능은 아직 미구현입니다.')}
-              >
-                수정하기
-              </button>
-              <button
-                className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
+              {onEdit && (
+                <CommonButton
+                  variant="profile-modal-update"
+                  className="block w-full mb-2"
+                  onClick={onEdit}
+                >
+                  수정하기
+                </CommonButton>
+              )}
+              <CommonButton
+                variant="profile-modal-cancel"
+                className="block w-full"
                 onClick={handleDeleteClick}
               >
                 삭제하기
-              </button>
+              </CommonButton>
             </div>
           )}
         </div>
@@ -103,5 +121,31 @@ const MylistCard = ({ name, region, price, image = '/wine/wine-type2.svg' }: Myl
     </div>
   );
 };
+
+const MyWineCard = ({
+  name,
+  region,
+  price,
+  image,
+  type,
+  onDelete,
+  onEdit,
+}: {
+  name: string;
+  region: string;
+  price: number;
+  image: string;
+  type: string;
+  onDelete: () => void;
+  onEdit: () => void;
+}) => (
+  <div>
+    <img src={image || '/wine/wine-type2.svg'} alt="와인 이미지" />
+    <div>{name || '이름 없음'}</div>
+    <div>{region || '지역 정보 없음'}</div>
+    <div>{price != null ? `₩ ${Number(price).toLocaleString()}` : '가격 정보 없음'}</div>
+    <div>{type || '타입 정보 없음'}</div>
+  </div>
+);
 
 export default MylistCard;

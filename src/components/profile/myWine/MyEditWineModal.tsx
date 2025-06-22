@@ -1,23 +1,30 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import CommonButton from '@/components/button/CommonButton';
+import { uploadWineImage, editWine } from '@/lib/api/wine';
 
-type WineRegisterProps = {
+type WineEditModalProps = {
   onClose: () => void;
   onSuccess: (wineId: number) => void;
-  teamId: string;
+  initialData: {
+    id: number;
+    name: string;
+    region: string;
+    image: string;
+    price: number;
+    type: string;
+  };
 };
 
-const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
-  const [wineName, setWineName] = useState('');
-  const [price, setPrice] = useState('');
-  const [origin, setOrigin] = useState('');
-  const [type, setType] = useState('Red');
+const MyEditWineModal = ({ onClose, onSuccess, initialData }: WineEditModalProps) => {
+  const [wineName, setWineName] = useState(initialData.name);
+  const [price, setPrice] = useState(initialData.price.toString());
+  const [origin, setOrigin] = useState(initialData.region);
+  const [type, setType] = useState(initialData.type);
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -28,7 +35,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!wineName || !price || !origin || !type || !image) {
+    if (!wineName || !price || !origin || !type) {
       setError('모든 항목을 입력해주세요.');
       return;
     }
@@ -36,68 +43,19 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
     setLoading(true);
 
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      console.log('accessToken:', accessToken);
-
-      if (!accessToken) {
-        setError('로그인이 필요합니다.');
-        setLoading(false);
-        return;
+      let imageUrl = initialData.image;
+      if (image) {
+        imageUrl = await uploadWineImage(image);
       }
 
-      // 이미지 업로드 요청
-      const formDataImg = new FormData();
-      formDataImg.append('image', image);
-
-      const imgRes = await fetch(
-        `https://winereview-api.vercel.app/15-3/images/upload`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formDataImg,
-        }
-      );
-
-      const imgJson = await imgRes.json();
-      console.log('📸 image upload response:', imgJson);
-
-      if (!imgRes.ok || !imgJson.url) {
-        throw new Error('이미지 업로드에 실패했습니다.');
-      }
-
-      const imageUrl = imgJson.url;
-
-      const wineRes = await fetch(
-        `https://winereview-api.vercel.app/15-3/wines`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: wineName,
-            region: origin,
-            image: imageUrl,
-            price: Number(price),
-            type: type.toUpperCase(),
-          }),
-        }
-      );
-
-      const wineJson = await wineRes.json();
-      console.log('📨 응답 내용:', wineJson);
-
-      if (!wineRes.ok) {
-        throw new Error('와인 등록 실패');
-      }
-
-      const newWineId = wineJson.id;
-      onSuccess(newWineId);
-
-      router.push(`/reviews/${newWineId}`);
+      await editWine(initialData.id, {
+        name: wineName,
+        region: origin,
+        image: imageUrl,
+        price: Number(price),
+        type: type.toUpperCase(),
+      });
+      onSuccess(initialData.id);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -105,79 +63,13 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
     }
   };
 
-  const resetForm = () => {
-    setWineName('');
-    setPrice('');
-    setOrigin('');
-    setType('Red');
-    setImage(null);
-    onClose();
-  };
-
   return (
     <form
       onSubmit={handleSubmit}
       className="bg-white rounded-2xl p-6 space-y-25 w-327 h-620 md:w-412 md:h-657"
     >
-      <h2 className="text-2xl font-bold text-gray-800">
-        <span className="block md:hidden">필터</span>
-        <span className="hidden md:block">와인 등록</span>
-      </h2>
-
-      <div className="space-y-1">
-        <label className="block text-lg font-medium text-gray-800 mb-10">
-          와인 이름
-        </label>
-        <input
-          type="text"
-          placeholder="와인 이름 입력"
-          value={wineName}
-          onChange={(e) => setWineName(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label className="block text-lg font-medium text-gray-800 mb-10">
-          가격
-        </label>
-        <input
-          type="number"
-          placeholder="가격 입력"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label className="block text-lg font-medium text-gray-800 mb-10">
-          원산지
-        </label>
-        <input
-          type="text"
-          placeholder="원산지 입력"
-          value={origin}
-          onChange={(e) => setOrigin(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-      </div>
-
-      <div className="space-y-1">
-        <label className="block text-lg font-medium text-gray-800 mb-10">
-          타입
-        </label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
-        >
-          <option value="Red">Red</option>
-          <option value="White">White</option>
-          <option value="Sparkling">Sparkling</option>
-        </select>
-      </div>
-
+      <h2 className="text-2xl font-bold text-gray-800">와인 정보 수정</h2>
+      {/* 입력 필드들 */}
       <div className="space-y-1">
         <label className="block text-lg font-medium text-gray-700 mb-10">
           와인 사진
@@ -189,6 +81,12 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
               alt="와인 사진"
               className="object-cover size-full"
             />
+          ) : initialData.image ? (
+            <img
+              src={initialData.image}
+              alt="와인 사진"
+              className="object-cover size-full"
+            />
           ) : (
             <label htmlFor="imageUpload" className="cursor-pointer">
               <img
@@ -196,37 +94,78 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
                 alt="사진 추가 아이콘"
                 className="size-32 opacity-50"
               />
-              <input
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
             </label>
           )}
+          <label htmlFor="imageUpload" className="cursor-pointer absolute inset-0 opacity-0">
+            <input
+              id="imageUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
+          </label>
         </div>
       </div>
-
-      {/* 버튼(취소/와인 등록하기) 영역 */}
+      {/* 나머지 입력 필드 (이름, 가격, 지역, 타입 등) */}
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-700">이름</label>
+        <input
+          type="text"
+          value={wineName}
+          onChange={e => setWineName(e.target.value)}
+          className="w-full border rounded p-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-700">가격</label>
+        <input
+          type="number"
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+          className="w-full border rounded p-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-700">지역</label>
+        <input
+          type="text"
+          value={origin}
+          onChange={e => setOrigin(e.target.value)}
+          className="w-full border rounded p-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label className="block text-lg font-medium text-gray-700">타입</label>
+        <input
+          type="text"
+          value={type}
+          onChange={e => setType(e.target.value)}
+          className="w-full border rounded p-2"
+        />
+      </div>
+      {/* 버튼 영역 */}
       <div className="flex justify-between space-x-4 pt-4">
-        <button
+        <CommonButton
           type="button"
-          className="text-lg w-1/4 py-7 rounded-xl bg-main-10 text-main font-semibold"
-          onClick={resetForm}
+          variant="profile-modal-cancel"
+          className="w-1/4 py-7"
+          onClick={onClose}
         >
           취소
-        </button>
-        <button
+        </CommonButton>
+        <CommonButton
           type="submit"
-          className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
+          variant="profile-modal-update"
+          className="w-3/4 py-7"
           disabled={loading}
         >
-          {loading ? '등록 중...' : '와인 등록하기'}
-        </button>
+          {loading ? '수정 중...' : '수정하기'}
+        </CommonButton>
       </div>
+      {error && <div className="text-red-500 text-sm pt-2">{error}</div>}
     </form>
   );
 };
 
-export default WineRegister;
+export default MyEditWineModal;
