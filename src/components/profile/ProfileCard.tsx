@@ -52,8 +52,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
     try {
       // 1. 이미지 파일을 서버에 업로드해서 URL을 받음
       const imageUrl = await uploadImageToServer(file);
-      // 2. 부모(onChangeImage)에게 URL만 전달
-      onChangeImage(imageUrl);
+      // 2. 부모(onChangeImage)에게 URL만 전달 & 변경된 경우에만 반영 + alert
+      if (imageUrl !== profileImageUrl) {
+        onChangeImage(imageUrl);
+        alert('변경되었습니다!');
+      }
     } catch {
       alert("이미지 업로드에 실패했습니다.");
     }
@@ -66,8 +69,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
   // '변경하기' 버튼을 누르면 부모에게 닉네임 변경 요청
   const handleNicknameSubmit = () => {
-    if (inputNickname.trim()) {
-      onChangeNickname(inputNickname.trim());
+    const trimmed = inputNickname.trim();
+    if (trimmed && trimmed !== nickname) {
+      onChangeNickname(trimmed);
+      alert('변경되었습니다!');
     }
   };
 
