@@ -41,9 +41,9 @@ export default function WineListPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [wineList, setWineList] = useState<Wine[]>([]);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
-    wineType: "White",
-    priceRange: [0, 74000],
-    rating: "4.5 - 5.0"
+    wineType: "전체",
+    priceRange: [0, 100000],
+    rating: "전체"
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
