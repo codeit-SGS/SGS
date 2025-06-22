@@ -288,6 +288,8 @@ export default function ReviewCard({ review = {} }: ReviewCardProps) {
                     {left}
                   </span>
                   <PurpleSlider
+                    min={1}
+                    max={10}
                     className="max-w-110 tablet:max-w-380 pc:max-w-470"
                     value={Number(percent) || 0}
                     disabled
