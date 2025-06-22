@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 import EditModal from '../wineDetail/EditModal';
 import CancelModal from '@/components/modal/Cancle';
-import { likeReview, ReviewResponse, unlikeReview } from '@/lib/api/review';
+import { likeReview, unlikeReview } from '@/lib/api/review';
 
 // 날짜를 상대 시간으로 포맷하는 함수 (e.g. 5분 전, 2일 전)
 const getRelativeTime = (dateString?: string) => {
@@ -50,7 +50,6 @@ interface ReviewCardProps {
       image?: string | null;
     };
   };
-  setReviews: React.Dispatch<React.SetStateAction<ReviewResponse[]>>;
 }
 
 // 슬라이더 커스터마이징 (퍼플 테마)
@@ -80,10 +79,7 @@ const PurpleSlider = styled(Slider)({
   },
 });
 
-export default function ReviewCard({
-  review = {},
-  setReviews,
-}: ReviewCardProps) {
+export default function ReviewCard({ review = {} }: ReviewCardProps) {
   // 상태 관리
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -237,7 +233,6 @@ export default function ReviewCard({
                 wineName: '',
                 reviewId: review?.id || 0,
               }}
-              setReviews={setReviews}
             />
           )}
         </div>
@@ -293,8 +288,6 @@ export default function ReviewCard({
                     {left}
                   </span>
                   <PurpleSlider
-                    min={1}
-                    max={10}
                     className="max-w-110 tablet:max-w-380 pc:max-w-470"
                     value={Number(percent) || 0}
                     disabled

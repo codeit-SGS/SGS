@@ -8,8 +8,7 @@ import StarInput from './StarInput';
 import TasteSliderInput from './TasteSliderInput';
 import FlavorTagSelector from './FlavorTagSelector';
 import { TasteData } from '@/types/tasteType';
-import { editReview, ReviewResponse } from '@/lib/api/review';
-import { flavorToEng } from '@/components/wineDetail/FlavorTagSelector';
+import { editReview } from '@/lib/api/review';
 
 // ✨ props 타입 정의
 interface EditModalProps {
@@ -24,14 +23,9 @@ interface EditModalProps {
     wineName: string;
     reviewId: number;
   };
-  setReviews: React.Dispatch<React.SetStateAction<ReviewResponse[]>>;
 }
 
-export default function EditModal({
-  onClose,
-  initialData,
-  setReviews,
-}: EditModalProps) {
+export default function EditModal({ onClose, initialData }: EditModalProps) {
   const router = useRouter();
 
   // ⭐ 각 필드 상태
@@ -72,19 +66,16 @@ export default function EditModal({
       smoothTannic: sliderValues.tannin,
       drySweet: sliderValues.sweetness,
       softAcidic: sliderValues.acidity,
-      aroma: selectedFlavors.map((kor) => flavorToEng[kor]).filter(Boolean),
+      aroma: selectedFlavors.map((f) => f.toUpperCase()),
       content: reviewText,
-      // wineId: initialData.wineId,
+      wineId: initialData.wineId,
     };
-
-    console.log('✏️ 전송 payload:', payload);
-    console.log('🆔 리뷰 ID:', initialData.reviewId);
 
     try {
       const res = await editReview(initialData.reviewId, payload);
       console.log('수정 성공:', res);
-      setReviews((prev) => prev.map((r) => (r.id === res.id ? res : r)));
       onClose(); // ✅ 성공 시 모달 닫기
+      router.refresh(); // ✅ 페이지 새로고침
     } catch (err) {
       console.error('수정 실패:', err);
     } finally {
