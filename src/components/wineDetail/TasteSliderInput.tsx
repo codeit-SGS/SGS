@@ -54,7 +54,7 @@ export default function TasteSliderInput({
             type="range"
             min={1}
             max={10}
-            value={values[id]}
+            value={typeof values[id] === 'number' ? values[id] : 5}
             onChange={(e) => onChange(id, Number(e.target.value))}
             className="w-260 h-16 border border-gray-300 accent-[var(--color-main)]"
           />

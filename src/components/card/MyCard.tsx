@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import CancelModal from '@/components/modal/Cancle';
+import CancelModal from '@/components/modal/Cancel';
 
 // 시간 차이를 "몇 분 전", "몇 시간 전" 등으로 변환하는 함수
 const getRelativeTime = (dateString: string) => {
@@ -25,14 +25,16 @@ const getRelativeTime = (dateString: string) => {
 };
 
 interface MyCardProps {
+  id: number;
   rating: number;
   createdAt: string;
   wineName: string;
   content: string;
-  // ...다른 props
+  onDelete?: (id: number) => void;
+  onEdit?: (id: number) => void;
 }
 
-const MyCard = ({ rating, createdAt, wineName, content }: MyCardProps) => {
+const MyCard = ({ id, rating, createdAt, wineName, content, onDelete, onEdit }: MyCardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -67,9 +69,9 @@ const MyCard = ({ rating, createdAt, wineName, content }: MyCardProps) => {
   };
 
   // 모달 확인(삭제) 버튼
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsModalOpen(false);
-    console.log('삭제 완료');
+    if (onDelete) onDelete(id);
   };
 
   return (
@@ -91,13 +93,13 @@ const MyCard = ({ rating, createdAt, wineName, content }: MyCardProps) => {
           {/* 옵션 드롭다운 */}
           <div className="relative" ref={dropdownRef}>
             <button onClick={handleDropdownToggle}>
-              <Image src="/icon/menu.svg" alt="더보기" width={26} height={26} />
+              <Image src="/icon/menu.svg" className='cursor-pointer' alt="더보기" width={26} height={26} />
             </button>
             {isDropdownOpen && (
               <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">
                 <button
                   className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
-                  onClick={() => alert('수정 기능은 아직 미구현입니다.')}
+                  onClick={() => onEdit && onEdit(id)}
                 >
                   수정하기
                 </button>

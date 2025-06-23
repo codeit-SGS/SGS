@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 import EditModal from '../wineDetail/EditModal';
-import CancelModal from '@/components/modal/Cancle';
+import CancelModal from '@/components/modal/Cancel';
 import { likeReview, ReviewResponse, unlikeReview } from '@/lib/api/review';
 
 // 날짜를 상대 시간으로 포맷하는 함수 (e.g. 5분 전, 2일 전)
