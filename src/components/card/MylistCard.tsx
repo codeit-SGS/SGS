@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import CancelModal from '@/components/modal/Cancel';
-import Image from 'next/image';
-import CommonButton from '@/components/button/CommonButton';
+
 
 interface Wine {
   name: string;
@@ -96,21 +95,19 @@ const MylistCard = ({
           {isDropdownOpen && (
             <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">
               {onEdit && (
-                <CommonButton
-                  variant="profile-modal-update"
-                  className="block w-full mb-2"
+                <button
+                 className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
                   onClick={onEdit}
                 >
                   수정하기
-                </CommonButton>
+                </button>
               )}
-              <CommonButton
-                variant="profile-modal-cancel"
-                className="block w-full"
+              <button
+               className="block w-full px-16 py-8 tablet:px-30 tablet:py-10 text-md tablet:text-lg rounded-[12px] text-gray-800 text-medium whitespace-nowrap cursor-pointer hover:bg-main-10 hover:text-main"
                 onClick={handleDeleteClick}
               >
                 삭제하기
-              </CommonButton>
+              </button>
             </div>
           )}
         </div>
@@ -122,30 +119,5 @@ const MylistCard = ({
   );
 };
 
-const MyWineCard = ({
-  name,
-  region,
-  price,
-  image,
-  type,
-  onDelete,
-  onEdit,
-}: {
-  name: string;
-  region: string;
-  price: number;
-  image: string;
-  type: string;
-  onDelete: () => void;
-  onEdit: () => void;
-}) => (
-  <div>
-    <img src={image || '/wine/wine-type2.svg'} alt="와인 이미지" />
-    <div>{name || '이름 없음'}</div>
-    <div>{region || '지역 정보 없음'}</div>
-    <div>{price != null ? `₩ ${Number(price).toLocaleString()}` : '가격 정보 없음'}</div>
-    <div>{type || '타입 정보 없음'}</div>
-  </div>
-);
 
 export default MylistCard;

@@ -66,7 +66,7 @@ export default function EditModal({ onClose, onEditSuccess, initialData }: EditM
       setRating(initialData.rating);
       setReviewText(initialData.content);
       setSliderValues(initialData.taste);
-      setSelectedFlavors(initialData.aroma);
+      setSelectedFlavors(Array.isArray(initialData.aroma) ? initialData.aroma : []);
     }
   }, [initialData]);
 
@@ -100,6 +100,8 @@ export default function EditModal({ onClose, onEditSuccess, initialData }: EditM
       setIsSubmitting(false);
     }
   };
+
+  const safeTaste = sliderValues && typeof sliderValues.body === 'number' ? sliderValues : { body: 5, tannin: 5, sweetness: 5, acidity: 5 };
 
   return (
     <div className="p-6 fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
@@ -147,7 +149,7 @@ export default function EditModal({ onClose, onEditSuccess, initialData }: EditM
           {/* 🎚️ 맛 슬라이더 */}
           <div className="mt-10 flex flex-col space-y-6">
             <TasteSliderInput
-              values={sliderValues}
+              values={safeTaste}
               onChange={handleSliderChange}
             />
           </div>
@@ -155,7 +157,7 @@ export default function EditModal({ onClose, onEditSuccess, initialData }: EditM
           {/* 🌸 향 선택 */}
           <div className="mt-5 mb-10 w-476 h-270 space-y-6">
             <FlavorTagSelector
-              value={selectedFlavors}
+              value={Array.isArray(selectedFlavors) ? selectedFlavors : []}
               onChange={setSelectedFlavors}
             />
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchMyWines, deleteWine } from '@/lib/api/wine';
 import MyWineCard from '@/components/card/MylistCard';
-import MyEditModal from '@/components/profile/myReview/MyEditModal';
+import MyEditWineModal from '@/components/profile/myWine/MyEditWineModal';
 
 interface Wine {
   id: number;
@@ -78,7 +78,7 @@ const WineList = ({ setWineCount }: { setWineCount: (count: number) => void }) =
         />
       ))}
       {editingWine && editModalOpen && (
-        <MyEditModal
+        <MyEditWineModal
           isOpen={editModalOpen}
           onClose={() => setEditModalOpen(false)}
           initialData={editingWine}
