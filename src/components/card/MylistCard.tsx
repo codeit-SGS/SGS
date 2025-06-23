@@ -79,7 +79,7 @@ const MylistCard = ({
             <div className="inline-block text-18 font-bold py-5 px-15 rounded-[12px] bg-main-10 text-main mb-40">
               {wine.price != null ? `₩ ${Number(wine.price).toLocaleString()}` : '가격 정보 없음'}
             </div>
-            <div className="text-14 text-gray-400">{wine.type || '타입 정보 없음'}</div>
+            {/* <div className="text-14 text-gray-400">{wine.type || '타입 정보 없음'}</div> */}
           </div>
         </div>
 

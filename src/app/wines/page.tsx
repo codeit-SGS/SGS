@@ -135,9 +135,9 @@ export default function WineListPage() {
   return (
     <main className="max-w-1140 min-h-screen bg-white px-4 py-6 pt-10 mx-auto">
       {/* 이번 달 추천 와인 */}
-      <section className="w-1140 h-299 bg-gray-100 rounded-lg mt-10">
-        <h2 className="text-lg font-semibold mb-2">이번 달 추천 와인</h2>
-        <div className="flex gap-4 overflow-x-auto">
+      <section className="w-1140 h-299 bg-gray-100 rounded-2xl mt-10 relative">
+        <h2 className="text-xl text-gray-800 font-semibold mt-30 ml-30 absolute">이번 달 추천 와인</h2>
+        <div className="flex mt-84 absolute">
           {recommendedWines.map((wine) => (
             <MonthlyCard
               key={wine.id}
@@ -170,7 +170,7 @@ export default function WineListPage() {
         </div>
 
         {/* 와인 카드 리스트 */}
-        <div className="lg:w-3/4 w-full flex flex-col gap-4">
+        <div className="lg:w-3/4 w-full flex flex-col gap-64">
           {filteredWineList.length > 0 ? (
             filteredWineList.map((wine) => (
               <WineCard
