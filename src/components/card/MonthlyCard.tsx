@@ -33,12 +33,12 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
       className="flex flex-col w-full max-w-232 min-h-185 rounded-[12px] bg-white cursor-pointer ml-15 shadow-subtle transition"
     >
       <div className="flex pt-24 pr-30">
-        <div className="relative w-full px-30">
+        <div className="relative w-full px-30 overflow-hidden">
           {/* 와인 이미지 */}
           <img
             src={displayImage}
             alt="와인 이미지"
-            className="absolute -bottom-15 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
+            className="absolute -bottom-10 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
           />
         </div>
 
@@ -71,7 +71,7 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
               </div>
             </div>
           </div>
-          <h3 className="text-12 text-gray-500 leading-25">{displayName}</h3>
+          <h3 className="text-12 text-gray-500 leading-25 text-overflow-line3">{displayName}</h3>
         </div>
       </div>
     </div>

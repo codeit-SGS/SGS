@@ -110,7 +110,7 @@ export default function ReviewModal({
   return (
     // 바깥 영역 클릭 시 닫기
     <div
-      className="p-6 fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
+      className="p-6 fixed inset-0 z-100 bg-black/40 flex items-center justify-center"
       onClick={onClose}
     >
       {/*  모달 내부 클릭 시 이벤트 전파 막기 */}

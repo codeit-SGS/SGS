@@ -76,63 +76,54 @@ const MyEditWineModal = ({ isOpen, onClose, onEditSuccess, initialData }: WineEd
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-50 bg-black/40 flex justify-center items-center overflow-y-auto p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl p-6 space-y-6 w-327 h-620 tablet::w-412 tablet::h-657"
-      >
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          <span>내가 등록한 와인</span>
-          
+        className="fixed inset-0 z-50 tablet:static tablet:min-w-460 w-full tablet:max-w-[460px]  top-[50px] tablet:top-auto bottom-0 left-0 right-0  flex flex-col gap-24 p-24 bg-white rounded-[16px] shadow-xl tablet:h-[95vh] tablet:max-h-[840px]">
+        <h2 className="mb-8 text-2xl font-bold text-gray-800">
+          <span className="block tablet:hidden">필터</span>
+          <span className="hidden tablet:block">내가 등록한 와인</span>
         </h2>
 
         <div className="space-y-1">
-          <label className="block text-lg font-medium text-gray-800 mb-10">
-            와인 이름
-          </label>
+          <label className="block text-lg font-medium text-gray-800 mb-10">와인 이름</label>
           <input
             type="text"
             placeholder="와인 이름 입력"
             value={wineName}
             onChange={e => setWineName(e.target.value)}
-            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block text-lg font-medium text-gray-800 mb-10">
-            가격
-          </label>
+          <label className="block text-lg font-medium text-gray-800 mb-10">가격</label>
           <input
             type="number"
             placeholder="가격 입력"
             value={price}
             onChange={e => setPrice(e.target.value)}
-            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block text-lg font-medium text-gray-800 mb-10">
-            원산지
-          </label>
+          <label className="block text-lg font-medium text-gray-800 mb-10">원산지</label>
           <input
             type="text"
             placeholder="원산지 입력"
             value={origin}
             onChange={e => setOrigin(e.target.value)}
-            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block text-lg font-medium text-gray-800 mb-10">
-            타입
-          </label>
+          <label className="block text-lg font-medium text-gray-800 mb-10">타입</label>
           <select
             value={type}
             onChange={e => setType(e.target.value)}
-            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
           >
             <option value="Red">Red</option>
             <option value="White">White</option>
@@ -141,22 +132,20 @@ const MyEditWineModal = ({ isOpen, onClose, onEditSuccess, initialData }: WineEd
         </div>
 
         <div className="space-y-1">
-          <label className="block text-lg font-medium text-gray-700 mb-10">
-            와인 사진
-          </label>
-          <div className="size-140 border border-gray-300 rounded-2xl bg-gray-50 flex items-center justify-center cursor-pointer">
+          <label className="block text-lg font-medium text-gray-700 mb-10">와인 사진</label>
+          <div className="size-140 border border-gray-300 rounded-2xl bg-gray-50 flex items-center justify-center cursor-pointer overflow-hidden">
             {image ? (
               <img
                 src={URL.createObjectURL(image)}
                 alt="와인 사진"
-                className="object-cover size-full"
+                className="object-contain w-full h-full"
               />
             ) : (
-              <label htmlFor="imageUpload" className="cursor-pointer">
+              <label htmlFor="imageUpload" className="cursor-pointer w-full h-full">
                 <img
                   src={initialData.image}
                   alt="와인 사진"
-                  className="object-cover size-full"
+                  className="object-contain w-full h-full"
                 />
                 <input
                   id="imageUpload"
@@ -170,18 +159,17 @@ const MyEditWineModal = ({ isOpen, onClose, onEditSuccess, initialData }: WineEd
           </div>
         </div>
 
-        {/* 버튼(취소/수정하기) 영역 */}
-        <div className="flex justify-between space-x-4 pt-4">
+        <div className="flex justify-between space-x-4 pt-15 gap-8">
           <button
             type="button"
-            className="text-lg w-1/4 py-7 rounded-xl bg-main-10 text-main font-semibold"
+            className="text-lg w-1/4 py-16 rounded-xl bg-main-10 text-main font-semibold"
             onClick={resetForm}
           >
             취소
           </button>
           <button
             type="submit"
-            className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
+            className="text-lg w-3/4 py-16 rounded-xl bg-main text-white font-semibold"
             disabled={loading}
           >
             {loading ? '수정 중...' : '수정하기'}

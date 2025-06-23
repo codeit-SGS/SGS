@@ -90,8 +90,8 @@ export default function GNB() {
 
   return (
     <div
-      className={`sticky pt-40 -top-40 z-50 w-full ${
-        pathname === '/' ? 'bg-gray-100' : 'bg-white'
+      className={`sticky pt-40 -top-40 z-10 w-full ${
+        pathname === '/' ? 'bg-gray-100' : 'bg-transparent'
       }`}
     >
       <div className="flex justify-between items-center bg-black w-full max-w-[1140px] h-[70px] px-60 py-4 rounded-[16px] mx-auto">

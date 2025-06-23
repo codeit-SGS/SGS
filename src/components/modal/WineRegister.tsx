@@ -115,9 +115,9 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   };
 
   return (
-    <form
+  <form
       onSubmit={handleSubmit}
-      className="fixed tablet:static tablet:min-w-460 tablet:h-[95vh] top-[50px] tablet:top-auto bottom-0 left-0 right-0 w-full flex flex-col gap-24 tablet:gap-24 p-24 bg-white rounded-t-[16px] tablet:rounded-[16px]"
+      className="fixed tablet:static tablet:min-w-460 tablet:h-[95vh] tablet:max-h-840 top-[50px] tablet:top-auto bottom-0 left-0 right-0 w-full flex flex-col gap-24 tablet:gap-24 p-24 bg-white rounded-t-[16px] tablet:rounded-[16px]"
     >
       <h2 className="mb-8 text-2xl font-bold text-gray-800">
         <span className="block tablet:hidden">필터</span>
