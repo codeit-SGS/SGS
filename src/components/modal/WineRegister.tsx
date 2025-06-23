@@ -117,11 +117,11 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl p-6 space-y-25 w-327 h-620 md:w-412 md:h-657"
+      className="fixed tablet:static tablet:min-w-460 tablet:h-[95vh] top-[50px] tablet:top-auto bottom-0 left-0 right-0 w-full flex flex-col gap-24 tablet:gap-24 p-24 bg-white rounded-t-[16px] tablet:rounded-[16px]"
     >
-      <h2 className="text-2xl font-bold text-gray-800">
-        <span className="block md:hidden">필터</span>
-        <span className="hidden md:block">와인 등록</span>
+      <h2 className="mb-8 text-2xl font-bold text-gray-800">
+        <span className="block tablet:hidden">필터</span>
+        <span className="hidden tablet:block">와인 등록</span>
       </h2>
 
       <div className="space-y-1">
@@ -133,7 +133,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           placeholder="와인 이름 입력"
           value={wineName}
           onChange={(e) => setWineName(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -146,7 +146,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           placeholder="가격 입력"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -159,7 +159,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           placeholder="원산지 입력"
           value={origin}
           onChange={(e) => setOrigin(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -170,7 +170,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-15 py-6 focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="text-lg text-gray-500 w-full border border-gray-300 rounded-xl px-20 py-14 focus:outline-none focus:ring-2 focus:ring-purple-400"
         >
           <option value="Red">Red</option>
           <option value="White">White</option>
@@ -209,23 +209,23 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       </div>
 
       {/* 버튼(취소/와인 등록하기) 영역 */}
-      <div className="flex justify-between space-x-4 pt-4">
+      <div className="flex justify-between space-x-4 pt-15 gap-8">
         <button
           type="button"
-          className="text-lg w-1/4 py-7 rounded-xl bg-main-10 text-main font-semibold"
+          className="text-lg w-1/4 py-16 rounded-xl bg-main-10 text-main font-semibold"
           onClick={resetForm}
         >
           취소
         </button>
         <button
           type="submit"
-          className="text-lg w-3/4 py-7 rounded-xl bg-main text-white font-semibold"
+          className="text-lg w-3/4 py-16 rounded-xl bg-main text-white font-semibold"
           disabled={loading}
         >
           {loading ? '등록 중...' : '와인 등록하기'}
         </button>
       </div>
-    </form>
+  </form>
   );
 };
 
