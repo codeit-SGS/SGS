@@ -30,7 +30,7 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
   return (
     <div
       onClick={handleClick}
-      className="flex flex-col w-full max-w-232 rounded-[12px] bg-white cursor-pointer ml-50 shadow-subtle transition"
+      className="flex flex-col w-full max-w-232 min-h-185 rounded-[12px] bg-white cursor-pointer ml-15 shadow-subtle transition"
     >
       <div className="flex pt-24 pr-30">
         <div className="relative w-full px-30">
@@ -38,7 +38,7 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
           <img
             src={displayImage}
             alt="와인 이미지"
-            className="absolute bottom-0 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
+            className="absolute -bottom-15 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
           />
         </div>
 
