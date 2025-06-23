@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import CommonButton from '@/components/button/CommonButton';
 import { uploadWineImage, editWine } from '@/lib/api/wine';
 
 type WineEditModalProps = {
@@ -19,8 +18,7 @@ type WineEditModalProps = {
 };
 
 const MyEditWineModal = ({ isOpen, onClose, onEditSuccess, initialData }: WineEditModalProps) => {
-  if (!isOpen) return null;
-
+  // 1. 먼저 useState 등 모든 Hook을 선언
   const [wineName, setWineName] = useState(initialData.name);
   const [price, setPrice] = useState(initialData.price.toString());
   const [origin, setOrigin] = useState(initialData.region);
@@ -28,6 +26,9 @@ const MyEditWineModal = ({ isOpen, onClose, onEditSuccess, initialData }: WineEd
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // 2. 그 다음에 조건문으로 렌더링 제어
+  if (!isOpen) return null;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
