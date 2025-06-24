@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface MonthlyCardProps {
   id?: number;
@@ -33,12 +33,16 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
       className="flex flex-col w-full max-w-232 min-h-185 rounded-[12px] bg-white cursor-pointer ml-15 shadow-subtle transition"
     >
       <div className="flex pt-24 pr-30">
-        <div className="relative w-full px-30 overflow-hidden">
+        <div className="relative w-full px-30 overflow-hidden" style={{ minHeight: 100 }}>
           {/* 와인 이미지 */}
-          <img
+          <Image
             src={displayImage}
             alt="와인 이미지"
+            fill
             className="absolute -bottom-10 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 232px) 100vw, 232px"
+            priority
           />
         </div>
 
@@ -51,7 +55,7 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
             <div className="flex flex-col">
               <div className="flex">
                 {[...Array(fullStars)].map((_, i) => (
-                  <img
+                  <Image
                     key={i}
                     src="/icon/purple-star.svg"
                     alt="별점"
@@ -60,7 +64,7 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
                   />
                 ))}
                 {[...Array(5 - fullStars)].map((_, i) => (
-                  <img
+                  <Image
                     key={i}
                     src="/icon/star.svg"
                     alt="빈 별"

@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 type WineRegisterProps = {
   onClose: () => void;
   onSuccess: (wineId: number) => void;
-  teamId: string;
+  teamId: string; // ← 이 줄을 추가하세요!
 };
 
 const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
@@ -50,7 +51,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       formDataImg.append('image', image);
 
       const imgRes = await fetch(
-        `https://winereview-api.vercel.app/15-3/images/upload`,
+        `https://winereview-api.vercel.app/${teamId}/images/upload`,
         {
           method: 'POST',
           headers: {
@@ -70,7 +71,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
       const imageUrl = imgJson.url;
 
       const wineRes = await fetch(
-        `https://winereview-api.vercel.app/15-3/wines`,
+        `https://winereview-api.vercel.app/${teamId}/wines`,
         {
           method: 'POST',
           headers: {
@@ -115,7 +116,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
   };
 
   return (
-  <form
+    <form
       onSubmit={handleSubmit}
       className="fixed tablet:static tablet:min-w-460 tablet:h-[95vh] tablet:max-h-840 top-[50px] tablet:top-auto bottom-0 left-0 right-0 w-full flex flex-col gap-24 tablet:gap-24 p-24 bg-white rounded-t-[16px] tablet:rounded-[16px]"
     >
@@ -184,17 +185,24 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         </label>
         <div className="size-140 border border-gray-300 rounded-2xl bg-gray-50 flex items-center justify-center cursor-pointer">
           {image ? (
-            <img
+            <Image
               src={URL.createObjectURL(image)}
               alt="와인 사진"
-              className="object-cover size-full"
+              fill
+              className="object-cover"
+              style={{ borderRadius: '16px' }}
+              sizes="(max-width: 140px) 100vw, 140px"
+              priority
             />
           ) : (
             <label htmlFor="imageUpload" className="cursor-pointer">
-              <img
+              <Image
                 src="/icon/photo.svg"
                 alt="사진 추가 아이콘"
-                className="size-32 opacity-50"
+                width={32}
+                height={32}
+                className="opacity-50"
+                priority
               />
               <input
                 id="imageUpload"
@@ -207,6 +215,8 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           )}
         </div>
       </div>
+
+      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
 
       {/* 버튼(취소/와인 등록하기) 영역 */}
       <div className="flex justify-between space-x-4 pt-15 gap-8">
@@ -225,7 +235,7 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
           {loading ? '등록 중...' : '와인 등록하기'}
         </button>
       </div>
-  </form>
+    </form>
   );
 };
 

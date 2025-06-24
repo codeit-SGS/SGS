@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { fetchMyReviews } from '@/lib/api/user';
 import { deleteReview } from '@/lib/api/review';
 import MyCard from '@/components/card/MyCard';
@@ -29,7 +29,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
   const [open, setOpen] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState<number | null>(null);
 
-  const fetchReviewsData = async () => {
+  const fetchReviewsData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -41,7 +41,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
     } finally {
       setLoading(false);
     }
-  };
+  }, [setReviewCount]);
 
   // 삭제 핸들러
   const handleDelete = async (id: number) => {
@@ -78,7 +78,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
 
   useEffect(() => {
     fetchReviewsData();
-  }, [setReviewCount]);
+  }, [fetchReviewsData]);
 
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
@@ -103,7 +103,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
           className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
           onClick={() => setEditModalOpen(false)}
         >
-          <div onClick={(e) => e.stopPropagation()}>
+          <div onClick={_ => _.stopPropagation()}>
             <MyEditModal
               isOpen={editModalOpen}
               onClose={() => setEditModalOpen(false)}
@@ -118,7 +118,7 @@ const ReviewList = ({ setReviewCount }: { setReviewCount: (count: number) => voi
               }}
               onEditSuccess={() => {
                 setEditModalOpen(false);
-                fetchReviewsData(); // 리뷰 목록 새로고침
+                fetchReviewsData();
               }}
             />
           </div>

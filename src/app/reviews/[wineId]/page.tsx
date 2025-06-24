@@ -1,9 +1,8 @@
 'use client';
 
-import { use } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import DetailCard from '@/components/card/DetailCard';
 import StarReview from '@/components/wineDetail/StarReview';
-import { useEffect, useState } from 'react';
 import { TasteData } from '@/types/tasteType';
 import TasteSummary from '@/components/wineDetail/TasteSummary';
 import FlavorTop3 from '@/components/wineDetail/FlavorTop3';
@@ -23,15 +22,9 @@ export default function WinePage({
 }) {
   const resolvedParams = use(params);
   const wineId = Number(resolvedParams.wineId);
-  const name = String(resolvedParams.name);
 
-  // 🍷 와인 상세 정보 상태
   const [wine, setWine] = useState<WineDetail | null>(null);
-
-  // 리뷰 리스트 상태 (서버에서 불러온 리뷰들 저장)
   const [reviews, setReviews] = useState<ReviewResponse[]>([]);
-
-  // ⭐ 별점 통계 상태 (평균, 참여 수, 점수별 분포 저장)
   const [ratingData, setRatingData] = useState<{
     average: number;
     count: number;
@@ -41,19 +34,13 @@ export default function WinePage({
     count: 0,
     ratings: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
   });
-
-  // 🧮 와인 맛 평균 데이터
   const [tasteSummary, setTasteSummary] = useState<TasteData>({
     body: 0,
     tannin: 0,
     sweetness: 0,
     acidity: 0,
   });
-
-  // 🧮 와인 향 TOP3 데이터
   const [flavorTop3, setFlavorTop3] = useState<string[]>([]);
-
-  // ✅ 페이지네이션 관련 상태 및 함수
   const REVIEWS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -71,21 +58,9 @@ export default function WinePage({
     }
   };
 
-  // 📝🧮 리뷰 데이터 기반 계산 수행
-  useEffect(() => {
-    getWineData(wineId).then((data) => {
-      setWine(data);
-    });
-
-    fetchReviews(); // ✅ 리뷰 데이터 초기 로딩
-  }, [wineId]);
-
-  // ✅ 리뷰 다시 불러오기 + 관련 요약 정보 재계산 함수
-  const fetchReviews = () => {
+  // 1. useCallback으로 fetchReviews를 먼저 선언
+  const fetchReviews = useCallback(() => {
     getReview(wineId).then((fetchedReviews) => {
-      console.log('🔍 fetchedReviews 타입 확인:', fetchedReviews);
-      console.log('🔍 타입은 배열인가?', Array.isArray(fetchedReviews));
-
       if (!Array.isArray(fetchedReviews)) {
         console.error('❌ fetchedReviews가 배열이 아님!', fetchedReviews);
         return;
@@ -145,15 +120,20 @@ export default function WinePage({
 
       setFlavorTop3(top3);
     });
-  };
+  }, [wineId]);
+
+  // 2. useEffect에서 fetchReviews 사용
+  useEffect(() => {
+    getWineData(wineId).then((data) => {
+      setWine(data);
+    });
+    fetchReviews();
+  }, [wineId, fetchReviews]);
 
   if (!wine)
     return (
       <div className="w-full max-w-1140 mx-auto px-4 py-10">
-        {/* 와인 카드 스켈레톤 */}
         <div className="w-full h-302 bg-gray-200 animate-pulse rounded-xl" />
-
-        {/* 맛/향/리뷰 영역 스켈레톤 */}
         <div className="mt-10 space-y-6">
           <div className="w-1/3 h-6 bg-gray-200 rounded animate-pulse" />
           <div className="w-full h-24 bg-gray-200 rounded animate-pulse" />
@@ -166,14 +146,12 @@ export default function WinePage({
     <main className="min-h-screen px-4 py-10 flex flex-col items-center bg-white">
       {/* 🍷 와인 정보 카드 */}
       <div className="relative w-full max-w-1140 h-200 md:h-260 lg:h-302 mt-50 mb-30 lg:mb-16">
-        {wine && (
-          <DetailCard
-            name={wine.name}
-            region={wine.region}
-            price={wine.price}
-            image={wine.image}
-          />
-        )}
+        <DetailCard
+          name={wine.name}
+          region={wine.region}
+          price={wine.price}
+          image={wine.image}
+        />
       </div>
 
       {/* 💻 PC: 리뷰 카드 + 별점 요약 나란히 */}
@@ -182,7 +160,6 @@ export default function WinePage({
         {reviews.length > 0 && tasteSummary && (
           <section className="w-full mt-15 mb-20 px-4 md:px-0">
             <div className="flex justify-between gap-12">
-              {/* 🎚️ 어떤 맛이 나나요? */}
               <div className="w-1/2">
                 <h3 className="text-xl font-semibold text-gray-800 mb-10">
                   어떤 맛이 나나요?
@@ -192,8 +169,6 @@ export default function WinePage({
                 </h3>
                 <TasteSummary values={tasteSummary} readOnly />
               </div>
-
-              {/* 🌸 어떤 향이 있나요? */}
               <div className="w-1/2">
                 <h3 className="text-xl font-semibold text-gray-800 mb-6">
                   어떤 향이 있나요?
@@ -207,9 +182,7 @@ export default function WinePage({
           </section>
         )}
 
-        {/* 💻 리뷰 카드 + 별점 요약 나란히 */}
         <div className="flex justify-between gap-30">
-          {/* 리뷰 카드 리스트 */}
           <div className="flex flex-col space-y-10 w-800">
             <h3 className="text-2xl font-bold leading-8 tracking-normal text-gray-800 mt-20 mb-20">
               리뷰 목록
@@ -223,7 +196,6 @@ export default function WinePage({
             ))}
           </div>
 
-          {/* 별점 요약 */}
           <div className="sticky top-130 w-280 h-311 bg-none">
             <StarReview
               name={wine.name}

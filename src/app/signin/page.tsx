@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { signup } from '@/lib/api/auth';
 import CommonInput from '@/components/input/CommonInput';
 import CommonButton from '@/components/button/CommonButton';
+import axios from 'axios';
 
 const SigninPage = () => {
   const router = useRouter();
@@ -32,9 +33,16 @@ const SigninPage = () => {
       } else {
         alert('회원가입 실패. 다시 시도해주세요.');
       }
-    } catch (err: any) {
-      console.error('Signup failed:', err.response?.data || err.message);
-      alert(`오류 발생: ${err.response?.data?.message || '알 수 없는 오류'}`);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error('Signup failed:', err.response?.data || err.message);
+        alert(`오류 발생: ${err.response?.data?.message || err.message}`);
+      } else if (err instanceof Error) {
+        console.error('Signup failed:', err.message);
+        alert(`오류 발생: ${err.message}`);
+      } else {
+        alert('알 수 없는 오류 발생');
+      }
     } finally {
       setLoading(false);
     }

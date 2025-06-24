@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface ProfileIconProps {
   className?: string;
@@ -24,11 +25,14 @@ export default function ProfileIcon({ className = "size-45", src }: ProfileIconP
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <img
+      <Image
         src={displaySrc}
         alt="Profile Icon"
+        fill
         className="object-contain w-full h-full"
         style={{ borderRadius: "50%" }}
+        sizes="(max-width: 45px) 100vw, 45px"
+        priority
       />
     </div>
   );

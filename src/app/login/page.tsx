@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { login } from '@/lib/api/auth';
+import axios from 'axios'; // 이미 있다면 생략
 
 
 export default function LoginPage() {
@@ -24,9 +25,18 @@ export default function LoginPage() {
       } else {
         alert('로그인 실패. 다시 시도해주세요.');
       }
-    } catch (err: any) {
-      console.error('Login failed', err.response?.data || err.message);
-      alert(`오류 발생: ${err.response?.data?.message || '알 수 없는 오류'}`);
+    } catch (err: unknown) {
+      // AxiosError 타입 가드
+      if (axios.isAxiosError(err)) {
+        console.error('Login failed', err.response?.data || err.message);
+        alert(`오류 발생: ${err.response?.data?.message || err.message}`);
+      } else if (err instanceof Error) {
+        console.error('Login failed', err.message);
+        alert(`오류 발생: ${err.message}`);
+      } else {
+        console.error('Login failed', err);
+        alert('알 수 없는 오류 발생');
+      }
     }
   };
 

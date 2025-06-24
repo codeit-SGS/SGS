@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 interface DetailCardProps {
   name: string;
   region: string;
@@ -18,10 +20,14 @@ const DetailCard = ({
       <div className="flex pt-51 pr-45">
         <div className="relative w-full px-100 max-w-250">
           {/* 와인 이미지 */}
-          <img
+          <Image
             src={image}
             alt="와인 이미지"
+            fill
             className="absolute bottom-0 w-full h-full max-w-58 left-1/2 -translate-x-1/2 object-cover"
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 250px) 100vw, 250px"
+            priority
           />
         </div>
         {/* 텍스트 영역 */}

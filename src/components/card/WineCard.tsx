@@ -1,17 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 interface WineCardProps {
   id?: number;
   name?: string;
   region?: string;
   price?: number;
-  type?: string;
   image?: string;
   avgRating?: number;
   reviewCount?: number;
   recentReview?: string;
+  type?: string; // ← 이 줄을 추가하세요!
 }
 
 const WineCard = ({
@@ -19,7 +20,6 @@ const WineCard = ({
   name = '와인 이름 없음',
   region = '지역 정보 없음',
   price = 0,
-  type = '와인 타입 없음',
   image = '/wine/wine-type1.svg',
   avgRating = 0,
   reviewCount = 0,
@@ -41,10 +41,14 @@ const WineCard = ({
     >
       <div className="flex pt-36.5 pr-50">
         <div className="relative w-full max-w-200 pt-40 mr-20">
-          <img
+          <Image
             src={image}
             alt="와인 이미지"
+            fill
             className="absolute bottom-0 w-full h-full max-w-60 left-1/2 -translate-x-1/2 object-cover"
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 200px) 100vw, 200px"
+            priority
           />
         </div>
         <div className="relative flex flex-col justify-between flex-1">
@@ -66,7 +70,7 @@ const WineCard = ({
               <div className="flex flex-col gap-10 items-start">
                 <div className="flex">
                   {[...Array(fullStars)].map((_, i) => (
-                    <img
+                    <Image
                       key={i}
                       src="/icon/purple-star.svg"
                       alt={`별${i}`}
@@ -75,7 +79,7 @@ const WineCard = ({
                     />
                   ))}
                   {[...Array(5 - fullStars)].map((_, i) => (
-                    <img
+                    <Image
                       key={i}
                       src="/icon/star.svg"
                       alt={`빈 별${i}`}
@@ -91,10 +95,11 @@ const WineCard = ({
             </div>
 
             <div className="absolute bottom-23.5 right-0">
-              <img
+              <Image
                 src="/icon/right.svg"
                 alt="오른쪽 화살표 아이콘"
-                className="w-36 h-36"
+                width={36}
+                height={36}
               />
             </div>
           </div>

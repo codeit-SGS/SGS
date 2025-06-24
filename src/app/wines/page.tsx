@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
 
 import MonthlyCard from "@/components/card/MonthlyCard";
 import Search from "@/components/input/Search";
@@ -59,8 +60,14 @@ export default function WineListPage() {
 
         console.log('와인 데이터:', res.data);
         setWineList(res.data.list ?? []);
-      } catch (err: any) {
-        console.error('와인 목록 에러:', err.response?.data || err.message);
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.error('와인 목록 에러:', err.response?.data || err.message);
+        } else if (err instanceof Error) {
+          console.error('와인 목록 에러:', err.message);
+        } else {
+          console.error('와인 목록 에러:', err);
+        }
         setError('와인 목록을 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);
@@ -75,19 +82,16 @@ export default function WineListPage() {
             limit: 20
           }
         });
-        console.log('추천 와인 데이터:', res.data);
-        console.log('추천 와인 개수:', Array.isArray(res.data) ? res.data.length : '응답이 배열이 아님');
-
         setRecommendedWines(res.data ?? []);
-      } catch (err: any) {
-        if (err.response) {
-          console.error('추천 와인 에러 상태코드:', err.response.status);
-          console.error('추천 와인 에러 응답 내용:', err.response.data);
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.error('추천 와인 에러 상태코드:', err.response?.status);
+          console.error('추천 와인 에러 응답 내용:', err.response?.data);
           console.error('추천 와인 요청 경로:', err.config?.url);
-        } else if (err.request) {
-          console.error('추천 와인 요청 에러:', err.request);
+        } else if (err instanceof Error) {
+          console.error('추천 와인 에러:', err.message);
         } else {
-          console.error('추천 와인 일반 에러:', err.message);
+          console.error('추천 와인 알 수 없는 에러:', err);
         }
       }
     };

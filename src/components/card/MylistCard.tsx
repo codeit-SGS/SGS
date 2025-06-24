@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import CancelModal from '@/components/modal/Cancel';
 
 
@@ -64,12 +65,16 @@ const MylistCard = ({
     <div className="flex flex-col w-full max-w-800 pt-42">
       <div className="relative flex pt-30 pr-40 max-h-228 rounded-[16px] bg-white border border-gray-300">
         <div className="relative w-full px-70 max-w-180">
-          <img
-            src={wine?.image || '/wine/wine-type2.svg'}
-            alt="와인 이미지"
-            onError={(e) => { e.currentTarget.src = '/wine/wine-type2.svg'; }}
-            className="absolute bottom-0 w-full h-4/3 max-w-76 left-1/2 -translate-x-1/2 object-contain"
-          />
+          <div className="absolute bottom-0 w-full h-4/3 max-w-76 left-1/2 -translate-x-1/2 object-contain">
+            <Image
+              src={wine?.image || '/wine/wine-type2.svg'}
+              alt="와인 이미지"
+              fill
+              style={{ objectFit: 'contain' }}
+              sizes="(max-width: 180px) 100vw, 180px"
+              priority
+            />
+          </div>
         </div>
 
         <div className="flex flex-col justify-between gap-5">
@@ -85,12 +90,14 @@ const MylistCard = ({
 
         {/* 드롭다운 */}
         <div className="absolute top-30 right-40 cursor-pointer" ref={dropdownRef}>
-          <img
+          <Image
             src="/icon/menu.svg"
             alt="드롭다운 버튼"
             width={26}
             height={26}
             onClick={handleDropdownToggle}
+            style={{ cursor: 'pointer' }}
+            priority
           />
           {isDropdownOpen && (
             <div className="absolute top-30 tablet:top-60 pc:top-50 right-0 px-4 py-3 bg-white border border-gray-300 rounded-[16px] z-10">

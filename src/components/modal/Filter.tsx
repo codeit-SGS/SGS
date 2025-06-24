@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, SetStateAction } from "react";
+import { useState } from "react";
 import Slider from "@mui/material/Slider";
 
 type FilterProps = {
@@ -16,8 +16,11 @@ export default function Filter({ onApplyFilter }: FilterProps) {
   const [priceRange, setPriceRange] = useState([0, 74000]);
   const [selectedRating, setSelectedRating] = useState("전체");
 
-  const handlePriceChange = (_event: any, newValue: SetStateAction<number[]>) => {
-    setPriceRange(newValue);
+  const handlePriceChange = (
+    _event: Event | React.SyntheticEvent,
+    newValue: number | number[]
+  ) => {
+    setPriceRange(newValue as number[]);
   };
 
   const wineTypes = ["Red", "White", "Sparkling"];
