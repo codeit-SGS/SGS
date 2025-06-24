@@ -60,12 +60,22 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
 
   // 실제 화면 렌더링
   return (
+<<<<<<< HEAD
     <div className="max-w-1140 mx-auto mt-0 flex flex-col items-center p-20">
       <div className="flex justify-center items-center bg-black rounded-[12px] text-white h-50 min-w-343 w-full tablet:max-w-704 pc:max-w-1140 tablet:h-70">
         gnb
       </div>
       <div className="flex flex-col pc:flex-row w-full mt-20 tablet:mt-17 pc:mt-37 ">
         <section className="flex flex-col w-full items-center ">
+=======
+    <div className="max-w-1140 mt-20 p-20 pc:p-0 mx-auto">
+      <header className="p-20 mb-20 pc:pb-37 text-center text-2xl font-bold bg-black text-white rounded-[16px] h-70 w-full">
+        gnb
+      </header>
+
+      <div className="flex flex-col pc:flex-row items-center pc:items-start justify-start pc:justify-between gap-y-30 tablet:gap-y-37 pc:gap-0">        
+        <section className="flex flex-col items-center w-auto">
+>>>>>>> 0a360d28581a95a534128f2637ad76dcacf0dbcf
           {/* 프로필 카드에 상태와 함수 props로 전달 */}
           <ProfileCard
             profileImageUrl={profileImageUrl}
@@ -75,7 +85,12 @@ const MyProfileLayout: React.FC<MyProfileLayoutProps> = ({ children }) => {
             nicknamePlaceholder="변경할 닉네임을 입력해주세요."
           />
         </section>
+<<<<<<< HEAD
         <main className="flex-1">{children}</main>
+=======
+        
+        <main>{children}</main>
+>>>>>>> 0a360d28581a95a534128f2637ad76dcacf0dbcf
       </div>
     </div>
   );
