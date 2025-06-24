@@ -11,7 +11,7 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
 
   return (
     <>
-      {!hideGnb && <Gnb isLoggedIn={false} />}
+      {!hideGnb && <Gnb />}
       {children}
     </>
   );
