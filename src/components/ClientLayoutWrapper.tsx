@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Gnb from './gnb/Gnb';
+import Gnb from '@/components/gnb/Gnb';
 
 
 
