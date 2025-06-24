@@ -185,24 +185,17 @@ const WineRegister = ({ onClose, onSuccess, teamId }: WineRegisterProps) => {
         </label>
         <div className="size-140 border border-gray-300 rounded-2xl bg-gray-50 flex items-center justify-center cursor-pointer">
           {image ? (
-            <Image
+            <img
               src={URL.createObjectURL(image)}
               alt="와인 사진"
-              fill
-              className="object-cover"
-              style={{ borderRadius: '16px' }}
-              sizes="(max-width: 140px) 100vw, 140px"
-              priority
+              className="object-cover size-full"
             />
           ) : (
             <label htmlFor="imageUpload" className="cursor-pointer">
-              <Image
+              <img
                 src="/icon/photo.svg"
                 alt="사진 추가 아이콘"
-                width={32}
-                height={32}
-                className="opacity-50"
-                priority
+                className="size-32 opacity-50"
               />
               <input
                 id="imageUpload"

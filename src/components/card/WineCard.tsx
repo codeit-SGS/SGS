@@ -41,14 +41,10 @@ const WineCard = ({
     >
       <div className="flex pt-36.5 pr-50">
         <div className="relative w-full max-w-200 pt-40 mr-20">
-          <Image
+          <img
             src={image}
             alt="와인 이미지"
-            fill
             className="absolute bottom-0 w-full h-full max-w-60 left-1/2 -translate-x-1/2 object-cover"
-            style={{ objectFit: 'cover' }}
-            sizes="(max-width: 200px) 100vw, 200px"
-            priority
           />
         </div>
         <div className="relative flex flex-col justify-between flex-1">

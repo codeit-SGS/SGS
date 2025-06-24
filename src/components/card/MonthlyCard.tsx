@@ -33,16 +33,14 @@ const MonthlyCard = ({ id, name, image, avgRating }: MonthlyCardProps) => {
       className="flex flex-col w-full max-w-232 min-h-185 rounded-[12px] bg-white cursor-pointer ml-15 shadow-subtle transition"
     >
       <div className="flex pt-24 pr-30">
-        <div className="relative w-full px-30 overflow-hidden" style={{ minHeight: 100 }}>
+        <div className="relative w-full px-30 overflow-hidden">
           {/* 와인 이미지 */}
           <Image
             src={displayImage}
             alt="와인 이미지"
-            fill
             className="absolute -bottom-10 w-full h-full max-w-44 left-1/2 -translate-x-1/2 object-cover"
-            style={{ objectFit: 'cover' }}
-            sizes="(max-width: 232px) 100vw, 232px"
-            priority
+            width={44}
+            height={161}
           />
         </div>
 
