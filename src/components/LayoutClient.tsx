@@ -9,7 +9,7 @@ export default function LayoutClient({ children }: { children: React.ReactNode }
 
   return (
     <>
-      {!hideGnb && <Gnb isLoggedIn={false} />}
+      {!hideGnb && <Gnb />}
       {children}
     </>
   );
